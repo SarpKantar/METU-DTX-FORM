@@ -8,6 +8,7 @@ import AssessorLogin from './pages/AssessorLogin';
 import CompanyRegister from './pages/CompanyRegister';
 import AssessorRegister from './pages/AssessorRegister';
 import CompanyForm from './pages/CompanyForm';
+import FetchData from './components/FetchData';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/register/company" element={<CompanyRegister />} />
         <Route path="/register/assessor" element={<AssessorRegister />} />
         <Route path="/company-form" element={<CompanyForm />} />
+        <Route path="/fetch-data" element={<FetchData />} />
       </Routes>
     </Router>
   );

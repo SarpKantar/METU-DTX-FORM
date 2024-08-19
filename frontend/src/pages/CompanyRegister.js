@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 import '../styling/RegisterPage.css';
 
 const CompanyRegister = () => {
@@ -15,13 +16,17 @@ const CompanyRegister = () => {
       return;
     }
 
+    if (password.length < 6) {
+      alert('Password should be at least 6 characters long');
+      return;
+    }
+
     try {
-      const res = await axios.post('/api/register', { email, password });
-      console.log(res.data);
+      await createUserWithEmailAndPassword(auth, email, password);
       navigate('/login/company');
-    } catch (err) {
-      console.error(err);
-      alert('Error registering user');
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert(`Error registering user: ${error.message}`);
     }
   };
 

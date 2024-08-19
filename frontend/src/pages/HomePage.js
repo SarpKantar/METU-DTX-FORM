@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styling/HomePage.css';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleLogin = () => {
     navigate('/login');
   };
 
-  const handleRegister = () => {
-    navigate('/register');
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+  
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate('/login/company');
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert('Error registering user');
+    }
   };
 
   return (

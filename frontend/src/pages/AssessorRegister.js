@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 import '../styling/RegisterPage.css';
 
 const AssessorRegister = () => {
@@ -14,16 +15,21 @@ const AssessorRegister = () => {
       alert('Passwords do not match');
       return;
     }
-  
+
+    if (password.length < 6) {
+      alert('Password should be at least 6 characters long');
+      return;
+    }
+
     try {
-      const res = await axios.post('/api/users/register', { email, password, userType: 'company' });
-      console.log(res.data);
-      navigate('/login/company');
-    } catch (err) {
-      console.error(err.response.data);
-      alert(err.response.data.message || 'Error registering user');
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate('/login/assessor');
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert(`Error registering user: ${error.message}`);
     }
   };
+
   return (
     <div className="container">
       <h1 className="title">Assessor Register</h1>
