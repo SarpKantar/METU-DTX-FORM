@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 import '../styling/CompanyForm.css';
 
 const CompanyForm = () => {
@@ -13,11 +16,11 @@ const CompanyForm = () => {
   const [companyAge, setCompanyAge] = useState('');
   const [companySector, setCompanySector] = useState('');
   const [exportStatus, setExportStatus] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log({
+    const formData = {
       companyName,
       participantName,
       phoneNumber,
@@ -29,7 +32,16 @@ const CompanyForm = () => {
       companyAge,
       companySector,
       exportStatus
-    });
+    };
+
+    try {
+      await addDoc(collection(db, 'companyForms'), formData);
+      alert('Form submitted successfully!');
+      navigate('/');
+    } catch (error) {
+      console.error('Error submitting form: ', error);
+      alert('Error submitting form');
+    }
   };
 
   return (
@@ -201,7 +213,7 @@ const CompanyForm = () => {
             </label>
           </div>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" className="button">Submit</button>
       </form>
     </div>
   );

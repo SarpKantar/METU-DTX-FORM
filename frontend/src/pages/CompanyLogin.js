@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styling/LoginPage.css';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import '../styling/LoginPage.css';
 
 const CompanyLogin = () => {
   const [email, setEmail] = useState('');
@@ -11,8 +12,16 @@ const CompanyLogin = () => {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/company-form');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Check user type in Firestore
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if (userDoc.exists() && userDoc.data().userType === 'company') {
+        navigate('/company-form');
+      } else {
+        alert('Not authorized as company user');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
       alert('Login failed. Please check your credentials.');

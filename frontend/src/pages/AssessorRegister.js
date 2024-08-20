@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import '../styling/RegisterPage.css';
 
 const AssessorRegister = () => {
@@ -21,8 +22,22 @@ const AssessorRegister = () => {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Invalid email format');
+      return;
+    }
+
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Store additional user information in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        userType: 'assessor',
+      });
+
       navigate('/login/assessor');
     } catch (error) {
       console.error('Error registering user:', error);
@@ -39,6 +54,7 @@ const AssessorRegister = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="input"
+        required
       />
       <input
         type="password"
@@ -46,6 +62,7 @@ const AssessorRegister = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="input"
+        required
       />
       <input
         type="password"
@@ -53,6 +70,7 @@ const AssessorRegister = () => {
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         className="input"
+        required
       />
       <button className="button" onClick={handleRegister}>Register</button>
     </div>

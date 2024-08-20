@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styling/LoginPage.css';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import '../styling/LoginPage.css';
 
 const AssessorLogin = () => {
   const [email, setEmail] = useState('');
@@ -11,8 +12,17 @@ const AssessorLogin = () => {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // Navigate to assessor dashboard or another page after successful login
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Check user type in Firestore
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if (userDoc.exists() && userDoc.data().userType === 'assessor') {
+        // Navigate to assessor dashboard or another page
+        navigate('/assessor-dashboard');
+      } else {
+        alert('Not authorized as assessor user');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
       alert('Login failed. Please check your credentials.');
@@ -28,6 +38,7 @@ const AssessorLogin = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="input"
+        required
       />
       <input
         type="password"
@@ -35,6 +46,7 @@ const AssessorLogin = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="input"
+        required
       />
       <button className="button" onClick={handleLogin}>Login</button>
       <button className="button" onClick={() => navigate('/')}>Return to Home</button>

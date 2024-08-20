@@ -9,6 +9,8 @@ import CompanyRegister from './pages/CompanyRegister';
 import AssessorRegister from './pages/AssessorRegister';
 import CompanyForm from './pages/CompanyForm';
 import FetchData from './components/FetchData';
+import AssessorDashboard from './pages/AssessorDashboard';
+import AssessmentForm from './pages/AssessmentForm';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/register/assessor" element={<AssessorRegister />} />
         <Route path="/company-form" element={<CompanyForm />} />
         <Route path="/fetch-data" element={<FetchData />} />
+        <Route path="/assessor-dashboard" element={<AssessorDashboard />} />
+        <Route path="/assessment-form" element={<AssessmentForm />} />
       </Routes>
     </Router>
   );
