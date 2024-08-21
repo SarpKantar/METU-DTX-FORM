@@ -11,23 +11,28 @@ import CompanyForm from './pages/CompanyForm';
 import FetchData from './components/FetchData';
 import AssessorDashboard from './pages/AssessorDashboard';
 import AssessmentForm from './pages/AssessmentForm';
+import CompanyDashboard from './pages/CompanyDashboard';
+import SessionChecker from './components/SessionChecker';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" exact element={<HomePage />} />
-        <Route path="/login" exact element={<LoginPage />} />
-        <Route path="/register" exact element={<RegisterPage />} />
-        <Route path="/login/company" element={<CompanyLogin />} />
-        <Route path="/login/assessor" element={<AssessorLogin />} />
-        <Route path="/register/company" element={<CompanyRegister />} />
-        <Route path="/register/assessor" element={<AssessorRegister />} />
-        <Route path="/company-form" element={<CompanyForm />} />
-        <Route path="/fetch-data" element={<FetchData />} />
-        <Route path="/assessor-dashboard" element={<AssessorDashboard />} />
-        <Route path="/assessment-form" element={<AssessmentForm />} />
-      </Routes>
+      <SessionChecker>
+        <Routes>
+          <Route path="/" exact element={<HomePage />} />
+          <Route path="/login" exact element={<LoginPage />} />
+          <Route path="/register" exact element={<RegisterPage />} />
+          <Route path="/login/company" element={<CompanyLogin />} />
+          <Route path="/login/assessor" element={<AssessorLogin />} />
+          <Route path="/register/company" element={<CompanyRegister />} />
+          <Route path="/register/assessor" element={<AssessorRegister />} />
+          <Route path="/company-form" element={<CompanyForm />} />
+          <Route path="/fetch-data" element={<FetchData />} />
+          <Route path="/assessor-dashboard" element={<AssessorDashboard />} />
+          <Route path="/assessment-form" element={<AssessmentForm />} />
+          <Route path="/company-dashboard" element={<CompanyDashboard />} />
+        </Routes>
+      </SessionChecker>
     </Router>
   );
 }

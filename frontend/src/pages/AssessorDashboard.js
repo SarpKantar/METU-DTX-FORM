@@ -11,14 +11,19 @@ const AssessorDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCompanyForms = async () => {
-      const querySnapshot = await getDocs(collection(db, 'companyForms'));
-      const forms = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setCompanyForms(forms);
-    };
+    const user = sessionStorage.getItem('user');
+    if (!user) {
+      navigate('/login');
+    } else {
+      const fetchCompanyForms = async () => {
+        const querySnapshot = await getDocs(collection(db, 'companyForms'));
+        const forms = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setCompanyForms(forms);
+      };
 
-    fetchCompanyForms();
-  }, []);
+      fetchCompanyForms();
+    }
+  }, [navigate]);
 
   const downloadPDF = (form) => {
     const doc = new jsPDF();

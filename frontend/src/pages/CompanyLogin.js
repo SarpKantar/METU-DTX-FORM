@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase';
@@ -10,15 +10,32 @@ const CompanyLogin = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        handleLogin();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [email, password]);
+
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      // Store user session in sessionStorage
+      sessionStorage.setItem('user', JSON.stringify(user));
+
       // Check user type in Firestore
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       if (userDoc.exists() && userDoc.data().userType === 'company') {
-        navigate('/company-form');
+        sessionStorage.setItem('userType', 'company');
+        navigate('/company-dashboard');
       } else {
         alert('Not authorized as company user');
       }
@@ -50,7 +67,6 @@ const CompanyLogin = () => {
         className="input"
       />
       <button className="button" onClick={handleLogin}>Login</button>
-      <button className="button" onClick={() => navigate('/')}>Return to Home</button>
       <button className="button" onClick={handleBack}>Back</button>
     </div>
   );
