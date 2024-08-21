@@ -35,6 +35,10 @@ const AssessorDashboard = () => {
     navigate('/assessment-form');
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="container">
       <h1 className="title">Assessor Dashboard</h1>
@@ -50,6 +54,7 @@ const AssessorDashboard = () => {
           ))}
         </ul>
         <button className="button" onClick={handleAssessment}>Fill Assessment Form</button>
+        <button className="button" onClick={handleBack}>Back</button>
       </div>
     </div>
   );

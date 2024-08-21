@@ -28,6 +28,10 @@ const CompanyLogin = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="container">
       <h1 className="title">Company Login</h1>
@@ -47,6 +51,7 @@ const CompanyLogin = () => {
       />
       <button className="button" onClick={handleLogin}>Login</button>
       <button className="button" onClick={() => navigate('/')}>Return to Home</button>
+      <button className="button" onClick={handleBack}>Back</button>
     </div>
   );
 };

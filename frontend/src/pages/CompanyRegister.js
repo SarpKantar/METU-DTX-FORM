@@ -45,6 +45,10 @@ const CompanyRegister = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="container">
       <h1 className="title">Company Register</h1>
@@ -74,6 +78,7 @@ const CompanyRegister = () => {
       />
       <button className="button" onClick={handleRegister}>Register</button>
       <button className="button" onClick={() => navigate('/')}>Return to Home</button>
+      <button className="button" onClick={handleBack}>Back</button>
     </div>
   );
 };

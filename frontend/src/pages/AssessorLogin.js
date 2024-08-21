@@ -18,7 +18,6 @@ const AssessorLogin = () => {
       // Check user type in Firestore
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       if (userDoc.exists() && userDoc.data().userType === 'assessor') {
-        // Navigate to assessor dashboard or another page
         navigate('/assessor-dashboard');
       } else {
         alert('Not authorized as assessor user');
@@ -27,6 +26,10 @@ const AssessorLogin = () => {
       console.error('Error logging in:', error);
       alert('Login failed. Please check your credentials.');
     }
+  };
+
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -50,6 +53,7 @@ const AssessorLogin = () => {
       />
       <button className="button" onClick={handleLogin}>Login</button>
       <button className="button" onClick={() => navigate('/')}>Return to Home</button>
+      <button className="button" onClick={handleBack}>Back</button>
     </div>
   );
 };

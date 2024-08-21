@@ -45,6 +45,10 @@ const AssessorRegister = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="container">
       <h1 className="title">Assessor Register</h1>
@@ -73,6 +77,8 @@ const AssessorRegister = () => {
         required
       />
       <button className="button" onClick={handleRegister}>Register</button>
+      <button className="button" onClick={() => navigate('/')}>Return to Home</button>
+      <button className="button" onClick={handleBack}>Back</button>
     </div>
   );
 };
