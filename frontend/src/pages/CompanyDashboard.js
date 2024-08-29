@@ -13,7 +13,7 @@ const CompanyDashboard = () => {
   }, [navigate]);
 
   const handleFillAssessmentForm = () => {
-    navigate('/company-form');
+    navigate('/company-form'); // Ensure this route is correct
   };
 
   const handleLogout = () => {
@@ -26,7 +26,7 @@ const CompanyDashboard = () => {
     <div className="container">
       <h1 className="title">Company Dashboard</h1>
       <button className="button" onClick={handleFillAssessmentForm}>Fill Assessment Form</button>
-      <button className="button" onClick={handleLogout}>Log Out</button> {/* Logout Button */}
+      <button className="button" onClick={handleLogout}>Log Out</button>
     </div>
   );
 };

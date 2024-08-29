@@ -38,13 +38,19 @@ label {
   font-weight: bold;
 }
 
+/* Apply consistent styles to all input types */
 input[type="text"],
 input[type="date"],
-input[type="email"] {
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+input[type="password"] {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 .radio-group {
@@ -71,4 +77,9 @@ button {
 
 button:hover {
   background-color: #45a049;
+}
+
+/* Add this new class */
+.required-star {
+  color: red; /* Red color for the star */
 }

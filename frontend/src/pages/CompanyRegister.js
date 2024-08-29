@@ -9,6 +9,9 @@ const CompanyRegister = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState(''); // New state for name
+  const [surname, setSurname] = useState(''); // New state for surname
+  const [companyName, setCompanyName] = useState(''); // New state for company name
   const navigate = useNavigate();
 
   const handleRegister = async () => {
@@ -36,6 +39,9 @@ const CompanyRegister = () => {
       await setDoc(doc(db, 'users', user.uid), {
         email: user.email,
         userType: 'company',
+        name: name, // Include name
+        surname: surname, // Include surname
+        companyName: companyName // Include company name
       });
 
       // Send email verification
@@ -56,6 +62,14 @@ const CompanyRegister = () => {
   return (
     <div className="container">
       <h1 className="title">Company Register</h1>
+      <input
+        type="text"
+        placeholder="Company Name"
+        value={companyName}
+        onChange={(e) => setCompanyName(e.target.value)}
+        className="input"
+        required
+      />
       <input
         type="email"
         placeholder="Email"

@@ -19,6 +19,11 @@
   margin-top: 0;
 }
 
+/* Add this new class */
+.required-star {
+  color: red; /* Red color for the star */
+}
+
 .intro-text p {
   margin: 10px 0;
 }

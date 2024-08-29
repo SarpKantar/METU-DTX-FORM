@@ -9,7 +9,9 @@ import CompanyLogin from './pages/CompanyLogin';
 import AssessorLogin from './pages/AssessorLogin';
 import CompanyDashboard from './pages/CompanyDashboard';
 import AssessorDashboard from './pages/AssessorDashboard';
-import ActivationPage from './pages/ActivationPage'; // Import the ActivationPage
+import ActivationPage from './pages/ActivationPage';
+import CompanyForm from './pages/CompanyForm'; // Import the CompanyForm
+import AssessmentForm from './pages/AssessmentForm'; // Import the AssessmentForm
 
 function App() {
   return (
@@ -24,7 +26,9 @@ function App() {
         <Route path="/login/assessor" element={<AssessorLogin />} />
         <Route path="/company-dashboard" element={<CompanyDashboard />} />
         <Route path="/assessor-dashboard" element={<AssessorDashboard />} />
-        <Route path="/activation" element={<ActivationPage />} /> {/* Add the route for ActivationPage */}
+        <Route path="/activation" element={<ActivationPage />} />
+        <Route path="/company-form" element={<CompanyForm />} /> {/* Ensure this route exists */}
+        <Route path="/assessment-form" element={<AssessmentForm />} /> {/* Ensure this route exists */}
       </Routes>
     </Router>
   );

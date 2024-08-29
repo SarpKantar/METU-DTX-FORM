@@ -229,7 +229,7 @@ const handleDevelopmentPlansChange = (e) => {
           <div className="form-group">
             <label>Katılımcı Bilgisi</label>
           <div className="name-inputs">
-            <label>1. Şirket Adı *</label>
+            <label>1. Şirket Adı <span className="required-star">*</span></label>
             <input
               type="text"
               value={companyName}
@@ -237,7 +237,7 @@ const handleDevelopmentPlansChange = (e) => {
               placeholder="Enter your answer"
               required
             />
-            <label>2. Katılımcının adı *</label>
+            <label>2. Katılımcının adı <span className="required-star">*</span></label>
             <input
               type="text"
               value={participantName}
@@ -245,15 +245,15 @@ const handleDevelopmentPlansChange = (e) => {
               placeholder="Enter your answer"
               required
             />
-            <label>3. Telefon numarası *</label>
+            <label>3. Telefon numarası <span className="required-star">*</span></label>
             <input
-              type="text"
+              type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               placeholder="Enter your answer"
               required
             />
-            <label>4. Değerlendirme planlamasıyla ilgili daha fazla iletişim için katılımcının e-postası *</label>
+            <label>4. Değerlendirme planlamasıyla ilgili daha fazla iletişim için katılımcının e-postası <span className="required-star">*</span></label>
             <input
               type="email"
               value={email}
@@ -261,7 +261,7 @@ const handleDevelopmentPlansChange = (e) => {
               placeholder="Enter your answer"
               required
             />
-            <label>5. Şirket Adresi *</label>
+            <label>5. Şirket Adresi <span className="required-star">*</span></label>
             <input
               type="text"
               value={companyAddress}
@@ -271,7 +271,7 @@ const handleDevelopmentPlansChange = (e) => {
             />
             <label>6. Şirket Websitesi URL'si</label>
             <input
-              type="text"
+              type="url"
               value={companyWebsite}
               onChange={(e) => setCompanyWebsite(e.target.value)}
               placeholder="Enter your answer"
@@ -279,7 +279,7 @@ const handleDevelopmentPlansChange = (e) => {
           </div>
         </div>
         <div className="form-group">
-          <label>7. Şirketteki ünvanınız *</label>
+          <label>7. Şirketteki ünvanınız <span className="required-star">*</span></label>
           <div className="radio-group">
             <label>
               <input type="radio" name="jobTitle" value="Şirket sahibi" onChange={(e) => setJobTitle(e.target.value)} required /> Şirket sahibi
@@ -320,9 +320,9 @@ const handleDevelopmentPlansChange = (e) => {
           </div>
         </div>
         <div className="form-group">
-          <label>8. Bu pozisyonda kaç yıldır çalışıyorsunuz? *</label>
+          <label>8. Bu pozisyonda kaç yıldır çalışıyorsunuz? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={yearsInPosition}
             onChange={(e) => setYearsInPosition(e.target.value)}
             placeholder="Enter your answer"
@@ -330,7 +330,7 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>9. Şirketiniz kaç yaşındadır? *</label>
+          <label>9. Şirketiniz kaç yaşındadır? <span className="required-star">*</span></label>
           <div className="radio-group">
             <label>
               <input type="radio" name="companyAge" value="Yeni kuruluş – 1 yaşından küçük" onChange={(e) => setCompanyAge(e.target.value)} required /> Yeni kuruluş – 1 yaşından küçük
@@ -353,7 +353,7 @@ const handleDevelopmentPlansChange = (e) => {
           </div>
         </div>
         <div className="form-group">
-          <label>10. İşletmenizin sektörü nedir? *</label>
+          <label>10. İşletmenizin sektörü nedir? <span className="required-star">*</span></label>
           <p>Ekli NACE listesine bakınız (Makine ve otomotiv dışında bir sektör ise veya şirket bu iki sektörden birinin tedarikçisi değil ise, lütfen ankete devam etmeyiniz.)</p>
           <input
             type="text"
@@ -364,7 +364,7 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>11. Hizmetlerinizi/ürünlerinizi ihraç ediyor musunuz? *</label>
+          <label>11. Hizmetlerinizi/ürünlerinizi ihraç ediyor musunuz? <span className="required-star">*</span></label>
           <div className="radio-group">
             <label>
               <input type="radio" name="exportStatus" value="Evet doğrudan" onChange={(e) => setExportStatus(e.target.value)} required /> Evet doğrudan
@@ -378,7 +378,7 @@ const handleDevelopmentPlansChange = (e) => {
           </div>
         </div>
         <div className="form-group">
-          <label>12. E-ihracat yapıyor musunuz? *</label>
+          <label>12. E-ihracat yapıyor musunuz? <span className="required-star">*</span></label>
           <div className="radio-group">
             <label>
               <input type="radio" name="eExport" value="Evet" onChange={(e) => setEExport(e.target.value)} required /> Evet
@@ -398,7 +398,7 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>14. Gelecek yıl ihracat yapmayı hedeflediğiniz bölgeler var mı? *</label>
+          <label>14. Gelecek yıl ihracat yapmayı hedeflediğiniz bölgeler var mı? <span className="required-star">*</span></label>
           <div className="checkbox-group">
             <label>
               <input type="checkbox" value="Afrika ülkeleri" onChange={handleTargetRegionsChange} /> Afrika ülkeleri
@@ -436,9 +436,9 @@ const handleDevelopmentPlansChange = (e) => {
           </div>
         </div>
         <div className="form-group">
-          <label>15. Geliştirme sahalarınızın sayısı nedir? *</label>
+          <label>15. Geliştirme sahalarınızın sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={developmentAreas}
             onChange={(e) => setDevelopmentAreas(e.target.value)}
             placeholder="Enter your answer"
@@ -446,9 +446,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>16. Üretim sahalarınızın sayısı nedir? *</label>
+          <label>16. Üretim sahalarınızın sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={productionAreas}
             onChange={(e) => setProductionAreas(e.target.value)}
             placeholder="Enter your answer"
@@ -456,7 +456,7 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>17. 2022 yılındaki Cironuz nedir? *</label>
+          <label>17. 2022 yılındaki Cironuz nedir? <span className="required-star">*</span></label>
           <div className="radio-group">
             <label>
               <input type="radio" name="revenue2022" value="0 - 3 Milyon TL (mikro)" onChange={(e) => setRevenue2022(e.target.value)} required /> 0 - 3 Milyon TL (mikro)
@@ -476,7 +476,7 @@ const handleDevelopmentPlansChange = (e) => {
           </div>
         </div>
         <div className="form-group">
-          <label>18. 2021 yılındaki cironuz nedir? *</label>
+          <label>18. 2021 yılındaki cironuz nedir? <span className="required-star">*</span></label>
           <div className="radio-group">
             <label>
               <input type="radio" name="revenue2021" value="0 - 3 Milyon TL (mikro)" onChange={(e) => setRevenue2021(e.target.value)} required /> 0 - 3 Milyon TL (mikro)
@@ -496,9 +496,9 @@ const handleDevelopmentPlansChange = (e) => {
           </div>
         </div>
         <div className="form-group">
-          <label>19. Bu yıl toplam cironuzun ne kadarını inovasyon ve AR-GE faaliyetlerine ayırmayı planlıyorsunuz? *</label>
+          <label>19. Bu yıl toplam cironuzun ne kadarını inovasyon ve AR-GE faaliyetlerine ayırmayı planlıyorsunuz? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={innovationBudgetCurrent}
             onChange={(e) => setInnovationBudgetCurrent(e.target.value)}
             placeholder="Enter your answer"
@@ -506,9 +506,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>20. Önümüzdeki üç yıl içinde toplam cironuzun ne kadarını inovasyon ve Ar-Ge faaliyetlerine ayırmayı planlıyorsunuz? *</label>
+          <label>20. Önümüzdeki üç yıl içinde toplam cironuzun ne kadarını inovasyon ve Ar-Ge faaliyetlerine ayırmayı planlıyorsunuz? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={innovationBudgetFuture}
             onChange={(e) => setInnovationBudgetFuture(e.target.value)}
             placeholder="Enter your answer"
@@ -516,7 +516,7 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>21. Son üç yıldaki teknoloji yatırımınız ne kadardır? *</label>
+          <label>21. Son üç yıldaki teknoloji yatırımınız ne kadardır? <span className="required-star">*</span></label>
           <input
             type="text"
             value={techInvestment}
@@ -526,9 +526,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>22. Şirketinizdeki tam zamanlı çalışan sayısı nedir? *</label>
+          <label>22. Şirketinizdeki tam zamanlı çalışan sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={fullTimeEmployees}
             onChange={(e) => setFullTimeEmployees(e.target.value)}
             placeholder="Enter your answer"
@@ -536,9 +536,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>23. Şirketinizdeki beyaz yaka sayısı nedir? *</label>
+          <label>23. Şirketinizdeki beyaz yaka sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={whiteCollarEmployees}
             onChange={(e) => setWhiteCollarEmployees(e.target.value)}
             placeholder="Enter your answer"
@@ -546,9 +546,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>24. Şirketinizdeki mavi yaka sayısı nedir? *</label>
+          <label>24. Şirketinizdeki mavi yaka sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={blueCollarEmployees}
             onChange={(e) => setBlueCollarEmployees(e.target.value)}
             placeholder="Enter your answer"
@@ -556,9 +556,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>25. Şirketinizdeki ön lisans mezunu çalışan sayısı nedir? *</label>
+          <label>25. Şirketinizdeki ön lisans mezunu çalışan sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={associateDegreeEmployees}
             onChange={(e) => setAssociateDegreeEmployees(e.target.value)}
             placeholder="Enter your answer"
@@ -566,9 +566,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>26. Şirketinizdeki üniversite (lisans) mezunu çalışan sayısı nedir? *</label>
+          <label>26. Şirketinizdeki üniversite (lisans) mezunu çalışan sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={bachelorDegreeEmployees}
             onChange={(e) => setBachelorDegreeEmployees(e.target.value)}
             placeholder="Enter your answer"
@@ -576,9 +576,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>27. Şirketinizdeki yüksek lisans (Master) dereceli çalışan sayısı nedir? *</label>
+          <label>27. Şirketinizdeki yüksek lisans (Master) dereceli çalışan sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={masterDegreeEmployees}
             onChange={(e) => setMasterDegreeEmployees(e.target.value)}
             placeholder="Enter your answer"
@@ -586,9 +586,9 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>28. Şirketinizdeki doktora dereceli çalışan sayısı nedir? *</label>
+          <label>28. Şirketinizdeki doktora dereceli çalışan sayısı nedir? <span className="required-star">*</span></label>
           <input
-            type="text"
+            type="number"
             value={phdDegreeEmployees}
             onChange={(e) => setPhdDegreeEmployees(e.target.value)}
             placeholder="Enter your answer"
@@ -596,7 +596,7 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>29. Aşağıda listelenen departmanlardan hangileri şirketinizde mevcuttur? *</label>
+          <label>29. Aşağıda listelenen departmanlardan hangileri şirketinizde mevcuttur? <span className="required-star">*</span></label>
           <div className="checkbox-group">
             <label>
               <input type="checkbox" value="AR-GE ve Teknoloji Geliştirme" onChange={handleDepartmentsChange} /> AR-GE ve Teknoloji Geliştirme
@@ -637,7 +637,7 @@ const handleDevelopmentPlansChange = (e) => {
           </div>
         </div>
         <div className="form-group">
-          <label>30. Herhangi bir dijitalleşme değerlendirmesine katıldınız mı? Cevabınız evet ise hangi değerlendirme yöntemine veya hizmetine katıldınız? *</label>
+          <label>30. Herhangi bir dijitalleşme değerlendirmesine katıldınız mı? Cevabınız evet ise hangi değerlendirme yöntemine veya hizmetine katıldınız? <span className="required-star">*</span></label>
           <p>Eğer soruya cevabınız evet ise lütfen değerlendirmenin adını ve ofisini yazınız.</p>
           <input
             type="text"
@@ -648,7 +648,7 @@ const handleDevelopmentPlansChange = (e) => {
           />
         </div>
         <div className="form-group">
-          <label>31. Lütfen bize şirketinizin satış ve pazarlama yaklaşımından bahsedin. Şirketiniz aşağıdaki faaliyetlerden hangilerini gerçekleştiriyor? *</label>
+          <label>31. Lütfen bize şirketinizin satış ve pazarlama yaklaşımından bahsedin. Şirketiniz aşağıdaki faaliyetlerden hangilerini gerçekleştiriyor? <span className="required-star">*</span></label>
           <div className="checkbox-group">
             <label>
               <input type="checkbox" value="Şirketin sosyal medya hesabı var (Linkedin, Instagram, Facebook vb.)" onChange={handleSalesMarketingActivitiesChange} /> Şirketin sosyal medya hesabı var (Linkedin, Instagram, Facebook vb.)
@@ -696,9 +696,9 @@ const handleDevelopmentPlansChange = (e) => {
       </div>
     </div>
     <div className="form-group">
-      <label>33. Son beş yılda şirketinizde inovasyonla ilgili kaç proje yürüttünüz? *</label>
+      <label>33. Son beş yılda şirketinizde inovasyonla ilgili kaç proje yürüttünüz? <span className="required-star">*</span></label>
       <input
-        type="text"
+        type="number"
         value={innovationProjects}
         onChange={(e) => setInnovationProjects(e.target.value)}
         placeholder="Enter your answer"
@@ -706,9 +706,9 @@ const handleDevelopmentPlansChange = (e) => {
       />
     </div>
     <div className="form-group">
-      <label>34. Lütfen ürün çeşitliliğinizi belirtir misiniz? Kaç farklı/özgün ürün çeşidi/aileşi üretiyorsunuz? *</label>
+      <label>34. Lütfen ürün çeşitliliğinizi belirtir misiniz? Kaç farklı/özgün ürün çeşidi/aileşi üretiyorsunuz? <span className="required-star">*</span></label>
       <input
-        type="text"
+        type="number"
         value={productVariety}
         onChange={(e) => setProductVariety(e.target.value)}
         placeholder="Enter your answer"
@@ -716,7 +716,7 @@ const handleDevelopmentPlansChange = (e) => {
       />
     </div>
     <div className="form-group">
-      <label>35. Müşterilerinizin ürünlerinizi/hizmetlerinizi rakiplerinize tercih etmesinin en önemli üç nedeni nedir? *</label>
+      <label>35. Müşterilerinizin ürünlerinizi/hizmetlerinizi rakiplerinize tercih etmesinin en önemli üç nedeni nedir? <span className="required-star">*</span></label>
       <p>En fazla 3 seçenek işaretleyiniz</p>
       <div className="checkbox-group">
         <label>
@@ -758,7 +758,7 @@ const handleDevelopmentPlansChange = (e) => {
       </div>
     </div>
     <div className="form-group">
-      <label>36. Her bir trend mevcut işinizi nasıl etkiliyor? *</label>
+      <label>36. Her bir trend mevcut işinizi nasıl etkiliyor? <span className="required-star">*</span></label>
       <p>Lütfen her satır için geçerli olan cevabı seçiniz.</p>
       <table>
         <thead>
@@ -936,7 +936,7 @@ const handleDevelopmentPlansChange = (e) => {
       </table>
     </div>
     <div className="form-group">
-      <label>37. Her bir trend mevcut işinizi nasıl etkiliyor? *</label>
+      <label>37. Her bir trend mevcut işinizi nasıl etkiliyor? <span className="required-star">*</span></label>
       <p>Lütfen her satır için geçerli olan cevabı seçiniz.</p>
       <table>
         <thead>
@@ -1026,7 +1026,7 @@ const handleDevelopmentPlansChange = (e) => {
       </table>
     </div>
     <div className="form-group">
-      <label>38. Döngüsel Tasarım/Üretim: Döngüsel Tasarım/Üretim modelleri, bir ürünün geliştirme aşamasına odaklanır. Ürünlerin ve varlıkların döngüsel kaynak verimliliğini artırmayı amaçlar. Ürünler daha uzun süre dayanacak ve bakım, onarımı, yükseltilmesi, yenilenmesi, yeniden üretilmesi veya geri dönüştürülmesi daha kolay olacak şekilde tasarlanır. Buna ek olarak, biyo-bazlı veya tamamen geri dönüştürülebilir malzemeler gibi yeni malzemeler geliştirilir veya kullanılır. *</label>
+      <label>38. Döngüsel Tasarım/Üretim: Döngüsel Tasarım/Üretim modelleri, bir ürünün geliştirme aşamasına odaklanır. Ürünlerin ve varlıkların döngüsel kaynak verimliliğini artırmayı amaçlar. Ürünler daha uzun süre dayanacak ve bakım, onarımı, yükseltilmesi, yenilenmesi, yeniden üretilmesi veya geri dönüştürülmesi daha kolay olacak şekilde tasarlanır. Buna ek olarak, biyo-bazlı veya tamamen geri dönüştürülebilir malzemeler gibi yeni malzemeler geliştirilir veya kullanılır. <span className="required-star">*</span></label>
       <input
         type="text"
         value={circularDesign}
@@ -1036,7 +1036,7 @@ const handleDevelopmentPlansChange = (e) => {
       />
     </div>
     <div className="form-group">
-      <label>39. Döngüsel (Optimal) Kullanım: Bu iş modelleri, kullanımı optimize ederek ve böylece kullanım ömrünü uzatarak ve kaynakları koruyarak bir ürünün kullanım aşamasına odaklanır. Bu iş modelleri, ürünün sahipliğini korumayı (örneğin bir ürünü satmak yerine hizmet olarak sunarak) ve ürünün ömrü boyunca sorumluluğunu almayı (örneğin bakım hizmetleri veya ömrünü uzatan diğer eklentiler sunarak) mümkün kılar. Bu iş modelleri, ürün satışından sözleşme satışına geçişi içermektedir. *</label>
+      <label>39. Döngüsel (Optimal) Kullanım: Bu iş modelleri, kullanımı optimize ederek ve böylece kullanım ömrünü uzatarak ve kaynakları koruyarak bir ürünün kullanım aşamasına odaklanır. Bu iş modelleri, ürünün sahipliğini korumayı (örneğin bir ürünü satmak yerine hizmet olarak sunarak) ve ürünün ömrü boyunca sorumluluğunu almayı (örneğin bakım hizmetleri veya ömrünü uzatan diğer eklentiler sunarak) mümkün kılar. Bu iş modelleri, ürün satışından sözleşme satışına geçişi içermektedir. <span className="required-star">*</span></label>
       <input
         type="text"
         value={optimalUse}
@@ -1046,7 +1046,7 @@ const handleDevelopmentPlansChange = (e) => {
       />
     </div>
     <div className="form-group">
-      <label>40. Döngüsel Değer Geri Kazanımı: Bu iş modelleri, bir ürünün kullanım aşamasından sonraki çıktısına ve katma değerine odaklanır. Bu modeller, kullanılmış ürünleri yeni ürünlere veya kullanılabilir bileşenlere veya hammaddelere dönüştürerek gelir elde eder. Ters lojistik gelişimi bu model için esastır. *</label>
+      <label>40. Döngüsel Değer Geri Kazanımı: Bu iş modelleri, bir ürünün kullanım aşamasından sonraki çıktısına ve katma değerine odaklanır. Bu modeller, kullanılmış ürünleri yeni ürünlere veya kullanılabilir bileşenlere veya hammaddelere dönüştürerek gelir elde eder. Ters lojistik gelişimi bu model için esastır. <span className="required-star">*</span></label>
       <input
         type="text"
         value={valueRecovery}
@@ -1056,7 +1056,7 @@ const handleDevelopmentPlansChange = (e) => {
       />
     </div>
     <div className="form-group">
-      <label>41. Döngüsel Destek Modelleri: Döngüsel ekonomi stratejilerini mümkün kılan araçların, uygulamaların ve hizmetlerin geliştirilmesi/dağıtılması *</label>
+      <label>41. Döngüsel Destek Modelleri: Döngüsel ekonomi stratejilerini mümkün kılan araçların, uygulamaların ve hizmetlerin geliştirilmesi/dağıtılması <span className="required-star">*</span></label>
       <input
         type="text"
         value={supportModels}
@@ -1066,7 +1066,7 @@ const handleDevelopmentPlansChange = (e) => {
       />
     </div>
     <div className="form-group">
-      <label>42. Aşağıdaki bileşenlerin/unsurların hâli hazırdaki ürün ve hizmetlerinizle ne kadar ilgili olduğunu belirtir misiniz? *</label>
+      <label>42. Aşağıdaki bileşenlerin/unsurların hâli hazırdaki ürün ve hizmetlerinizle ne kadar ilgili olduğunu belirtir misiniz? <span className="required-star">*</span></label>
       <p>Günümüz</p>
       <table>
         <thead>
@@ -1118,7 +1118,7 @@ const handleDevelopmentPlansChange = (e) => {
       </table>
     </div>
     <div className="form-group">
-      <label>43. Aşağıdaki bileşenlerin/unsurların hangilerinin önümüzdeki 5 yıl içinde ürün ve hizmetlerinizle ne kadar ilgili olacağını belirtir misiniz? *</label>
+      <label>43. Aşağıdaki bileşenlerin/unsurların hangilerinin önümüzdeki 5 yıl içinde ürün ve hizmetlerinizle ne kadar ilgili olacağını belirtir misiniz? <span className="required-star">*</span></label>
       <p>Gelecek</p>
       <table>
         <thead>
@@ -1170,7 +1170,7 @@ const handleDevelopmentPlansChange = (e) => {
       </table>
     </div>
     <div className="form-group">
-      <label>44. Şirketiniz için geçerli olan ve en çok uygulanan Ürün Yaratma/Geliştirme Stratejisi hangisidir? *</label>
+      <label>44. Şirketiniz için geçerli olan ve en çok uygulanan Ürün Yaratma/Geliştirme Stratejisi hangisidir? <span className="required-star">*</span></label>
       <p>Ürün yaratmanın tanımı: Ürün yaratma, yeni bir ürün veya hizmet geliştirme ve pazara sunma sürecini ifade eder. Müşteri ihtiyaçlarının belirlenmesini, pazar araştırması yapılmasını, ürünün tasarlanmasını ve prototipinin oluşturulmasını, hizmetin üretilmesini veya geliştirilmesini ve son olarak müşterilere sunulmasını ve pazarlanmasını içerir. Kısaca ürün geliştirme + üretim.</p>
       <div className="radio-group">
         <label>
