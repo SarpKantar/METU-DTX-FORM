@@ -25,6 +25,12 @@ const AssessorDashboard = () => {
     }
   }, [navigate]);
 
+  const handleLogout = () => {
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('userType');
+    navigate('/login', { replace: true });
+  };
+  
   const downloadPDF = (form) => {
     const doc = new jsPDF();
     doc.text(JSON.stringify(form, null, 2), 10, 10);
@@ -60,6 +66,7 @@ const AssessorDashboard = () => {
         </ul>
         <button className="button" onClick={handleAssessment}>Fill Assessment Form</button>
         <button className="button" onClick={handleBack}>Back</button>
+        <button className="button" onClick={handleLogout}>Log Out</button> {/* Added Logout Button */}
       </div>
     </div>
   );

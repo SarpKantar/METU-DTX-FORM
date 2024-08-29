@@ -29,10 +29,10 @@ const AssessorLogin = () => {
       const user = userCredential.user;
 
       // Store user session in sessionStorage
-    sessionStorage.setItem('user', JSON.stringify(user));
+      sessionStorage.setItem('user', JSON.stringify(user));
 
       // Check user type in Firestore
-    const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
       if (userDoc.exists() && userDoc.data().userType === 'assessor') {
         sessionStorage.setItem('userType', 'assessor');
         navigate('/assessor-dashboard');
@@ -46,7 +46,7 @@ const AssessorLogin = () => {
   };
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/login'); // Always navigate to the login page
   };
 
   return (
@@ -69,7 +69,7 @@ const AssessorLogin = () => {
         required
       />
       <button className="button" onClick={handleLogin}>Login</button>
-      <button className="button" onClick={handleBack}>Back</button>
+      <button className="button" onClick={handleBack}>Back</button> {/* Back button */}
     </div>
   );
 };

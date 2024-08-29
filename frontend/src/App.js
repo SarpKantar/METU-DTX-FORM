@@ -3,36 +3,29 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import CompanyLogin from './pages/CompanyLogin';
-import AssessorLogin from './pages/AssessorLogin';
 import CompanyRegister from './pages/CompanyRegister';
 import AssessorRegister from './pages/AssessorRegister';
-import CompanyForm from './pages/CompanyForm';
-import FetchData from './components/FetchData';
-import AssessorDashboard from './pages/AssessorDashboard';
-import AssessmentForm from './pages/AssessmentForm';
+import CompanyLogin from './pages/CompanyLogin';
+import AssessorLogin from './pages/AssessorLogin';
 import CompanyDashboard from './pages/CompanyDashboard';
-import SessionChecker from './components/SessionChecker';
+import AssessorDashboard from './pages/AssessorDashboard';
+import ActivationPage from './pages/ActivationPage'; // Import the ActivationPage
 
 function App() {
   return (
     <Router>
-      <SessionChecker>
-        <Routes>
-          <Route path="/" exact element={<HomePage />} />
-          <Route path="/login" exact element={<LoginPage />} />
-          <Route path="/register" exact element={<RegisterPage />} />
-          <Route path="/login/company" element={<CompanyLogin />} />
-          <Route path="/login/assessor" element={<AssessorLogin />} />
-          <Route path="/register/company" element={<CompanyRegister />} />
-          <Route path="/register/assessor" element={<AssessorRegister />} />
-          <Route path="/company-form" element={<CompanyForm />} />
-          <Route path="/fetch-data" element={<FetchData />} />
-          <Route path="/assessor-dashboard" element={<AssessorDashboard />} />
-          <Route path="/assessment-form" element={<AssessmentForm />} />
-          <Route path="/company-dashboard" element={<CompanyDashboard />} />
-        </Routes>
-      </SessionChecker>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register/company" element={<CompanyRegister />} />
+        <Route path="/register/assessor" element={<AssessorRegister />} />
+        <Route path="/login/company" element={<CompanyLogin />} />
+        <Route path="/login/assessor" element={<AssessorLogin />} />
+        <Route path="/company-dashboard" element={<CompanyDashboard />} />
+        <Route path="/assessor-dashboard" element={<AssessorDashboard />} />
+        <Route path="/activation" element={<ActivationPage />} /> {/* Add the route for ActivationPage */}
+      </Routes>
     </Router>
   );
 }

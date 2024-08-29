@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import '../styling/RegisterPage.css';
@@ -38,7 +38,11 @@ const CompanyRegister = () => {
         userType: 'company',
       });
 
-      navigate('/login/company');
+      // Send email verification
+      await sendEmailVerification(user);
+
+      // Navigate to the activation page
+      navigate('/activation');
     } catch (error) {
       console.error('Error registering user:', error);
       alert(`Error registering user: ${error.message}`);

@@ -46,7 +46,7 @@ const CompanyLogin = () => {
   };
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/login'); // Always navigate to the login page
   };
 
   return (
@@ -58,6 +58,7 @@ const CompanyLogin = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="input"
+        required
       />
       <input
         type="password"
@@ -65,9 +66,10 @@ const CompanyLogin = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="input"
+        required
       />
       <button className="button" onClick={handleLogin}>Login</button>
-      <button className="button" onClick={handleBack}>Back</button>
+      <button className="button" onClick={handleBack}>Back</button> {/* Back button */}
     </div>
   );
 };

@@ -30,7 +30,7 @@ const LoginPage = () => {
   };
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/'); // Always navigate to the homepage
   };
 
   return (
@@ -38,7 +38,7 @@ const LoginPage = () => {
       <h1 className="title">Login</h1>
       <button className="button" onClick={handleCompanyLogin}>Company Login</button>
       <button className="button" onClick={handleAssessorLogin}>Assessor Login</button>
-      <button className="button" onClick={handleBack}>Back</button>
+      <button className="button" onClick={handleBack}>Back</button> {/* Back button */}
     </div>
   );
 };

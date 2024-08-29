@@ -19,14 +19,14 @@ const CompanyDashboard = () => {
   const handleLogout = () => {
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('userType');
-    navigate('/login');
+    navigate('/login', { replace: true });
   };
 
   return (
     <div className="container">
       <h1 className="title">Company Dashboard</h1>
       <button className="button" onClick={handleFillAssessmentForm}>Fill Assessment Form</button>
-      <button className="button" onClick={handleLogout}>Log Out</button>
+      <button className="button" onClick={handleLogout}>Log Out</button> {/* Logout Button */}
     </div>
   );
 };
