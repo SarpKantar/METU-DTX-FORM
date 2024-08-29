@@ -83,3 +83,255 @@ button:hover {
 .required-star {
   color: red; /* Red color for the star */
 }
+
+.bt-systems-usage table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bt-systems-usage th, .bt-systems-usage td {
+  text-align: center;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.bt-systems-usage th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.bt-systems-usage td {
+  vertical-align: middle;
+}
+
+.bt-systems-usage input[type="radio"] {
+  margin: 0 auto;
+  display: block;
+}
+
+.checkbox-group {
+  display: inline;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.checkbox-group label {
+  display: inline-block;
+  font-weight: normal; /* Ensure labels are not bold */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold; /* Ensure question labels are bold */
+}
+
+.question-57 .checkbox-group {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.question-57 .checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.question-57 .checkbox-group label {
+  display: inline-block;
+  font-weight: normal; 
+}
+
+.question-58 .checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.question-58 .checkbox-group input[type="radio"] {
+  margin-right: 8px;
+}
+
+.question-58 .checkbox-group label {
+  font-weight: normal; 
+  margin: 0; 
+  flex: 1; 
+}
+
+.question-59 .checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.question-59 .checkbox-group input[type="radio"] {
+  margin-right: 8px;
+}
+
+.question-59 .checkbox-group label {
+  font-weight: normal; /* Ensure labels are not bold */
+  margin: 0; /* Remove any default margin */
+  flex: 1; /* Allow the label to take up the remaining space */
+}
+
+.question-64 .checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.question-64 .checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.question-64 .checkbox-group label {
+  font-weight: normal; /* Ensure labels are not bold */
+  margin: 0; /* Remove any default margin */
+  flex: 1; /* Allow the label to take up the remaining space */
+}
+
+.question-65 .checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.question-65 .checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.question-65 .checkbox-group label {
+  font-weight: normal; /* Ensure labels are not bold */
+  margin: 0; /* Remove any default margin */
+  flex: 1; /* Allow the label to take up the remaining space */
+}
+
+.bt-systems-usage table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bt-systems-usage th, .bt-systems-usage td {
+  text-align: center;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.bt-systems-usage th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.bt-systems-usage td {
+  vertical-align: middle;
+}
+
+.bt-systems-usage input[type="radio"] {
+  margin: 0 auto;
+  display: block;
+}
+
+.checkbox-group {
+  display: inline;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.checkbox-group label {
+  display: inline-block;
+  font-weight: normal; /* Ensure labels are not bold */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold; /* Ensure question labels are bold */
+}
+
+.question-57 .checkbox-group {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.question-57 .checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.question-57 .checkbox-group label {
+  display: inline-block;
+  font-weight: normal; 
+}
+
+.question-58 .checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.question-58 .checkbox-group input[type="radio"] {
+  margin-right: 8px;
+}
+
+.question-58 .checkbox-group label {
+  font-weight: normal; 
+  margin: 0; 
+  flex: 1; 
+}
+
+.question-59 .checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.question-59 .checkbox-group input[type="radio"] {
+  margin-right: 8px;
+}
+
+.question-59 .checkbox-group label {
+  font-weight: normal; /* Ensure labels are not bold */
+  margin: 0; /* Remove any default margin */
+  flex: 1; /* Allow the label to take up the remaining space */
+}
+
+.question-64 .checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.question-64 .checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.question-64 .checkbox-group label {
+  font-weight: normal; /* Ensure labels are not bold */
+  margin: 0; /* Remove any default margin */
+  flex: 1; /* Allow the label to take up the remaining space */
+}
+
+.question-65 .checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.question-65 .checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.question-65 .checkbox-group label {
+  font-weight: normal; /* Ensure labels are not bold */
+  margin: 0; /* Remove any default margin */
+  flex: 1; /* Allow the label to take up the remaining space */
+}
