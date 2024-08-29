@@ -234,7 +234,7 @@ const handleDevelopmentPlansChange = (e) => {
               type="text"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              placeholder="Enter your answer"
+              placeholder="Cevabınızı girin"
               required
             />
             <label>2. Katılımcının adı <span className="required-star">*</span></label>
@@ -242,7 +242,7 @@ const handleDevelopmentPlansChange = (e) => {
               type="text"
               value={participantName}
               onChange={(e) => setParticipantName(e.target.value)}
-              placeholder="Enter your answer"
+              placeholder="Cevabınızı girin"
               required
             />
             <label>3. Telefon numarası <span className="required-star">*</span></label>
@@ -250,7 +250,7 @@ const handleDevelopmentPlansChange = (e) => {
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="Enter your answer"
+              placeholder="Cevabınızı girin"
               required
             />
             <label>4. Değerlendirme planlamasıyla ilgili daha fazla iletişim için katılımcının e-postası <span className="required-star">*</span></label>
@@ -258,7 +258,7 @@ const handleDevelopmentPlansChange = (e) => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your answer"
+              placeholder="Cevabınızı girin"
               required
             />
             <label>5. Şirket Adresi <span className="required-star">*</span></label>
@@ -266,7 +266,7 @@ const handleDevelopmentPlansChange = (e) => {
               type="text"
               value={companyAddress}
               onChange={(e) => setCompanyAddress(e.target.value)}
-              placeholder="Enter your answer"
+              placeholder="Cevabınızı girin"
               required
             />
             <label>6. Şirket Websitesi URL'si</label>
@@ -274,7 +274,7 @@ const handleDevelopmentPlansChange = (e) => {
               type="url"
               value={companyWebsite}
               onChange={(e) => setCompanyWebsite(e.target.value)}
-              placeholder="Enter your answer"
+              placeholder="Cevabınızı girin"
             />
           </div>
         </div>
@@ -325,7 +325,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={yearsInPosition}
             onChange={(e) => setYearsInPosition(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -359,7 +359,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="text"
             value={companySector}
             onChange={(e) => setCompanySector(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -394,7 +394,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="text"
             value={exportPercentage}
             onChange={(e) => setExportPercentage(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
           />
         </div>
         <div className="form-group">
@@ -441,7 +441,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={developmentAreas}
             onChange={(e) => setDevelopmentAreas(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -451,7 +451,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={productionAreas}
             onChange={(e) => setProductionAreas(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -501,7 +501,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={innovationBudgetCurrent}
             onChange={(e) => setInnovationBudgetCurrent(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -511,7 +511,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={innovationBudgetFuture}
             onChange={(e) => setInnovationBudgetFuture(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -521,7 +521,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="text"
             value={techInvestment}
             onChange={(e) => setTechInvestment(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -531,7 +531,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={fullTimeEmployees}
             onChange={(e) => setFullTimeEmployees(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -541,7 +541,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={whiteCollarEmployees}
             onChange={(e) => setWhiteCollarEmployees(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -551,7 +551,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={blueCollarEmployees}
             onChange={(e) => setBlueCollarEmployees(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -561,7 +561,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={associateDegreeEmployees}
             onChange={(e) => setAssociateDegreeEmployees(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -571,7 +571,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={bachelorDegreeEmployees}
             onChange={(e) => setBachelorDegreeEmployees(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -581,7 +581,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={masterDegreeEmployees}
             onChange={(e) => setMasterDegreeEmployees(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -591,7 +591,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="number"
             value={phdDegreeEmployees}
             onChange={(e) => setPhdDegreeEmployees(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -643,7 +643,7 @@ const handleDevelopmentPlansChange = (e) => {
             type="text"
             value={digitalAssessment}
             onChange={(e) => setDigitalAssessment(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder="Cevabınızı girin"
             required
           />
         </div>
@@ -701,7 +701,7 @@ const handleDevelopmentPlansChange = (e) => {
         type="number"
         value={innovationProjects}
         onChange={(e) => setInnovationProjects(e.target.value)}
-        placeholder="Enter your answer"
+        placeholder="Cevabınızı girin"
         required
       />
     </div>
@@ -711,7 +711,7 @@ const handleDevelopmentPlansChange = (e) => {
         type="number"
         value={productVariety}
         onChange={(e) => setProductVariety(e.target.value)}
-        placeholder="Enter your answer"
+        placeholder="Cevabınızı girin"
         required
       />
     </div>
@@ -1031,7 +1031,7 @@ const handleDevelopmentPlansChange = (e) => {
         type="text"
         value={circularDesign}
         onChange={(e) => setCircularDesign(e.target.value)}
-        placeholder="Enter your answer"
+        placeholder="Cevabınızı girin"
         required
       />
     </div>
@@ -1041,7 +1041,7 @@ const handleDevelopmentPlansChange = (e) => {
         type="text"
         value={optimalUse}
         onChange={(e) => setOptimalUse(e.target.value)}
-        placeholder="Enter your answer"
+        placeholder="Cevabınızı girin"
         required
       />
     </div>
@@ -1051,7 +1051,7 @@ const handleDevelopmentPlansChange = (e) => {
         type="text"
         value={valueRecovery}
         onChange={(e) => setValueRecovery(e.target.value)}
-        placeholder="Enter your answer"
+        placeholder="Cevabınızı girin"
         required
       />
     </div>
@@ -1061,7 +1061,7 @@ const handleDevelopmentPlansChange = (e) => {
         type="text"
         value={supportModels}
         onChange={(e) => setSupportModels(e.target.value)}
-        placeholder="Enter your answer"
+        placeholder="Cevabınızı girin"
         required
       />
     </div>

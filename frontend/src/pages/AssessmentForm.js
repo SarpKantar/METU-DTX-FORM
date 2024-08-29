@@ -72,7 +72,7 @@ const AssessmentForm = () => {
             onChange={(e) => setSelectedCompany(e.target.value)}
             required
           >
-            <option value="">Select a company</option>
+            <option value="">Şirket seçin</option>
             {companies.map((company, index) => (
               <option key={index} value={company}>{company}</option>
             ))}
@@ -87,7 +87,7 @@ const AssessmentForm = () => {
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                placeholder="Enter city"
+                placeholder="Şehri girin"
                 required
               />
             </div>
@@ -98,7 +98,7 @@ const AssessmentForm = () => {
                 name="sector"
                 value={formData.sector}
                 onChange={handleChange}
-                placeholder="Enter sector"
+                placeholder="Sektörü girin"
                 required
               />
             </div>
@@ -109,7 +109,7 @@ const AssessmentForm = () => {
                 name="producingGoods"
                 value={formData.producingGoods}
                 onChange={handleChange}
-                placeholder="Yes/No"
+                placeholder="Evet/Hayır"
                 required
               />
             </div>
@@ -120,7 +120,7 @@ const AssessmentForm = () => {
                 name="productionOnSite"
                 value={formData.productionOnSite}
                 onChange={handleChange}
-                placeholder="Yes/No"
+                placeholder="Evet/Hayır"
                 required
               />
             </div>
@@ -131,7 +131,7 @@ const AssessmentForm = () => {
                 name="useOfCAD"
                 value={formData.useOfCAD}
                 onChange={handleChange}
-                placeholder="Yes/No"
+                placeholder="Evet/Hayır"
                 required
               />
             </div>
@@ -142,7 +142,7 @@ const AssessmentForm = () => {
                 name="managementUnderstanding"
                 value={formData.managementUnderstanding}
                 onChange={handleChange}
-                placeholder="Yes/No"
+                placeholder="Evet/Hayır"
                 required
               />
             </div>
@@ -153,7 +153,7 @@ const AssessmentForm = () => {
                 name="inHouseDevelopment"
                 value={formData.inHouseDevelopment}
                 onChange={handleChange}
-                placeholder="Yes/No"
+                placeholder="Evet/Hayır"
                 required
               />
             </div>
@@ -164,7 +164,7 @@ const AssessmentForm = () => {
                 name="digitalMaturity"
                 value={formData.digitalMaturity}
                 onChange={handleChange}
-                placeholder="Yes/No"
+                placeholder="Evet/Hayır"
                 required
               />
             </div>

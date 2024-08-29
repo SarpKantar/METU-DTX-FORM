@@ -8,6 +8,7 @@ import '../styling/LoginPage.css';
 const CompanyLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // State for error message
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const CompanyLogin = () => {
   }, [email, password]);
 
   const handleLogin = async () => {
+    setErrorMessage(''); // Clear previous error message
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -37,11 +39,11 @@ const CompanyLogin = () => {
         sessionStorage.setItem('userType', 'company');
         navigate('/company-dashboard');
       } else {
-        alert('Not authorized as company user');
+        setErrorMessage('Not authorized as company user'); // Set error message
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      alert('Login failed. Please check your credentials.');
+      setErrorMessage('Login failed. Please check your credentials.'); // Set error message
     }
   };
 
@@ -70,6 +72,7 @@ const CompanyLogin = () => {
       />
       <button className="button" onClick={handleLogin}>Login</button>
       <button className="button" onClick={handleBack}>Back</button> {/* Back button */}
+      {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
     </div>
   );
 };

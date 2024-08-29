@@ -7,6 +7,10 @@
     background-color: #f0f8ff;
     padding: 10px;
   }
+  .error-message {
+    color: red; /* Change color as needed */
+    margin-top: 10px;
+  }
   
   .title {
     color: #add8e6;
