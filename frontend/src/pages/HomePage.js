@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styling/HomePage.css';
+import METU_DTX_Logo from '../DTX-Logo-Sqr.png'; // Ensure this path is correct
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ const HomePage = () => {
 
   return (
     <div className="container">
+      <div className="logo-container">
+        <img src={METU_DTX_Logo} alt="METU DTX Logo" className="logo" />
+      </div>
       <div className="login-box">
         <h1 className="title-home">Digital Innovation Assessment</h1>
         {!showRegisterOptions ? (
