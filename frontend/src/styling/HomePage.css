@@ -8,39 +8,39 @@ body, html {
   height: 100%;
 }
 
-.container {
-  display: flex !important;  /* Flexbox for side-by-side layout */
-  justify-content: space-between;   /* Space between logo and login box */
-  align-items: center !important; /* Vertically center the content */
-  min-height: 100vh;
+.home-container {
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space between logo and login box */
+  align-items: center; /* Vertically center the content */
+  min-height: 100vh; /* Full viewport height */
   padding: 20px;
+  padding-right: 100px !important;
+  flex-direction: row !important;
   background-color: #f0f2f5; /* A light background similar to Facebook */
 }
 
+.logo-container {
+  display: flex; /* Use flexbox for logo alignment */
+  justify-content: center;
+  margin-bottom: 55px; /* Center the logo horizontally */
+}
 
 .logo {
-  max-width: 35%; /* Ensure the logo doesn't exceed its container */
+  max-width: 40%; /* Ensure the logo doesn't exceed its container */
   height: auto;
-  position: absolute;
-  left: 100px;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .login-box {
   background-color: rgb(63, 48, 48);
   padding: 20px;
   border-radius: 8px;
-  width: 400px; /* Fixed width for the login box */
+  width: 90%; /* Make width responsive */
+  max-width: 400px; /* Set a maximum width */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for a lifted effect */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: absolute; /* Use absolute positioning */
-  right: 150px; /* Adjust this value as needed */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust for the height of the box */
 }
 
 .title-home {

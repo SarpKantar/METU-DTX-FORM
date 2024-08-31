@@ -24,7 +24,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="home-container">
       <div className="logo-container">
         <img src={METU_DTX_Logo} alt="METU DTX Logo" className="logo" />
       </div>
