@@ -9,9 +9,9 @@ body, html {
 }
 
 .container {
-  display: flex; /* Flexbox for side-by-side layout */
-  justify-content: space-between; /* Space between logo and login box */
-  align-items: cente; /* Vertically center the content */
+  display: flex !important;  /* Flexbox for side-by-side layout */
+  justify-content: space-between;   /* Space between logo and login box */
+  align-items: center !important; /* Vertically center the content */
   min-height: 100vh;
   padding: 20px;
   background-color: #f0f2f5; /* A light background similar to Facebook */
@@ -19,8 +19,12 @@ body, html {
 
 
 .logo {
-  max-width: 30%; /* Ensure the logo doesn't exceed its container */
+  max-width: 35%; /* Ensure the logo doesn't exceed its container */
   height: auto;
+  position: absolute;
+  left: 100px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .login-box {
@@ -33,6 +37,10 @@ body, html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: absolute; /* Use absolute positioning */
+  right: 150px; /* Adjust this value as needed */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for the height of the box */
 }
 
 .title-home {
