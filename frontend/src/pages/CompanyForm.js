@@ -54,6 +54,7 @@ const CompanyForm = () => {
   const [smartServices, setSmartServices] = useState([]);
   const [productionAutomationLevel, setProductionAutomationLevel] = useState('');
   const [optimalUse, setOptimalUse] = useState('');
+  const [salesReasons, setSalesReasons] = useState('');
   const [valueRecovery, setValueRecovery] = useState('');
   const [supportModels, setSupportModels] = useState('');
   const [productStrategy, setProductStrategy] = useState(''); // Add this line
@@ -65,6 +66,9 @@ const CompanyForm = () => {
   const [digitalTechnologyReasons, setDigitalTechnologyReasons] = useState({});
   const [digitalizationGoals, setDigitalizationGoals] = useState([]);
   const [managementApproach, setManagementApproach] = useState([]);
+  const [otherJobTitle, setOtherJobTitle] = useState('');
+  const [otherDepartment, setOtherDepartment] = useState('');
+  const [otherDepartment35, setOtherDepartment35] = useState('');
 
   const [currentRelevance, setCurrentRelevance] = useState({
     hydraulicPneumatic: '',
@@ -118,150 +122,316 @@ const CompanyForm = () => {
 
   const navigate = useNavigate();
   const handleNext = (e) => {
-    e.preventDefault();
-  
-    const requiredFieldsPage1 = [
-      companyName,
-      participantName,
-      phoneNumber,
-      email,
-      companyAddress,
-      jobTitle,
-      yearsInPosition,
-      companyAge,
-      companySector,
-      exportStatus,
-      eExport,
-      developmentAreas,
-      productionAreas,
-      revenue2022,
-      revenue2021,
-      innovationBudgetCurrent,
-      innovationBudgetFuture,
-      techInvestment,
-      fullTimeEmployees,
-      whiteCollarEmployees,
-      blueCollarEmployees,
-      associateDegreeEmployees,
-      bachelorDegreeEmployees,
-      masterDegreeEmployees,
-      phdDegreeEmployees,
-      departments.length > 0,
-      digitalAssessment,
-      salesMarketingActivities.length > 0
-    ];
-  
-    const requiredFieldsPage2 = [
-      btSystemsUsage,
-      machineControlMethod,
-      digitalizationStatus
-    ];
-  
-    const requiredFieldsPage3 = [
-      digitalizationChallenges,
-      digitalTechnologyReasons
-    ];
-  
-    const isPageValid = (requiredFields) => {
-      return requiredFields.every(field => field);
+    e.preventDefault(); // Formun varsayılan davranışını engelle
+
+    // Zorunlu alanları kontrol et
+    const requiredFields = {
+        1: [
+            { field: companyName, questionNumber: 1 },
+            { field: participantName, questionNumber: 2 },
+            { field: phoneNumber, questionNumber: 3 },
+            { field: email, questionNumber: 4 },
+            { field: companyAddress, questionNumber: 5 },
+            { field: jobTitle, questionNumber: 7 },
+            { field: yearsInPosition, questionNumber: 8 }
+        ],
+        2: [
+            { field: companyAge, questionNumber: 9 },
+            { field: companySector, questionNumber: 10 },
+            { field: exportStatus, questionNumber: 11 },
+            { field: eExport, questionNumber: 12 },
+            { field: targetRegions, questionNumber: 14 },
+            { field: developmentAreas, questionNumber: 15 },
+            { field: productionAreas, questionNumber: 16 },
+            { field: revenue2022, questionNumber: 17 },
+            { field: revenue2021, questionNumber: 18 },
+            { field: innovationBudgetCurrent, questionNumber: 19 },
+            { field: innovationBudgetFuture, questionNumber: 20 },
+            { field: techInvestment, questionNumber: 21 },
+            { field: fullTimeEmployees, questionNumber: 22 },
+            { field: whiteCollarEmployees, questionNumber: 23 },
+            { field: blueCollarEmployees, questionNumber: 24 },
+            { field: associateDegreeEmployees, questionNumber: 25 },
+            { field: bachelorDegreeEmployees, questionNumber: 26 },
+            { field: masterDegreeEmployees, questionNumber: 27 },
+            { field: phdDegreeEmployees, questionNumber: 28 },
+            { field: departments, questionNumber: 29 },
+            { field: digitalAssessment, questionNumber: 30 },
+            { field: salesMarketingActivities, questionNumber: 31 }
+        ],
+        3: [
+            { field: developmentPlans, questionNumber: 32 },
+            { field: innovationProjects, questionNumber: 33 }
+        ],
+        4: [
+            { field: productVariety, questionNumber: 34 },
+            { field: salesReasons, questionNumber: 35 },
+            { field: btSystemsUsage, questionNumber: 36 },
+            { field: btSystemsUsage, questionNumber: 37 }
+        ],
+        5: [
+            { field: circularDesign, questionNumber: 38 },
+            { field: optimalUse, questionNumber: 39 },
+            { field: valueRecovery, questionNumber: 40 },
+            { field: supportModels, questionNumber: 41 },
+            { field: btSystemsUsage, questionNumber: 42 },
+            { field: btSystemsUsage, questionNumber: 43 },
+            { field: productStrategy, questionNumber: 44 }
+        ],
+        6: [
+            { field: additionalStrategies, questionNumber: 45 },
+            { field: optimizationConcepts, questionNumber: 46 }
+        ],
+        7: [
+            { field: productDevelopmentMethod, questionNumber: 47 },
+            { field: productionStrategy, questionNumber: 48 },
+            { field: productConfiguration, questionNumber: 49 },
+            { field: workflowProcesses, questionNumber: 50 },
+            { field: engineeringDataManagement, questionNumber: 51 },
+            { field: supplyChainManagement, questionNumber: 52 },
+            { field: smartProducts, questionNumber: 53 },
+            { field: smartServices, questionNumber: 54 },
+            { field: productionAutomationLevel, questionNumber: 55 }
+        ],
+        8: [
+            { field: btSystemsUsage, questionNumber: 56 },
+            { field: btSystemChains, questionNumber: 57 },
+            { field: machineControlMethod, questionNumber: 58 }
+        ]
     };
-  
-    if (currentPage === 1) {
-      if (isPageValid(requiredFieldsPage1)) {
-        setCurrentPage(2);
-      } else {
-        alert("Please fill all required fields.");
-      }
-    } else if (currentPage === 2) {
-      if (isPageValid(requiredFieldsPage2)) {
-        setCurrentPage(3);
-      } else {
-        alert("Please fill all required fields.");
-      }
-    } else if (currentPage === 3) {
-      if (isPageValid(requiredFieldsPage3)) {
-        setCurrentPage(4);
-      } else {
-        alert("Please fill all required fields.");
-      }
-    } 
-  };
 
+    // Checkbox soruları için kontrol
+    const checkboxQuestions = {
+        2: [
+            { field: targetRegions, questionNumber: 14 },
+            { field: departments, questionNumber: 29 },
+            { field: salesMarketingActivities, questionNumber: 31 }
+        ],
+        3: [
+            { field: developmentPlans, questionNumber: 32 }
+        ],
+        4: [
+            { field: salesReasons, questionNumber: 35 }
+        ],
+        7: [
+            { field: workflowProcesses, questionNumber: 50 },
+            { field: engineeringDataManagement, questionNumber: 51 },
+            { field: smartServices, questionNumber: 54 }
+        ],
+        8: [
+            { field: btSystemChains, questionNumber: 57 }
+        ]
+    };
+
+    // Zorunlu alanları kontrol et
+    const missingFields = Object.entries(requiredFields)
+        .filter(([key]) => currentPage === parseInt(key))
+        .flatMap(([key, fields]) => fields.map(({ field, questionNumber }) => !field ? questionNumber : null))
+        .filter(Boolean);
+
+    // Checkbox kontrolü
+    for (const [key, fields] of Object.entries(checkboxQuestions)) {
+        if (currentPage === parseInt(key)) {
+            fields.forEach(({ field, questionNumber }) => {
+                if (!field.length) {
+                    missingFields.push(questionNumber);
+                }
+            });
+        }
+    }
+
+    // 36. ve 37. soruların kontrolü
+    if (currentPage === 4) {
+        const trends36 = [
+            'Yeşil Teknoloji', 'CO2 ayak izi ve döngüsel ekonomi', 'Yaşam döngüsü değerlendirmeleri ve Yaşam döngüsü maliyet hesaplamaları',
+            'Uyumluluk ve yeni düzenlemeler', 'BT sistemlerinin operasyonel güvenliği ve veri yönetimi',
+            'Müşteri yolculuğunun karmaşıklığı (tüm ürün yaşam döngüsü aşamalarında kişiselleştirilmiş teklifler ve hizmetler)',
+            'Ürün bireyselleştirme', 'Mekatronik sistemler', 'Ürünlerde yazılım tanımlı özellikler/ürünlerde gömülü yazılım',
+            'Otonom, dinamik olarak ağa bağlı gibi özelliklere sahip daha büyük bir sistemin parçası olan karmaşık sistemler/ürünler',
+            'Ürün-Hizmet Sistemleri (entegre ürün ve hizmet paketleri, varsa hizmetlerin ayrı fiyatlandırılması)',
+            'Dijital hizmetler ve iş modelleri', 'Paylaşım ekonomisi', 'Veri ekonomisi (uzaktan hizmetlerden gelir elde etme, kestirimci bakım için)',
+            'Sistem Mühendisliği, ITSM, karmaşık sistemler için geliştirme yöntemleri', 'Dijital süreklilik/ uçtan uca entegrasyon',
+            'Karmaşık sistemlerin simülasyonu ve gerçek zamanlı simülasyon', 'Yapay zeka', 'Dijital ikiz', 'Dijital Platformlar ve (Çoklu) Bulut Bilişimi'
+        ];
+        const trends37 = [
+            'Nesnelerin interneti', 'Sanal gerçeklik ortamları ve arayüzler (AR/VR)', 'Blokzincir teknolojisi',
+            'Veri formatları ve veri aktarımı için yeni (açık) standartlar', 'Robotik süreç otomasyonu', 'Yetenekler savaşı',
+            'Yeni iş (mobil çalışma, yaratıcılık, sanal işbirliği)', 'Çeviklik ve kendi kendini organize eden ekipler',
+            'Değer yaratma ağlarının karmaşıklığı ve eksik dayanıklılığı'
+        ];
+
+        trends36.forEach((trend, index) => {
+            if (!btSystemsUsage[`trend-${index}`]) {
+                missingFields.push(36);
+            }
+        });
+
+        trends37.forEach((trend, index) => {
+            if (!btSystemsUsage[`trend-37-${index}`]) {
+                missingFields.push(37);
+            }
+        });
+    }
+
+    if (currentPage === 5) {
+        const components42 = Array.from({ length: 5 }, (_, i) => `component-42-${i}`);
+        const components43 = Array.from({ length: 5 }, (_, i) => `component-43-${i}`);
+
+        components42.forEach((component) => {
+            if (!btSystemsUsage[component]) missingFields.push(42);
+        });
+
+        components43.forEach((component) => {
+            if (!btSystemsUsage[component]) missingFields.push(43);
+        });
+    }
+
+    if (currentPage === 8) {
+        const requiredKeys = [
+            'iysDys', 'projectManagement', 'crm', 'pdmPlm', 'cad', 'ecad', 'cae', 'cam', 'erp', 'mes', 'mom', 'supplyChain', 'integrationTools'
+        ];
+        const allAnswered = requiredKeys.every(key => btSystemsUsage[key]);
+        if (!allAnswered) {
+            missingFields.push(56);
+        }
+    }
+
+    // Eksik alanları kontrol et
+    if (missingFields.length > 0) {
+        const uniqueMissingFields = [...new Set(missingFields)].sort((a, b) => a - b); // Tekil soruları al ve sırala
+        const message = `Sonraki sayfaya geçmeden önce aşağıdaki ${uniqueMissingFields.length} soruyu tamamlamanız gerekiyor: ${uniqueMissingFields.join(', ')} numaralı ${uniqueMissingFields.length > 1 ? 'sorular' : 'soru'}.`;
+        alert(message);
+        return;
+    }
+
+    // İleri git
+    setCurrentPage((prevPage) => prevPage + 1);
+};
   /* Zorunlu olmayan sorular: 6, 13, 57, 60, 61, 63 */
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const companyData = {
-      companyName,
-      participantName,
-      phoneNumber,
-      email,
-      companyAddress,
-      companyWebsite,
-      jobTitle,
-      yearsInPosition,
-      companyAge,
-      companySector,
-      exportStatus,
-      eExport,
-      exportPercentage,
-      targetRegions,
-      developmentAreas,
-      productionAreas,
-      revenue2022,
-      revenue2021,
-      innovationBudgetCurrent,
-      innovationBudgetFuture,
-      techInvestment,
-      fullTimeEmployees,
-      whiteCollarEmployees,
-      blueCollarEmployees,
-      associateDegreeEmployees,
-      bachelorDegreeEmployees,
-      masterDegreeEmployees,
-      phdDegreeEmployees,
-      departments,
-      digitalAssessment,
-      salesMarketingActivities,
-      developmentPlans,
-      innovationProjects,
-      productVariety,
-      customerPreferences,
-      circularDesign,
-      optimalUse,
-      valueRecovery,
-      supportModels,
-      productStrategy,
-      additionalStrategies,
-      optimizationConcepts,
-      productDevelopmentMethod,
-      productionStrategy,
-      productConfiguration,
-      workflowProcesses,
-      engineeringDataManagement,
-      supplyChainManagement,
-      smartProducts,
-      smartServices,
-      productionAutomationLevel,
-      btSystemsUsage,
-      machineControlMethod,
-      digitalizationStatus,
-      digitalizationChallenges,
-      digitalTechnologyReasons,
-      otherResponse,
-      digitalizationGoals,
-      managementApproach
-    };
-  
-    try {
-      await addDoc(collection(db, 'companyForms'), companyData);
-      alert('Company form submitted successfully!');
-      navigate('/login/company'); 
-    } catch (error) {
-      console.error('Error submitting form: ', error);
-      alert('Error submitting form');
+
+    // 9. sayfadaki zorunlu alanları kontrol et
+    const requiredFields = [
+        { field: digitalizationStatus, questionNumber: 59 },
+        { field: digitalTechnologyReasons, questionNumber: 62 },
+        { field: digitalizationGoals.length > 0, questionNumber: 64 }, // Checkbox kontrolü
+        { field: managementApproach.length > 0, questionNumber: 65 }  // Checkbox kontrolü
+    ];
+
+    // 59. soruda 2, 3 veya 4 seçildiyse 60. soruyu zorunlu yap
+    const digitalizationStatusValues = ['2- Şirketimizin dijitalleşmiş olduğunu söylemek zor, ancak yakın zamanda dijital dönüşüm için bir miktar bütçe harcadık.',
+                '3- Şirketimiz ağırlıklı olarak dijital olmayan üretim ve satışa odaklanmıştır; şimdiye kadar dijital tasarım / modelleme / prototipleme / satış konusunda herhangi bir çalışma yapmadık, ancak yakın gelecekte dijitalleşmeye yatırım yapmayı planlıyoruz.',
+                '4- Şirketimiz ağırlıklı olarak dijital olmayan üretim ve satışa odaklanmıştır; şimdiye kadar dijital tasarım / modelleme / prototipleme / satış konusunda herhangi bir çalışma yapmadık, yakın gelecekte yapacağımızı sanmıyoruz.'];
+    const isDigitalizationStatusSelected = digitalizationStatusValues.includes(digitalizationStatus);
+    if (isDigitalizationStatusSelected) {
+        const digitalizationChallengesKeys = [
+            'digitalizationChallenge-0', 'digitalizationChallenge-1', 'digitalizationChallenge-2', 'digitalizationChallenge-3',
+            'digitalizationChallenge-4', 'digitalizationChallenge-5', 'digitalizationChallenge-6', 'digitalizationChallenge-7',
+            'digitalizationChallenge-8', 'digitalizationChallenge-9', 'digitalizationChallenge-10', 'digitalizationChallenge-11',
+            'digitalizationChallenge-12', 'digitalizationChallenge-13', 'digitalizationChallenge-14', 'digitalizationChallenge-15',
+            'digitalizationChallenge-16', 'digitalizationChallenge-17', 'digitalizationChallenge-18', 'digitalizationChallenge-19'
+        ];
+        const allDigitalizationChallengesAnswered = digitalizationChallengesKeys.every(key => digitalizationChallenges[key]);
+        if (!allDigitalizationChallengesAnswered) {
+            requiredFields.push({ field: false, questionNumber: 60 });
+        }
     }
-  };
+
+    // 62. sorunun kontrolü
+    const digitalTechnologyReasonsKeys = [
+        'digitalTechnologyReason-0', 'digitalTechnologyReason-1', 'digitalTechnologyReason-2', 'digitalTechnologyReason-3',
+        'digitalTechnologyReason-4', 'digitalTechnologyReason-5', 'digitalTechnologyReason-6', 'digitalTechnologyReason-7',
+        'digitalTechnologyReason-8', 'digitalTechnologyReason-9', 'digitalTechnologyReason-10', 'digitalTechnologyReason-11'
+    ];
+    const allDigitalTechnologyReasonsAnswered = digitalTechnologyReasonsKeys.every(key => digitalTechnologyReasons[key]);
+
+    if (!allDigitalTechnologyReasonsAnswered) {
+        requiredFields.push({ field: false, questionNumber: 62 });
+    }
+
+    const missingFields = requiredFields
+        .map(({ field, questionNumber }) => !field ? questionNumber : null)
+        .filter(Boolean)
+        .sort((a, b) => a - b); // Soru numaralarını sırala
+
+    if (missingFields.length > 0) {
+        const message = `Formu göndermeden önce aşağıdaki ${missingFields.length} soruyu tamamlamanız gerekiyor: ${missingFields.join(', ')} numaralı ${missingFields.length > 1 ? 'sorular' : 'soru'}.`;
+        alert(message);
+        return;
+    }
+
+    const companyData = {
+        companyName,
+        participantName,
+        phoneNumber,
+        email,
+        companyAddress,
+        companyWebsite,
+        jobTitle,
+        yearsInPosition,
+        companyAge,
+        companySector,
+        exportStatus,
+        eExport,
+        exportPercentage,
+        targetRegions,
+        developmentAreas,
+        productionAreas,
+        revenue2022,
+        revenue2021,
+        innovationBudgetCurrent,
+        innovationBudgetFuture,
+        techInvestment,
+        fullTimeEmployees,
+        whiteCollarEmployees,
+        blueCollarEmployees,
+        associateDegreeEmployees,
+        bachelorDegreeEmployees,
+        masterDegreeEmployees,
+        phdDegreeEmployees,
+        departments,
+        digitalAssessment,
+        salesMarketingActivities,
+        developmentPlans,
+        innovationProjects,
+        productVariety,
+        customerPreferences,
+        circularDesign,
+        optimalUse,
+        valueRecovery,
+        supportModels,
+        productStrategy,
+        additionalStrategies,
+        optimizationConcepts,
+        productDevelopmentMethod,
+        productionStrategy,
+        productConfiguration,
+        workflowProcesses,
+        engineeringDataManagement,
+        supplyChainManagement,
+        smartProducts,
+        smartServices,
+        productionAutomationLevel,
+        btSystemsUsage,
+        machineControlMethod,
+        digitalizationStatus,
+        digitalizationChallenges,
+        digitalTechnologyReasons,
+        otherResponse,
+        digitalizationGoals,
+        managementApproach
+    };
+
+    try {
+        await addDoc(collection(db, 'companyForms'), companyData);
+        alert('Company form submitted successfully!');
+        navigate('/login/company'); 
+    } catch (error) {
+        console.error('Error submitting form: ', error);
+        alert('Error submitting form');
+    }
+};
 
   const handleBtSystemChainsChange = (e) => {
     const { value, checked } = e.target;
@@ -270,11 +440,31 @@ const CompanyForm = () => {
     );
   };
 
+  const handleSalesReasonsChange = (value) => {
+    setSalesReasons((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((item) => item !== value);
+      } else if (prev.length < 3) {
+        return [...prev, value];
+      }
+      return prev;
+    });
+  };
+
+  const handleJobTitleChange = (e) => {
+    setJobTitle(e.target.value);
+    if (e.target.value !== 'other') {
+      setOtherJobTitle('');
+    }
+  };
+
   const handleDepartmentsChange = (e) => {
     const { value, checked } = e.target;
-    setDepartments((prev) =>
-      checked ? [...prev, value] : prev.filter((v) => v !== value)
-    );
+    if (checked) {
+      setDepartments([...departments, value]);
+    } else {
+      setDepartments(departments.filter((department) => department !== value));
+    }
   };
 
   const handleSalesMarketingActivitiesChange = (e) => {
@@ -352,30 +542,33 @@ const CompanyForm = () => {
   };
 
   const handleWorkflowProcessesChange = (e) => {
-    const { value, checked } = e.target;
+    if (!e.target) return;
+    const { value } = e.target;
     setWorkflowProcesses((prev) =>
-      checked ? [...prev, value] : prev.filter((v) => v !== value)
+        prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
     );
-  };
+};
 
-  const handleEngineeringDataManagementChange = (e) => {
-    const { value, checked } = e.target;
+const handleEngineeringDataManagementChange = (e) => {
+    if (!e.target) return;
+    const { value } = e.target;
     setEngineeringDataManagement((prev) =>
-      checked ? [...prev, value] : prev.filter((v) => v !== value)
+        prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
     );
-  };
+};
 
-  const handleSmartServicesChange = (e) => {
-    const { value, checked } = e.target;
+const handleSmartServicesChange = (e) => {
+    if (!e.target) return;
+    const { value } = e.target;
     setSmartServices((prev) =>
-      checked ? [...prev, value] : prev.filter((v) => v !== value)
+        prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
     );
-  };
+};
 
   return (
     <div className="form-container">
       <div className="intro-text">
-        <h1>ODTÜ DTX - Dijital Olgunluk Değerlendirmesi için Başvuru Formu</h1>
+        <h1>ODTÜ DTX - Dijital Olgunluk Değerlendirmesi Başvuru Formu</h1>
         <p>
           Bu anket, Avrupa Birliği ve Türkiye Cumhuriyeti mali iş birliği çerçevesinde finanse edilen ve Sanayi ve Teknoloji Bakanlığı tarafından yürütülen Rekabetçi Sektörler Programı kapsamındaki "ODTÜ Dijital İnovasyon Merkezi" Projesi dahilinde yapılmaktadır.
         </p>
@@ -393,96 +586,53 @@ const CompanyForm = () => {
       <form onSubmit={handleSubmit}>
       {currentPage === 1 && (
         <>
-          <div className="form-group">
-            <label>Katılımcı Bilgisi</label>
-          <div className="name-inputs">
-            <label>1. Şirket Adı <span className="required-star">*</span></label>
-            <input
-              type="text"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              placeholder="Cevabınızı girin"
-              required
-            />
-            <label>2. Katılımcının adı <span className="required-star">*</span></label>
-            <input
-              type="text"
-              value={participantName}
-              onChange={(e) => setParticipantName(e.target.value)}
-              placeholder="Cevabınızı girin"
-              required
-            />
-            <label>3. Telefon numarası <span className="required-star">*</span></label>
-            <input
-              type="tel"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="Cevabınızı girin"
-              required
-            />
-            <label>4. Değerlendirme planlamasıyla ilgili daha fazla iletişim için katılımcının e-postası <span className="required-star">*</span></label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Cevabınızı girin"
-              required
-            />
-            <label>5. Şirket Adresi <span className="required-star">*</span></label>
-            <input
-              type="text"
-              value={companyAddress}
-              onChange={(e) => setCompanyAddress(e.target.value)}
-              placeholder="Cevabınızı girin"
-              required
-            />
-            <label>6. Şirket Websitesi URL'si</label>
-            <input
-              type="url"
-              value={companyWebsite}
-              onChange={(e) => setCompanyWebsite(e.target.value)}
-              placeholder="Cevabınızı girin"
-            />
-          </div>
+         <div className="form-group">
+         <p class="page-parts">Katılımcı Bilgisi</p>
+         <p class="question-note">1'den 8'e kadar olan soruları cevaplayın.</p>
         </div>
+
+        <div className="form-group">
+        <label>1. Şirket adı <span className="required-star">*</span></label>
+        <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Cevabınızı girin" required />
+        </div>
+
+        <div className="form-group">
+          <label>2. Katılımcının adı <span className="required-star">*</span></label>
+          <input type="text" value={participantName} onChange={(e) => setParticipantName(e.target.value)} placeholder="Cevabınızı girin" required />
+        </div>
+
+        <div className="form-group">
+          <label>3. Telefon numarası <span className="required-star">*</span></label>
+          <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="Cevabınızı girin" required />
+        </div>
+
+        <div className="form-group">
+          <label>4. Katılımcının e-postası <span className="required-star">*</span></label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Cevabınızı girin" required />
+        </div>
+
+        <div className="form-group">
+          <label>5. Şirket Adresi <span className="required-star">*</span></label>
+          <input type="text" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} placeholder="Cevabınızı girin" required />
+        </div>
+
+        <div className="form-group">
+          <label>6. Şirket Websitesi URL'si</label>
+          <input type="url" value={companyWebsite} onChange={(e) => setCompanyWebsite(e.target.value)} placeholder="Cevabınızı girin" />
+        </div>
+
         <div className="form-group">
           <label>7. Şirketteki ünvanınız <span className="required-star">*</span></label>
           <div className="radio-group">
-            <label>
-              <input type="radio" name="jobTitle" value="Şirket sahibi" onChange={(e) => setJobTitle(e.target.value)} required /> Şirket sahibi
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="Genel Müdür/CEO" onChange={(e) => setJobTitle(e.target.value)} required /> Genel Müdür/CEO
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="BT Müdürü/CTO/CDO" onChange={(e) => setJobTitle(e.target.value)} required /> BT Müdürü/CTO/CDO
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="Üretim Müdürü" onChange={(e) => setJobTitle(e.target.value)} required /> Üretim Müdürü
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="AR-GE Müdürü" onChange={(e) => setJobTitle(e.target.value)} required /> AR-GE Müdürü
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="Proje Direktörü (Dijital Dönüşüm)" onChange={(e) => setJobTitle(e.target.value)} required /> Proje Direktörü (Dijital Dönüşüm)
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="İş Geliştirme Müdürü" onChange={(e) => setJobTitle(e.target.value)} required /> İş Geliştirme Müdürü
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="Endüstriyel Tasarımcı" onChange={(e) => setJobTitle(e.target.value)} required /> Endüstriyel Tasarımcı
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="Pazarlama Müdürü" onChange={(e) => setJobTitle(e.target.value)} required /> Pazarlama Müdürü
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="Satış Müdürü" onChange={(e) => setJobTitle(e.target.value)} required /> Satış Müdürü
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="Yönetici (diğer)" onChange={(e) => setJobTitle(e.target.value)} required /> Yönetici (diğer)
-            </label>
-            <label>
-              <input type="radio" name="jobTitle" value="Other" onChange={(e) => setJobTitle(e.target.value)} required /> Other
+            {["Şirket sahibi", "Genel Müdür/CEO", "BT Müdürü/CTO/CDO", "Üretim Müdürü", "AR-GE Müdürü", "Proje Direktörü (Dijital Dönüşüm)", "İş Geliştirme Müdürü", "Endüstriyel Tasarımcı", "Pazarlama Müdürü", "Satış Müdürü", "Yönetici (diğer)"].map((title) => (
+              <label key={title}>
+                <input type="radio" value={title} checked={jobTitle === title} onChange={handleJobTitleChange} />
+                {title}
+              </label>
+            ))}
+            <label style={{ display: 'flex', alignItems: 'center' }}>
+              <input type="radio" value="other" checked={jobTitle === 'other'} onChange={handleJobTitleChange} />
+              <input type="text" value={otherJobTitle} onChange={(e) => setOtherJobTitle(e.target.value)} placeholder="Diğer" style={{ marginLeft: '10px' }} />
             </label>
           </div>
         </div>
@@ -496,32 +646,29 @@ const CompanyForm = () => {
             required
           />
         </div>
+        <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+        <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+        </>
+      )}
+      {currentPage === 2 && (
+        <>
         <div className="form-group">
-          <label>9. Şirketiniz kaç yaşındadır? <span className="required-star">*</span></label>
-          <div className="radio-group">
-            <label>
-              <input type="radio" name="companyAge" value="Yeni kuruluş – 1 yaşından küçük" onChange={(e) => setCompanyAge(e.target.value)} required /> Yeni kuruluş – 1 yaşından küçük
-            </label>
-            <label>
-              <input type="radio" name="companyAge" value="1 - 2 yaş" onChange={(e) => setCompanyAge(e.target.value)} required /> 1 - 2 yaş
-            </label>
-            <label>
-              <input type="radio" name="companyAge" value="3 - 5 yaş" onChange={(e) => setCompanyAge(e.target.value)} required /> 3 - 5 yaş
-            </label>
-            <label>
-              <input type="radio" name="companyAge" value="6 - 15 yaş" onChange={(e) => setCompanyAge(e.target.value)} required /> 6 - 15 yaş
-            </label>
-            <label>
-              <input type="radio" name="companyAge" value="16 - 30 yaş" onChange={(e) => setCompanyAge(e.target.value)} required /> 16 - 30 yaş
-            </label>
-            <label>
-              <input type="radio" name="companyAge" value="31 + yaş" onChange={(e) => setCompanyAge(e.target.value)} required /> 31 + yaş
-            </label>
-          </div>
+        <p class="page-parts">Şirket Profili</p>
+        <p class="question-note">9'dan 31'e kadar olan soruları cevaplayın.</p>
+        <label>9. Şirketiniz kaç yaşındadır? <span className="required-star">*</span></label>
+        <div className="radio-group">
+          <label><input type="radio" name="companyAge" value="Yeni kuruluş - 1 yaşından küçük" checked={companyAge === "Yeni kuruluş - 1 yaşından küçük"} onChange={() => setCompanyAge("Yeni kuruluş - 1 yaşından küçük")} required /> Yeni kuruluş – 1 yaşından küçük</label>
+          <label><input type="radio" name="companyAge" value="1 - 2 yaş" checked={companyAge === "1 - 2 yaş"} onChange={() => setCompanyAge("1 - 2 yaş")} required /> 1 - 2 yaş</label>
+          <label><input type="radio" name="companyAge" value="3 - 5 yaş" checked={companyAge === "3 - 5 yaş"} onChange={() => setCompanyAge("3 - 5 yaş")} required /> 3 - 5 yaş</label>
+          <label><input type="radio" name="companyAge" value="6 - 15 yaş" checked={companyAge === "6 - 15 yaş"} onChange={() => setCompanyAge("6 - 15 yaş")} required /> 6 - 15 yaş</label>
+          <label><input type="radio" name="companyAge" value="16 - 30 yaş" checked={companyAge === "16 - 30 yaş"} onChange={() => setCompanyAge("16 - 30 yaş")} required /> 16 - 30 yaş</label>
+          <label><input type="radio" name="companyAge" value="31 + yaş" checked={companyAge === "31 + yaş"} onChange={() => setCompanyAge("31 + yaş")} required /> 31 + yaş</label>
+        </div>
         </div>
         <div className="form-group">
           <label>10. İşletmenizin sektörü nedir? <span className="required-star">*</span></label>
-          <p>Ekli NACE listesine bakınız (Makine ve otomotiv dışında bir sektör ise veya şirket bu iki sektörden birinin tedarikçisi değil ise, lütfen ankete devam etmeyiniz.)</p>
+          <p class="question-note">Ekli NACE listesine bakınız.</p>
+          <p class="question-note"><strong>(Makine ve otomotiv dışında bir sektör ise veya şirket bu iki sektörden birinin tedarikçisi değil ise, lütfen ankete devam etmeyiniz.)</strong></p>
           <input
             type="text"
             value={companySector}
@@ -533,30 +680,27 @@ const CompanyForm = () => {
         <div className="form-group">
           <label>11. Hizmetlerinizi/ürünlerinizi ihraç ediyor musunuz? <span className="required-star">*</span></label>
           <div className="radio-group">
-            <label>
-              <input type="radio" name="exportStatus" value="Evet doğrudan" onChange={(e) => setExportStatus(e.target.value)} required /> Evet doğrudan
-            </label>
-            <label>
-              <input type="radio" name="exportStatus" value="Evet, aracılar vasıtasıyla" onChange={(e) => setExportStatus(e.target.value)} required /> Evet, aracılar vasıtasıyla
-            </label>
-            <label>
-              <input type="radio" name="exportStatus" value="Hayır, etmiyoruz" onChange={(e) => setExportStatus(e.target.value)} required /> Hayır, etmiyoruz
-            </label>
+            {["Evet doğrudan", "Evet, aracılar vasıtasıyla", "Hayır, etmiyoruz"].map((option) => (
+              <label key={option}>
+                <input type="radio" name="exportStatus" value={option} checked={exportStatus === option} onChange={() => setExportStatus(option)} required /> {option}
+              </label>
+            ))}
           </div>
         </div>
+
         <div className="form-group">
           <label>12. E-ihracat yapıyor musunuz? <span className="required-star">*</span></label>
           <div className="radio-group">
-            <label>
-              <input type="radio" name="eExport" value="Evet" onChange={(e) => setEExport(e.target.value)} required /> Evet
-            </label>
-            <label>
-              <input type="radio" name="eExport" value="Hayır" onChange={(e) => setEExport(e.target.value)} required /> Hayır
-            </label>
+            {["Evet", "Hayır"].map((option) => (
+              <label key={option}>
+                <input type="radio" name="eExport" value={option} checked={eExport === option} onChange={() => setEExport(option)} required /> {option}
+              </label>
+            ))}
           </div>
         </div>
         <div className="form-group">
           <label>13. İhracatın toplam cironuz içindeki yüzdesi nedir?</label>
+          <p class="question-note">(Soru 11 ve Soru 12 EVET kodlandı ise İHRACAT ve E-İHRACAT VARDIR).</p>
           <input
             type="text"
             value={exportPercentage}
@@ -567,39 +711,11 @@ const CompanyForm = () => {
         <div className="form-group">
           <label>14. Gelecek yıl ihracat yapmayı hedeflediğiniz bölgeler var mı? <span className="required-star">*</span></label>
           <div className="checkbox-group">
-            <label>
-              <input type="checkbox" value="Afrika ülkeleri" onChange={handleTargetRegionsChange} /> Afrika ülkeleri
-            </label>
-            <label>
-              <input type="checkbox" value="Avrupa Birliği ülkeleri" onChange={handleTargetRegionsChange} /> Avrupa Birliği ülkeleri
-            </label>
-            <label>
-              <input type="checkbox" value="Türki Cumhuriyetler" onChange={handleTargetRegionsChange} /> Türki Cumhuriyetler
-            </label>
-            <label>
-              <input type="checkbox" value="Diğer Amerika Ülkeleri" onChange={handleTargetRegionsChange} /> Diğer Amerika Ülkeleri
-            </label>
-            <label>
-              <input type="checkbox" value="Diğer Asya Ülkeleri" onChange={handleTargetRegionsChange} /> Diğer Asya Ülkeleri
-            </label>
-            <label>
-              <input type="checkbox" value="Diğer Ülkeler" onChange={handleTargetRegionsChange} /> Diğer Ülkeler
-            </label>
-            <label>
-              <input type="checkbox" value="Kuzey Amerika Serbest Ticaret Bölgesi" onChange={handleTargetRegionsChange} /> Kuzey Amerika Serbest Ticaret Bölgesi
-            </label>
-            <label>
-              <input type="checkbox" value="Okyanus Ülkeleri" onChange={handleTargetRegionsChange} /> Okyanus Ülkeleri
-            </label>
-            <label>
-              <input type="checkbox" value="Orta Doğu Ülkeleri" onChange={handleTargetRegionsChange} /> Orta Doğu Ülkeleri
-            </label>
-            <label>
-              <input type="checkbox" value="Serbest Bölgeler" onChange={handleTargetRegionsChange} /> Serbest Bölgeler
-            </label>
-            <label>
-              <input type="checkbox" value="Uzakdoğu Ülkeleri" onChange={handleTargetRegionsChange} /> Uzakdoğu Ülkeleri
-            </label>
+            {["Afrika ülkeleri", "Avrupa Birliği ülkeleri", "Türki Cumhuriyetler", "Diğer Amerika Ülkeleri", "Diğer Asya Ülkeleri", "Diğer Ülkeler", "Kuzey Amerika Serbest Ticaret Bölgesi", "Okyanus Ülkeleri", "Orta Doğu Ülkeleri", "Serbest Bölgeler", "Uzakdoğu Ülkeleri"].map((region) => (
+              <label key={region}>
+                <input type="checkbox" value={region} checked={targetRegions.includes(region)} onChange={handleTargetRegionsChange} /> {region}
+              </label>
+            ))}
           </div>
         </div>
         <div className="form-group">
@@ -625,41 +741,22 @@ const CompanyForm = () => {
         <div className="form-group">
           <label>17. 2022 yılındaki Cironuz nedir? <span className="required-star">*</span></label>
           <div className="radio-group">
-            <label>
-              <input type="radio" name="revenue2022" value="0 - 3 Milyon TL (mikro)" onChange={(e) => setRevenue2022(e.target.value)} required /> 0 - 3 Milyon TL (mikro)
-            </label>
-            <label>
-              <input type="radio" name="revenue2022" value="3 - 25 Milyon TL (small)" onChange={(e) => setRevenue2022(e.target.value)} required /> 3 - 25 Milyon TL (small)
-            </label>
-            <label>
-              <input type="radio" name="revenue2022" value="25 - 125 Milyon TL (orta)" onChange={(e) => setRevenue2022(e.target.value)} required /> 25 - 125 Milyon TL (orta)
-            </label>
-            <label>
-              <input type="radio" name="revenue2022" value="125 - 500 Milyon TL (büyük)" onChange={(e) => setRevenue2022(e.target.value)} required /> 125 - 500 Milyon TL (büyük)
-            </label>
-            <label>
-              <input type="radio" name="revenue2022" value="+ 500 Milyon TL" onChange={(e) => setRevenue2022(e.target.value)} required /> + 500 Milyon TL
-            </label>
+            {["0 - 3 Milyon TL (mikro)", "3 - 25 Milyon TL (small)", "25 - 125 Milyon TL (orta)", "125 - 500 Milyon TL (büyük)", "+ 500 Milyon TL"].map((option) => (
+              <label key={option}>
+                <input type="radio" name="revenue2022" value={option} checked={revenue2022 === option} onChange={() => setRevenue2022(option)} required /> {option}
+              </label>
+            ))}
           </div>
         </div>
+
         <div className="form-group">
           <label>18. 2021 yılındaki cironuz nedir? <span className="required-star">*</span></label>
           <div className="radio-group">
-            <label>
-              <input type="radio" name="revenue2021" value="0 - 3 Milyon TL (mikro)" onChange={(e) => setRevenue2021(e.target.value)} required /> 0 - 3 Milyon TL (mikro)
-            </label>
-            <label>
-              <input type="radio" name="revenue2021" value="3 - 25 Milyon TL (küçük)" onChange={(e) => setRevenue2021(e.target.value)} required /> 3 - 25 Milyon TL (küçük)
-            </label>
-            <label>
-              <input type="radio" name="revenue2021" value="25 - 125 Milyon TL (orta)" onChange={(e) => setRevenue2021(e.target.value)} required /> 25 - 125 Milyon TL (orta)
-            </label>
-            <label>
-              <input type="radio" name="revenue2021" value="125 - 500 Milyon TL (büyük)" onChange={(e) => setRevenue2021(e.target.value)} required /> 125 - 500 Milyon TL (büyük)
-            </label>
-            <label>
-              <input type="radio" name="revenue2021" value="+ 500 Milyon TL" onChange={(e) => setRevenue2021(e.target.value)} required /> + 500 Milyon TL
-            </label>
+            {["0 - 3 Milyon TL (mikro)", "3 - 25 Milyon TL (küçük)", "25 - 125 Milyon TL (orta)", "125 - 500 Milyon TL (büyük)", "+ 500 Milyon TL"].map((option) => (
+              <label key={option}>
+                <input type="radio" name="revenue2021" value={option} checked={revenue2021 === option} onChange={() => setRevenue2021(option)} required /> {option}
+              </label>
+            ))}
           </div>
         </div>
         <div className="form-group">
@@ -674,6 +771,7 @@ const CompanyForm = () => {
         </div>
         <div className="form-group">
           <label>20. Önümüzdeki üç yıl içinde toplam cironuzun ne kadarını inovasyon ve Ar-Ge faaliyetlerine ayırmayı planlıyorsunuz? <span className="required-star">*</span></label>
+          <p class="question-note">(Yüzde yazınız)</p>
           <input
             type="number"
             value={innovationBudgetFuture}
@@ -684,6 +782,7 @@ const CompanyForm = () => {
         </div>
         <div className="form-group">
           <label>21. Son üç yıldaki teknoloji yatırımınız ne kadardır? <span className="required-star">*</span></label>
+          <p class="question-note">TL/Cironuzdaki yüzdelik payı</p>
           <input
             type="text"
             value={techInvestment}
@@ -765,47 +864,20 @@ const CompanyForm = () => {
         <div className="form-group">
           <label>29. Aşağıda listelenen departmanlardan hangileri şirketinizde mevcuttur? <span className="required-star">*</span></label>
           <div className="checkbox-group">
-            <label>
-              <input type="checkbox" value="AR-GE ve Teknoloji Geliştirme" onChange={handleDepartmentsChange} /> AR-GE ve Teknoloji Geliştirme
-            </label>
-            <label>
-              <input type="checkbox" value="Sertifikalı AR-GE Merkezi" onChange={handleDepartmentsChange} /> Sertifikalı AR-GE Merkezi
-            </label>
-            <label>
-              <input type="checkbox" value="Tasarım/Ürün Geliştirme" onChange={handleDepartmentsChange} /> Tasarım/Ürün Geliştirme
-            </label>
-            <label>
-              <input type="checkbox" value="Sertifikalı Tasarım Merkezi" onChange={handleDepartmentsChange} /> Sertifikalı Tasarım Merkezi
-            </label>
-            <label>
-              <input type="checkbox" value="Endüstri Mühendisliği" onChange={handleDepartmentsChange} /> Endüstri Mühendisliği
-            </label>
-            <label>
-              <input type="checkbox" value="Üretim/İmalat" onChange={handleDepartmentsChange} /> Üretim/İmalat
-            </label>
-            <label>
-              <input type="checkbox" value="Lojistik" onChange={handleDepartmentsChange} /> Lojistik
-            </label>
-            <label>
-              <input type="checkbox" value="Finans" onChange={handleDepartmentsChange} /> Finans
-            </label>
-            <label>
-              <input type="checkbox" value="Satış & Pazarlama" onChange={handleDepartmentsChange} /> Satış & Pazarlama
-            </label>
-            <label>
-              <input type="checkbox" value="Satın alma" onChange={handleDepartmentsChange} /> Satın alma
-            </label>
-            <label>
-              <input type="checkbox" value="Dış Ticaret ve İhracat" onChange={handleDepartmentsChange} /> Dış Ticaret ve İhracat
-            </label>
-            <label>
-              <input type="checkbox" value="Other" onChange={handleDepartmentsChange} /> Other
+            {["AR-GE ve Teknoloji Geliştirme", "Sertifikalı AR-GE Merkezi", "Tasarım/Ürün Geliştirme", "Sertifikalı Tasarım Merkezi", "Endüstri Mühendisliği", "Üretim/İmalat", "Lojistik", "Finans", "Satış & Pazarlama", "Satın alma", "Dış Ticaret ve İhracat"].map((department) => (
+              <label key={department}>
+                <input type="checkbox" value={department} checked={departments.includes(department)} onChange={handleDepartmentsChange} /> {department}
+              </label>
+            ))}
+            <label style={{ display: 'flex', alignItems: 'center' }}>
+              <input type="checkbox" value="other" checked={departments.includes('other')} onChange={handleDepartmentsChange} />
+              <input type="text" value={otherDepartment} onChange={(e) => setOtherDepartment(e.target.value)} placeholder="Diğer" style={{ marginLeft: '10px' }} />
             </label>
           </div>
         </div>
         <div className="form-group">
           <label>30. Herhangi bir dijitalleşme değerlendirmesine katıldınız mı? Cevabınız evet ise hangi değerlendirme yöntemine veya hizmetine katıldınız? <span className="required-star">*</span></label>
-          <p>Eğer soruya cevabınız evet ise lütfen değerlendirmenin adını ve ofisini yazınız.</p>
+          <p class="question-note">Eğer soruya cevabınız evet ise lütfen değerlendirmenin adını ve ofisini yazınız.</p>
           <input
             type="text"
             value={digitalAssessment}
@@ -817,51 +889,58 @@ const CompanyForm = () => {
         <div className="form-group">
           <label>31. Lütfen bize şirketinizin satış ve pazarlama yaklaşımından bahsedin. Şirketiniz aşağıdaki faaliyetlerden hangilerini gerçekleştiriyor? <span className="required-star">*</span></label>
           <div className="checkbox-group">
-            <label>
-              <input type="checkbox" value="Şirketin sosyal medya hesabı var (Linkedin, Instagram, Facebook vb.)" onChange={handleSalesMarketingActivitiesChange} /> Şirketin sosyal medya hesabı var (Linkedin, Instagram, Facebook vb.)
-            </label>
-            <label>
-              <input type="checkbox" value="Şirketin işleyen bir web sayfası var" onChange={handleSalesMarketingActivitiesChange} /> Şirketin işleyen bir web sayfası var
-            </label>
-            <label>
-              <input type="checkbox" value="Şirket e-ticaret yapıyor (kendi web sitesi)" onChange={handleSalesMarketingActivitiesChange} /> Şirket e-ticaret yapıyor (kendi web sitesi)
-            </label>
-            <label>
-              <input type="checkbox" value="Şirket çevrimiçi pazar yeri üzerinden satış yapıyor (amazon vb)" onChange={handleSalesMarketingActivitiesChange} /> Şirket çevrimiçi pazar yeri üzerinden satış yapıyor (amazon vb)
-            </label>
-            <label>
-              <input type="checkbox" value="Şirket tele pazarlama yapıyor" onChange={handleSalesMarketingActivitiesChange} /> Şirket tele pazarlama yapıyor
-            </label>
-            <label>
-              <input type="checkbox" value="Şirket düzenli olarak fuarlara katılıyor" onChange={handleSalesMarketingActivitiesChange} /> Şirket düzenli olarak fuarlara katılıyor
-            </label>
-            <label>
-              <input type="checkbox" value="Şirket aktif olarak reklam veriyor" onChange={handleSalesMarketingActivitiesChange} /> Şirket aktif olarak reklam veriyor
-            </label>
-            <label>
-              <input type="checkbox" value="Şirket eşleştirme etkinliklerine katılıyor" onChange={handleSalesMarketingActivitiesChange} /> Şirket eşleştirme etkinliklerine katılıyor
-            </label>
+            {[
+              "Şirketin sosyal medya hesabı var (Linkedin, Instagram, Facebook vb.)",
+              "Şirketin işleyen bir web sayfası var",
+              "Şirket e-ticaret yapıyor (kendi web sitesi)",
+              "Şirket çevrimiçi pazar yeri üzerinden satış yapıyor (amazon vb)",
+              "Şirket tele pazarlama yapıyor",
+              "Şirket düzenli olarak fuarlara katılıyor",
+              "Şirket aktif olarak reklam veriyor",
+              "Şirket eşleştirme etkinliklerine katılıyor"
+            ].map((activity) => (
+              <label key={activity}>
+                <input type="checkbox" value={activity} checked={salesMarketingActivities.includes(activity)} onChange={handleSalesMarketingActivitiesChange} /> {activity}
+              </label>
+            ))}
           </div>
-          </div>
-          <button type="button" onClick={handleNext}>Next</button>
-          <button type="button" className="button" onClick={() => setCurrentPage(2)}>Go to Page 2</button>
-          <button type="button" className="button" onClick={() => setCurrentPage(3)}>Go to Page 3</button>
-          <button type="button" className="button" onClick={() => setCurrentPage(4)}>Go to Page 4</button>
+        </div>
+              <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+
         </>
       )}
-      {currentPage === 2 && (
+      {currentPage === 3 && (
   <>
     <div className="form-group">
-      <label>32. Şirketinizde aşağıdakilerden herhangi biri var mı? Lütfen geçerli olanları seçiniz. *</label>
+    <p class="page-parts">Şirket Stratejisi</p>
+    <p class="question-note">32. ve 33. soruları cevaplayın.</p>
+      <label>32. Şirketinizde aşağıdakilerden herhangi biri var mı? Lütfen geçerli olanları seçiniz. <span className="required-star">*</span></label>
       <div className="checkbox-group">
         <label>
-          <input type="checkbox" value="Şirket gelişim planı" onChange={handleDevelopmentPlansChange} /> Şirket gelişim planı: Bir iş geliştirme planı, işletmenin hem uzun hem de kısa vadeli hedeflerini ve bunlara nasıl ulaşmayı planladıklarını gösteren yazılı bir belgedir.
+          <input
+            type="checkbox"
+            value="Şirket gelişim planı"
+            checked={developmentPlans.includes("Şirket gelişim planı")}
+            onChange={handleDevelopmentPlansChange}
+          /> Şirket gelişim planı: Bir iş geliştirme planı, işletmenin hem uzun hem de kısa vadeli hedeflerini ve bunlara nasıl ulaşmayı planladıklarını gösteren yazılı bir belgedir.
         </label>
         <label>
-          <input type="checkbox" value="İş planı" onChange={handleDevelopmentPlansChange} /> İş planı: Bir iş planı, hedeflerini ve bunlara ulaşmak için planlarını vurgulayan belgelenmiş bir stratejidir. Bir şirketin pazara açılma planını, finansal projeksiyonlarını, pazar araştırmasını, iş amacını ve misyon beyanını ana hatlarıyla belirtir.
+          <input
+            type="checkbox"
+            value="İş planı"
+            checked={developmentPlans.includes("İş planı")}
+            onChange={handleDevelopmentPlansChange}
+          /> İş planı: Bir iş planı, hedeflerini ve bunlara ulaşmak için planlarını vurgulayan belgelenmiş bir stratejidir. Bir şirketin pazara açılma planını, finansal projeksiyonlarını, pazar araştırmasını, iş amacını ve misyon beyanını ana hatlarıyla belirtir.
         </label>
         <label>
-          <input type="checkbox" value="Finansal plan" onChange={handleDevelopmentPlansChange} /> Finansal plan: Finansal planlama, gelecekteki finansal hedefleri ve bunlara nasıl ulaşılacağını belirlemek iin mevcut finansal durumu değerlendirme sürecidir. Finansal plan, bir şirketin finansal büyümesi için yol haritası görevini gören bir belgedir.
+          <input
+            type="checkbox"
+            value="Finansal plan"
+            checked={developmentPlans.includes("Finansal plan")}
+            onChange={handleDevelopmentPlansChange}
+          /> Finansal plan: Finansal planlama, gelecekteki finansal hedefleri ve bunlara nasıl ulaşılacağını belirlemek için mevcut finansal durumu değerlendirme sürecidir. Finansal plan, bir şirketin finansal büyümesi için yol haritası görevini gören bir belgedir.
         </label>
       </div>
     </div>
@@ -875,7 +954,17 @@ const CompanyForm = () => {
         required
       />
     </div>
+              <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+
+    </>
+      )}
+    {currentPage === 4 && (
+  <>
     <div className="form-group">
+    <p class="page-parts">Ürün Portföyü ve Ürün Oluşturma</p>
+    <p class="question-note">34'ten 37'ye kadar olan soruları cevaplayın.</p>
       <label>34. Lütfen ürün çeşitliliğinizi belirtir misiniz? Kaç farklı/özgün ürün çeşidi/aileşi üretiyorsunuz? <span className="required-star">*</span></label>
       <input
         type="number"
@@ -887,49 +976,43 @@ const CompanyForm = () => {
     </div>
     <div className="form-group">
       <label>35. Müşterilerinizin ürünlerinizi/hizmetlerinizi rakiplerinize tercih etmesinin en önemli üç nedeni nedir? <span className="required-star">*</span></label>
-      <p>En fazla 3 seçenek işaretleyiniz</p>
+      <p className="question-note">En fazla 3 seçenek işaretleyiniz.</p>
       <div className="checkbox-group">
-        <label>
-          <input type="checkbox" value="Fiyat avantajı" onChange={handleCustomerPreferencesChange} /> Fiyat avantajı
-        </label>
-        <label>
-          <input type="checkbox" value="Ürün kalitesi" onChange={handleCustomerPreferencesChange} /> Ürün kalitesi
-        </label>
-        <label>
-          <input type="checkbox" value="Özel/Niş ürün" onChange={handleCustomerPreferencesChange} /> Özel/Niş ürün
-        </label>
-        <label>
-          <input type="checkbox" value="Hızlı vade/kısa teslimat süresi" onChange={handleCustomerPreferencesChange} /> Hızlı vade/kısa teslimat süresi
-        </label>
-        <label>
-          <input type="checkbox" value="Sürdürülebilir/Ekolojik Ürünler/Hizmetler/Uygulamalar" onChange={handleCustomerPreferencesChange} /> Sürdürülebilir/Ekolojik Ürünler/Hizmetler/Uygulamalar
-        </label>
-        <label>
-          <input type="checkbox" value="Koleksiyon (Çeşitlilik)" onChange={handleCustomerPreferencesChange} /> Koleksiyon (Çeşitlilik)
-        </label>
-        <label>
-          <input type="checkbox" value="Esnek üretim" onChange={handleCustomerPreferencesChange} /> Esnek üretim
-        </label>
-        <label>
-          <input type="checkbox" value="Güvenilirlik" onChange={handleCustomerPreferencesChange} /> Güvenilirlik
-        </label>
-        <label>
-          <input type="checkbox" value="Bilgi/Ustalık" onChange={handleCustomerPreferencesChange} /> Bilgi/Ustalık
-        </label>
-        <label>
-          <input type="checkbox" value="İnovasyon seviyesi" onChange={handleCustomerPreferencesChange} /> İnovasyon seviyesi
-        </label>
-        <label>
-          <input type="checkbox" value="Teknoloji Liderliği" onChange={handleCustomerPreferencesChange} /> Teknoloji Liderliği
-        </label>
-        <label>
-          <input type="checkbox" value="Other" onChange={handleCustomerPreferencesChange} /> Other
+        {[
+          "Fiyat avantajı", "Ürün kalitesi", "Özel/Niş ürün", "Hızlı vade/kısa teslimat süresi",
+          "Sürdürülebilir/Ekolojik Ürünler/Hizmetler/Uygulamalar", "Koleksiyon (Çeşitlilik)",
+          "Esnek üretim", "Güvenilirlik", "Bilgi/Ustalık", "İnovasyon seviyesi", "Teknoloji Liderliği"
+        ].map((reason) => (
+          <label key={reason}>
+            <input
+              type="checkbox"
+              value={reason}
+              checked={salesReasons.includes(reason)}
+              onChange={(e) => handleSalesReasonsChange(e.target.value)}
+            />
+            {reason}
+          </label>
+        ))}
+        <label style={{ display: 'flex', alignItems: 'center' }}>
+          <input
+            type="checkbox"
+            value="other35"
+            checked={salesReasons.includes('other35')}
+            onChange={(e) => handleSalesReasonsChange(e.target.value)}
+          />
+          <input
+            type="text"
+            value={otherDepartment35}
+            onChange={(e) => setOtherDepartment35(e.target.value)}
+            placeholder="Diğer"
+            style={{ marginLeft: '10px' }}
+          />
         </label>
       </div>
     </div>
     <div className="form-group">
         <label>36. Her bir trend mevcut işinizi nasıl etkiliyor? <span className="required-star">*</span></label>
-        <p>Lütfen her satır için geçerli olan cevabı seçiniz.</p>
+        <p class="question-note">Lütfen her satır için geçerli olan cevabı seçiniz.</p>
         <div className="bt-systems-usage">
           <table>
             <thead>
@@ -986,7 +1069,7 @@ const CompanyForm = () => {
       </div>
       <div className="form-group">
         <label>37. Her bir trend mevcut işinizi nasıl etkiliyor? <span className="required-star">*</span></label>
-        <p>Lütfen her satır için geçerli olan cevabı seçiniz.</p>
+        <p class="question-note">Lütfen her satır için geçerli olan cevabı seçiniz.</p>
         <div className="bt-systems-usage">
           <table>
             <thead>
@@ -1030,7 +1113,18 @@ const CompanyForm = () => {
           </table>
         </div>
       </div>
+      <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+      <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+      <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+
+        </>
+      )}
+      {currentPage === 5 && (
+  <>
     <div className="form-group">
+    <p class="page-parts">Lütfen seçim yaparak şirketinizin döngüsel ekonomiye yaklaşımını belirtiniz.</p>
+    <p class="page-parts">Bunları şirketinizde uyguluyor musunuz, evet ise nasıl? Lütfen bize biraz detay veriniz ve döngüsel ekonominin her başlığı hakkında yorum yapınız.</p>
+    <p class="question-note">38'ten 44'e kadar olan soruları cevaplayın.</p>
       <label>38. Döngüsel Tasarım/Üretim: Döngüsel Tasarım/Üretim modelleri, bir ürünün geliştirme aşamasına odaklanır. Ürünlerin ve varlıkların döngüsel kaynak verimliliğini artırmayı amaçlar. Ürünler daha uzun süre dayanacak ve bakım, onarımı, yükseltilmesi, yenilenmesi, yeniden üretilmesi veya geri dönüştürülmesi daha kolay olacak şekilde tasarlanır. Buna ek olarak, biyo-bazlı veya tamamen geri dönüştürülebilir malzemeler gibi yeni malzemeler geliştirilir veya kullanılır. <span className="required-star">*</span></label>
       <input
         type="text"
@@ -1072,7 +1166,7 @@ const CompanyForm = () => {
     </div>
     <div className="form-group">
         <label>42. Aşağıdaki bileşenlerin/unsurların hâli hazırdaki ürün ve hizmetlerinizle ne kadar ilgili olduğunu belirtir misiniz? <span className="required-star">*</span></label>
-        <p>Günümüz</p>
+        <p class="question-note">Günümüz</p>
         <div className="bt-systems-usage">
           <table>
             <thead>
@@ -1113,7 +1207,7 @@ const CompanyForm = () => {
       </div>
       <div className="form-group">
         <label>43. Aşağıdaki bileşenlerin/unsurların hangilerinin önümüzdeki 5 yıl içinde ürün ve hizmetlerinizle ne kadar ilgili olacağını belirtir misiniz? <span className="required-star">*</span></label>
-        <p>Gelecek</p>
+        <p class="question-note">Gelecek</p>
         <div className="bt-systems-usage">
           <table>
             <thead>
@@ -1154,7 +1248,7 @@ const CompanyForm = () => {
       </div>
     <div className="form-group">
       <label>44. Şirketiniz için geçerli olan ve en çok uygulanan Ürün Yaratma/Geliştirme Stratejisi hangisidir? <span className="required-star">*</span></label>
-      <p>Ürün yaratmanın tanımı: Ürün yaratma, yeni bir ürün veya hizmet geliştirme ve pazara sunma sürecini ifade eder. Müşteri ihtiyaçlarının belirlenmesini, pazar araştırması yapılmasını, ürünün tasarlanmasını ve prototipinin oluşturulmasını, hizmetin üretilmesini veya geliştirilmesini ve son olarak müşterilere sunulmasını ve pazarlanmasını içerir. Kısaca ürün geliştirme + üretim.</p>
+      <p class="question-note"><strong>Ürün yaratmanın tanımı:</strong> Ürün yaratma, yeni bir ürün veya hizmet geliştirme ve pazara sunma sürecini ifade eder. Müşteri ihtiyaçlarının belirlenmesini, pazar araştırması yapılmasını, ürünün tasarlanmasını ve prototipinin oluşturulmasını, hizmetin üretilmesini veya geliştirilmesini ve son olarak müşterilere sunulmasını ve pazarlanmasını içerir. Kısaca ürün geliştirme + üretim.</p>
       <div className="radio-group">
         <label>
           <input 
@@ -1202,15 +1296,17 @@ const CompanyForm = () => {
         </label>
       </div>
     </div>
-    <button type="button" onClick={handleNext}>Next</button>
-    <button type="button" className="button" onClick={() => setCurrentPage(1)}>Go to Page 1</button>
-    <button type="button" className="button" onClick={() => setCurrentPage(3)}>Go to Page 3</button>
-    <button type="button" className="button" onClick={() => setCurrentPage(4)}>Go to Page 4</button>
+              <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+
   </>
 )}
-{currentPage === 3 && (
+{currentPage === 6 && (
   <>
     <div className="form-group">
+    <p class="page-parts">Değer Zinciri Stratejileri</p>
+    <p class="question-note">45. ve 46. soruları cevaplayın.</p>
       <label>45. Bunun dışında başka geçerli olan stratejiler var mı? Eğer cevabınız evet ise lütfen yazınız.</label>
       <input
         type="text"
@@ -1221,6 +1317,7 @@ const CompanyForm = () => {
     </div>
           <div className="form-group">
             <label>46. Üretiminizi optimize etmek için temel kavramları kullanıyor musunuz (örneğin Toyota Üretim Sistemi, Yalın Üretim Yönetimi, Sürekli İyileştirme, Toplam Üretken Bakım, Dünya Klasında Üretim, GD³ - Yalın Geliştirme)? EVET/HAYIR</label>
+            <p class="question-note">Cevabınız Evet ise lütfen yazınız.</p>
             <input
               type="text"
               value={optimizationConcepts}
@@ -1228,269 +1325,281 @@ const CompanyForm = () => {
               placeholder="Enter your answer"
             />
           </div>
+          <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
 
+        </>
+      )}
+      {currentPage === 7 && (
+        <>
           <div className="form-group">
-            <label>47. Ürün geliştirme yönteminiz nedir?</label>
+            <p className="page-parts">Ürün Oluşturma</p>
+            <p className="question-note">47'den 55'e kadar olan soruları cevaplayın.</p>
+            <label>47. Ürün geliştirme yönteminiz nedir? <span className="required-star">*</span></label>
             <div className="radio-group">
               <label>
-                <input type="radio" name="productDevelopmentMethod" value="Kontrat/sözleşmeli ürün geliştirme" onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kontrat/sözleşmeli ürün geliştirme
+                <input type="radio" name="productDevelopmentMethod" value="Kontrat/sözleşmeli ürün geliştirme" checked={productDevelopmentMethod === "Kontrat/sözleşmeli ürün geliştirme"} onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kontrat/sözleşmeli ürün geliştirme
               </label>
               <label>
-                <input type="radio" name="productDevelopmentMethod" value="Kendi ürünlerinin kurum içi geliştirilmesi" onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kendi ürünlerinin kurum içi geliştirilmesi
+                <input type="radio" name="productDevelopmentMethod" value="Kendi ürünlerinin kurum içi geliştirilmesi" checked={productDevelopmentMethod === "Kendi ürünlerinin kurum içi geliştirilmesi"} onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kendi ürünlerinin kurum içi geliştirilmesi
               </label>
               <label>
-                <input type="radio" name="productDevelopmentMethod" value="Kendi ürün geliştirmesi yok" onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kendi ürün geliştirmesi yok
+                <input type="radio" name="productDevelopmentMethod" value="Kendi ürün geliştirmesi yok" checked={productDevelopmentMethod === "Kendi ürün geliştirmesi yok"} onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kendi ürün geliştirmesi yok
               </label>
             </div>
           </div>
 
           <div className="form-group">
-            <label>48. Üretim Stratejinizi/Yaklaşımınızı nasıl tanımlarsınız?</label>
+            <label>48. Üretim Stratejinizi/Yaklaşımınızı nasıl tanımlarsınız? <span className="required-star">*</span></label>
             <div className="radio-group">
               <label>
-                <input type="radio" name="productionStrategy" value="Tek seferlik üretim / Tek lot" onChange={(e) => setProductionStrategy(e.target.value)} /> Tek seferlik üretim / Tek lot
+                <input type="radio" name="productionStrategy" value="Tek seferlik üretim / Tek lot" checked={productionStrategy === "Tek seferlik üretim / Tek lot"} onChange={(e) => setProductionStrategy(e.target.value)} /> Tek seferlik üretim / Tek lot
               </label>
               <label>
-                <input type="radio" name="productionStrategy" value="Küçük seri üretim" onChange={(e) => setProductionStrategy(e.target.value)} /> Küçük seri üretim
+                <input type="radio" name="productionStrategy" value="Küçük seri üretim" checked={productionStrategy === "Küçük seri üretim"} onChange={(e) => setProductionStrategy(e.target.value)} /> Küçük seri üretim
               </label>
               <label>
-                <input type="radio" name="productionStrategy" value="Seri üretim" onChange={(e) => setProductionStrategy(e.target.value)} /> Seri üretim
+                <input type="radio" name="productionStrategy" value="Seri üretim" checked={productionStrategy === "Seri üretim"} onChange={(e) => setProductionStrategy(e.target.value)} /> Seri üretim
               </label>
             </div>
           </div>
 
           <div className="form-group">
-            <label>49. Ürünlerinizi nasıl yapılandırıyor ve modelliyorsunuz? Lütfen, uygun olan bir seçenek işaretleyiniz.</label>
+            <label>49. Ürünlerinizi nasıl yapılandırıyor ve modelliyorsunuz? Lütfen, uygun olan bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
             <div className="radio-group">
               <label>
-                <input type="radio" name="productConfiguration" value="Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır" onChange={(e) => setProductConfiguration(e.target.value)} /> Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır
+                <input type="radio" name="productConfiguration" value="Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır" checked={productConfiguration === "Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır"} onChange={(e) => setProductConfiguration(e.target.value)} /> Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır
               </label>
               <label>
-                <input type="radio" name="productConfiguration" value="Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır." onChange={(e) => setProductConfiguration(e.target.value)} /> Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır.
+                <input type="radio" name="productConfiguration" value="Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır." checked={productConfiguration === "Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır."} onChange={(e) => setProductConfiguration(e.target.value)} /> Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır.
               </label>
               <label>
-                <input type="radio" name="productConfiguration" value="Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir." onChange={(e) => setProductConfiguration(e.target.value)} /> Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir.
+                <input type="radio" name="productConfiguration" value="Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir." checked={productConfiguration === "Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir."} onChange={(e) => setProductConfiguration(e.target.value)} /> Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir.
               </label>
               <label>
-                <input type="radio" name="productConfiguration" value="Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)" onChange={(e) => setProductConfiguration(e.target.value)} /> Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)
+                <input type="radio" name="productConfiguration" value="Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)" checked={productConfiguration === "Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)"} onChange={(e) => setProductConfiguration(e.target.value)} /> Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)
               </label>
               <label>
-                <input type="radio" name="productConfiguration" value="Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)" onChange={(e) => setProductConfiguration(e.target.value)} /> Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)
+                <input type="radio" name="productConfiguration" value="Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)" checked={productConfiguration === "Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)"} onChange={(e) => setProductConfiguration(e.target.value)} /> Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)
               </label>
             </div>
           </div>
 
           <div className="form-group">
-            <label>50. Ürün oluşturma sürecinizdeki iş akışları ve süreçler nasıl uygulanıyor? Lütfen, uygun olanların hepsini işaretleyiniz.</label>
+            <label>50. Ürün oluşturma sürecinizdeki iş akışları ve süreçler nasıl uygulanıyor? Lütfen, uygun olanların hepsini işaretleyiniz. <span className="required-star">*</span></label>
             <div className="checkbox-group">
               <label>
-                <input type="checkbox" value="Dijital ama belge tabanlı" onChange={(e) => handleWorkflowProcessesChange(e)} /> Dijital ama belge tabanlı
+                <input type="checkbox" value="Dijital ama belge tabanlı" checked={workflowProcesses.includes("Dijital ama belge tabanlı")} onChange={handleWorkflowProcessesChange} /> Dijital ama belge tabanlı
               </label>
               <label>
-                <input type="checkbox" value="Sistem içi iş akışları" onChange={(e) => handleWorkflowProcessesChange(e)} /> Sistem içi iş akışları
+                <input type="checkbox" value="Sistem içi iş akışları" checked={workflowProcesses.includes("Sistem içi iş akışları")} onChange={handleWorkflowProcessesChange} /> Sistem içi iş akışları
               </label>
               <label>
-                <input type="checkbox" value="Sistemler ve alanlar arası iş akışları" onChange={(e) => handleWorkflowProcessesChange(e)} /> Sistemler ve alanlar arası iş akışları
+                <input type="checkbox" value="Sistemler ve alanlar arası iş akışları" checked={workflowProcesses.includes("Sistemler ve alanlar arası iş akışları")} onChange={handleWorkflowProcessesChange} /> Sistemler ve alanlar arası iş akışları
               </label>
               <label>
-                <input type="checkbox" value="Siparişi gerçekleştirmek için otomatikleştirilmiş standart süreçler (örn. satın alma ve mühendisliğin birbirine bağlanması, depo yönetimi)" onChange={(e) => handleWorkflowProcessesChange(e)} /> Siparişi gerçekleştirmek için otomatikleştirilmiş standart süreçler (örn. satın alma ve mühendisliğin birbirine bağlanması, depo yönetimi)
+                <input type="checkbox" value="Siparişi gerçekleştirmek için otomatikleştirilmiş standart süreçler (örn. satın alma ve mühendisliğin birbirine bağlanması, depo yönetimi)" checked={workflowProcesses.includes("Siparişi gerçekleştirmek için otomatikleştirilmiş standart süreçler (örn. satın alma ve mühendisliğin birbirine bağlanması, depo yönetimi)")} onChange={handleWorkflowProcessesChange} /> Siparişi gerçekleştirmek için otomatikleştirilmiş standart süreçler (örn. satın alma ve mühendisliğin birbirine bağlanması, depo yönetimi)
               </label>
               <label>
-                <input type="checkbox" value="Disiplinler arası ürün geliştirme için otomatikleştirilmiş standart süreçler (Alanlar arası parça listelerinin türetilmesi, iş emirlerinin otomatik oluşturulması)" onChange={(e) => handleWorkflowProcessesChange(e)} /> Disiplinler arası ürün geliştirme için otomatikleştirilmiş standart süreçler (Alanlar arası parça listelerinin türetilmesi, iş emirlerinin otomatik oluşturulması)
+                <input type="checkbox" value="Disiplinler arası ürün geliştirme için otomatikleştirilmiş standart süreçler (Alanlar arası parça listelerinin türetilmesi, iş emirlerinin otomatik oluşturulması)" checked={workflowProcesses.includes("Disiplinler arası ürün geliştirme için otomatikleştirilmiş standart süreçler (Alanlar arası parça listelerinin türetilmesi, iş emirlerinin otomatik oluşturulması)")} onChange={handleWorkflowProcessesChange} /> Disiplinler arası ürün geliştirme için otomatikleştirilmiş standart süreçler (Alanlar arası parça listelerinin türetilmesi, iş emirlerinin otomatik oluşturulması)
               </label>
             </div>
           </div>
 
           <div className="form-group">
-            <label>51. Mühendislik verilerinizi nasıl yönetiyor ve saklıyorsunuz? Geçerli olan cevaplardan tümünü seçiniz.</label>
+            <label>51. Mühendislik verilerinizi nasıl yönetiyor ve saklıyorsunuz? Geçerli olan cevaplardan tümünü seçiniz. <span className="required-star">*</span></label>
             <div className="checkbox-group">
               <label>
-                <input type="checkbox" value="Kağıt tabanlı" onChange={(e) => handleEngineeringDataManagementChange(e)} /> Kağıt tabanlı
+                <input type="checkbox" value="Kağıt tabanlı" checked={engineeringDataManagement.includes("Kağıt tabanlı")} onChange={handleEngineeringDataManagementChange} /> Kağıt tabanlı
               </label>
               <label>
-                <input type="checkbox" value="Dosya sistemi, doküman klasörleri" onChange={(e) => handleEngineeringDataManagementChange(e)} /> Dosya sistemi, doküman klasörleri
+                <input type="checkbox" value="Dosya sistemi, doküman klasörleri" checked={engineeringDataManagement.includes("Dosya sistemi, doküman klasörleri")} onChange={handleEngineeringDataManagementChange} /> Dosya sistemi, doküman klasörleri
               </label>
               <label>
-                <input type="checkbox" value="Belge yönetim sistemi (Sharepoint, …)" onChange={(e) => handleEngineeringDataManagementChange(e)} /> Belge yönetim sistemi (Sharepoint, …)
+                <input type="checkbox" value="Belge yönetim sistemi (Sharepoint, …)" checked={engineeringDataManagement.includes("Belge yönetim sistemi (Sharepoint, …)")} onChange={handleEngineeringDataManagementChange} /> Belge yönetim sistemi (Sharepoint, …)
               </label>
               <label>
-                <input type="checkbox" value="Sisteme özgü veri tabanları (ERP, PLM, ...)" onChange={(e) => handleEngineeringDataManagementChange(e)} /> Sisteme özgü veri tabanları (ERP, PLM, ...)
+                <input type="checkbox" value="Sisteme özgü veri tabanları (ERP, PLM, ...)" checked={engineeringDataManagement.includes("Sisteme özgü veri tabanları (ERP, PLM, ...)")} onChange={handleEngineeringDataManagementChange} /> Sisteme özgü veri tabanları (ERP, PLM, ...)
               </label>
               <label>
-                <input type="checkbox" value="Birbirine bağlı veri tabanları (Tek Kaynak/ Veri Gölü)" onChange={(e) => handleEngineeringDataManagementChange(e)} /> Birbirine bağlı veri tabanları (Tek Kaynak/ Veri Gölü)
+                <input type="checkbox" value="Birbirine bağlı veri tabanları (Tek Kaynak/ Veri Gölü)" checked={engineeringDataManagement.includes("Birbirine bağlı veri tabanları (Tek Kaynak/ Veri Gölü)")} onChange={handleEngineeringDataManagementChange} /> Birbirine bağlı veri tabanları (Tek Kaynak/ Veri Gölü)
               </label>
             </div>
           </div>
 
           <div className="form-group">
-            <label>52. Tedarik zinciri yönetiminizi (SCM) nasıl gerçekleştiriyorsunuz? Lütfen bir seçenek işaretleyiniz.</label>
+            <label>52. Tedarik zinciri yönetiminizi (SCM) nasıl gerçekleştiriyorsunuz? Lütfen bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
             <div className="radio-group">
               <label>
-                <input type="radio" name="supplyChainManagement" value="Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir." onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir.
+                <input type="radio" name="supplyChainManagement" value="Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir." checked={supplyChainManagement === "Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir.
               </label>
               <label>
-                <input type="radio" name="supplyChainManagement" value="Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür." onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür.
+                <input type="radio" name="supplyChainManagement" value="Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür." checked={supplyChainManagement === "Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür.
               </label>
               <label>
-                <input type="radio" name="supplyChainManagement" value="Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır." onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır.
+                <input type="radio" name="supplyChainManagement" value="Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır." checked={supplyChainManagement === "Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır.
               </label>
               <label>
-                <input type="radio" name="supplyChainManagement" value="Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir." onChange={(e) => setSupplyChainManagement(e.target.value)} /> Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir.
+                <input type="radio" name="supplyChainManagement" value="Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir." checked={supplyChainManagement === "Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir.
               </label>
               <label>
-                <input type="radio" name="supplyChainManagement" value="Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir." onChange={(e) => setSupplyChainManagement(e.target.value)} /> Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir.
+                <input type="radio" name="supplyChainManagement" value="Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir." checked={supplyChainManagement === "Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir.
               </label>
             </div>
           </div>
 
           <div className="form-group">
-            <label>53. Müşterinize akıllı ürünler sunuyor musunuz? Lütfen, uygun olan bir seçenek işaretleyiniz.</label>
+            <label>53. Müşterinize akıllı ürünler sunuyor musunuz? Lütfen, uygun olan bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
+            <p className="question-note"><strong>Akıllı ürünlerin tanımı:</strong> Akıllı ürün, akıllı teknolojilerle donatılmış ve internete veya diğer ağlara bağlanabilen bir üründür. Bu ürünler tipik olarak uzaktan kontrol edilebilir, izlenebilir veya otomatikleştirilebilir. Akıllı ürünlere örnek olarak akıllı telefonlar, akıllı termostatlar ve güvenlik sistemleri gibi akıllı ev cihazları, akıllı TV'ler, akıllı saatler ve diğer birçok bağlı cihaz verilebilir.
+            </p>
             <div className="radio-group">
               <label>
-                <input type="radio" name="smartProducts" value="Akıllı ürünümüz yok" onChange={(e) => setSmartProducts(e.target.value)} /> Akıllı ürünümüz yok
+                <input type="radio" name="smartProducts" value="Akıllı ürünümüz yok" checked={smartProducts === "Akıllı ürünümüz yok"} onChange={(e) => setSmartProducts(e.target.value)} /> Akıllı ürünümüz yok
               </label>
               <label>
-                <input type="radio" name="smartProducts" value="Bazı ürünlerimiz akıllı" onChange={(e) => setSmartProducts(e.target.value)} /> Bazı ürünlerimiz akıllı
+                <input type="radio" name="smartProducts" value="Bazı ürünlerimiz akıllı" checked={smartProducts === "Bazı ürünlerimiz akıllı"} onChange={(e) => setSmartProducts(e.target.value)} /> Bazı ürünlerimiz akıllı
               </label>
               <label>
-                <input type="radio" name="smartProducts" value="Ürünlerimizin yaklaşık %50'si akıllı" onChange={(e) => setSmartProducts(e.target.value)} /> Ürünlerimizin yaklaşık %50'si akıllı
+                <input type="radio" name="smartProducts" value="Ürünlerimizin yaklaşık %50'si akıllı" checked={smartProducts === "Ürünlerimizin yaklaşık %50'si akıllı"} onChange={(e) => setSmartProducts(e.target.value)} /> Ürünlerimizin yaklaşık %50'si akıllı
               </label>
               <label>
-                <input type="radio" name="smartProducts" value="Hepsi veya tamamına yakın ürünümüz akıllı" onChange={(e) => setSmartProducts(e.target.value)} /> Hepsi veya tamamına yakın ürünümüz akıllı
+                <input type="radio" name="smartProducts" value="Hepsi veya tamamına yakın ürünümüz akıllı" checked={smartProducts === "Hepsi veya tamamına yakın ürünümüz akıllı"} onChange={(e) => setSmartProducts(e.target.value)} /> Hepsi veya tamamına yakın ürünümüz akıllı
               </label>
             </div>
           </div>
 
+          
           <div className="form-group">
-            <label>54. Müşterinize akıllı hizmetler sunuyor musunuz? Birden fazla seçenek işaretleyebilirsiniz.</label>
-            <div className="checkbox-group">
-              <label>
-                <input type="checkbox" value="Müşterilerimize hizmet sunuyoruz, ancak bunlar akıllı değil" onChange={(e) => handleSmartServicesChange(e)} /> Müşterilerimize hizmet sunuyoruz, ancak bunlar akıllı değil
-              </label>
-              <label>
-                <input type="checkbox" value="Müşterilerimize akıllı veya internet tabanlı hizmetler sunuyoruz." onChange={(e) => handleSmartServicesChange(e)} /> Müşterilerimize akıllı veya internet tabanlı hizmetler sunuyoruz.
-              </label>
-              <label>
-                <input type="checkbox" value="Entegre ürün-hizmet sistemleri (paket/değer önerisi olarak ürün ve hizmetler) sunuyoruz." onChange={(e) => handleSmartServicesChange(e)} /> Entegre ürün-hizmet sistemleri (paket/değer önerisi olarak ürün ve hizmetler) sunuyoruz.
-              </label>
-              <label>
-                <input type="checkbox" value="Müşterilerimize PAAS (Platform as a Service), IAAS (Infrastructure as a Service) veya SAAS (Software as a Service) gibi iş modelleri sunuyoruz." onChange={(e) => handleSmartServicesChange(e)} /> Müşterilerimize PAAS (Platform as a Service), IAAS (Infrastructure as a Service) veya SAAS (Software as a Service) gibi iş modelleri sunuyoruz.
-              </label>
-              <label>
-                <input type="checkbox" value="Müşterilerimize performansa dayalı iş modelleri (kullanım başına ödeme planları gibi) sunuyoruz." onChange={(e) => handleSmartServicesChange(e)} /> Müşterilerimize performansa dayalı iş modelleri (kullanım başına ödeme planları gibi) sunuyoruz.
-              </label>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>55. Şirketinizdeki üretim otomasyonunun seviyesi nedir? Lütfen bir adet seçenek işaretleyiniz.</label>
-            <div className="radio-group">
-          <label>
-            <input type="radio" name="productionAutomationLevel" value="Üretim süreçleri manuel olarak yapılmaktadır." onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Üretim süreçleri manuel olarak yapılmaktadır.
-          </label>
-          <label>
-            <input type="radio" name="productionAutomationLevel" value="İnsan müdahalesi gerektiren makine ve ekipman uygulamaları" onChange={(e) => setProductionAutomationLevel(e.target.value)} /> İnsan müdahalesi gerektiren makine ve ekipman uygulamaları
-          </label>
-          <label>
-            <input type="radio" name="productionAutomationLevel" value="Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir)." onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir).
-          </label>
-          <label>
-            <input type="radio" name="productionAutomationLevel" value="Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor" onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor
-          </label>
-          <label>
-            <input type="radio" name="productionAutomationLevel" value="Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip" onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip
-          </label>
-        </div>
-        </div>
-
-  <div className="form-group">
-  <label>56. Şirketinizde aşağıdaki BT-Sistemlerinden hangilerini halihazırda kullanıyorsunuz? Ve bunların kullanım yoğunluğu nedir? (Lütfen her satır için geçerli olan cevabı seçiniz.)</label>
-  <div className="bt-systems-usage">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>5-Tam işlevsellik</th>
-          <th>4-genişletilmiş işlevsellik</th>
-          <th>3-Temel işlevsellik</th>
-          <th>2-mevcut değil ancak kısa vadede olacak</th>
-          <th>1-mevcut değil ve kısa vadede olmayacak</th>
-        </tr>
-      </thead>
-      <tbody>
-        {[
-          { label: 'İçerik/Doküman Yönetim Sistemi (İYS/DYS)', key: 'iysDys' },
-          { label: 'Proje Yönetim Araçları (çevik yönetim dahil)', key: 'projectManagement' },
-          { label: 'Müşteri İlişkileri Yönetimi (CRM)', key: 'crm' },
-          { label: 'Ürün Verisi/Yaşam Döngüsü Yönetimi (PDM/PLM)', key: 'pdmPlm' },
-          { label: 'Bilgisayar Destekli Tasarım (CAD)', key: 'cad' },
-          { label: 'Elektronik CAD (ECAD)', key: 'ecad' },
-          { label: 'Bilgisayar Destekli Mühendislik (CAE) (FEM, CFD, MBS, ...)', key: 'cae' },
-          { label: 'Bilgisayar Destekli Üretim (CAM)', key: 'cam' },
-          { label: 'Kurumsal Kaynak Planlama (ERP)', key: 'erp' },
-          { label: 'Üretim Yürütme Sistemi (MES)', key: 'mes' },
-          { label: 'Üretim Operasyonları Yönetimi (MOM)', key: 'mom' },
-          { label: 'Tedarik zinciri yönetim araçları / network planlama araçları', key: 'supplyChain' },
-          { label: 'Tedarikçi entegrasyonu araçları (veri alışverişi platformu, sanal masaüstü, EDI...)', key: 'integrationTools' }
-        ].map((system) => (
-          <tr key={system.key}>
-            <td>{system.label}</td>
-            {[5, 4, 3, 2, 1].map((value) => (
-              <td key={value}>
-                <input
-                  type="radio"
-                  name={system.key}
-                  value={value}
-                  checked={btSystemsUsage[system.key] === value.toString()}
-                  onChange={(e) => setBtSystemsUsage({ ...btSystemsUsage, [system.key]: e.target.value })}
-                />
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</div>
-
-  <div className="form-group question-57">
-        <label>57. Şirketinizde bu BT sistemlerinin mevcut olduğunu söyleyiniz. Lütfen şirketinizde halihazırda mevcut olan BT-Araç zincirlerini (sistemler arasında veri aktarımı ve iş akışları için ara yüzler) belirtir misiniz? Uygun olanları seçiniz.</label>
-        <p><i>BİR ÖNCEKİ ENTEGRASYON SORUSUNUN TAKİP SORUSU</i></p>
-        <p><i>Bu soru, 57. soruda, 5-4-3 (Tam, Genişletilmiş, Temel işlevsellik) cevaplarını veren katılımcılar içindir.</i></p>
-        {[
-          'CRM-PLM',
-          'CRM-ERP',
-          'CAD – CAM',
-          'CAD – PLM',
-          'E-CAD – PLM',
-          'PLM – CAE (Simülasyon Platformu)',
-          'PLM – ERP',
-          'PLM – MES'
-        ].map((chain) => (
-          <div className="checkbox-group" key={chain}>
-            <input
-              type="checkbox"
-              value={chain}
-              checked={btSystemChains.includes(chain)}
-              onChange={handleBtSystemChainsChange}
-            />
-            <label>{chain}</label>
-          </div>
-        ))}
+      <label>54. Müşterinize akıllı hizmetler sunuyor musunuz? Birden fazla seçenek işaretleyebilirsiniz. <span className="required-star">*</span></label>
+      <p className="question-note"><strong>Akıllı hizmetlerin tanımı:</strong> Akıllı hizmet, işlevselliğini, verimliliğini ve kullanıcı deneyimini geliştirmek için akıllı teknolojileri ve veri analizini kullanan bir hizmettir. Kişiselleştirilmiş ve otomatikleştirilmiş hizmetler sağlamak için bağlı cihazlardan, sensörlerden ve veri analitiğinden yararlanır. Akıllı hizmetlere örnek olarak akıllı ev otomasyon hizmetleri, kişiselleştirilmiş öneri sistemleri, akıllı sanal asistanlar ve uzaktan izleme ve bakım hizmetleri verilebilir. Bu hizmetler kullanıcılar için kolaylık, üretkenlik ve etkinliği artırmayı amaçlamaktadır.</p>
+      <div className="checkbox-group">
+        <label>
+          <input type="checkbox" value="Müşterilerimize hizmet sunuyoruz, ancak bunlar akıllı değil" checked={smartServices.includes("Müşterilerimize hizmet sunuyoruz, ancak bunlar akıllı değil")} onChange={handleSmartServicesChange} /> Müşterilerimize hizmet sunuyoruz, ancak bunlar akıllı değil
+        </label>
+        <label>
+          <input type="checkbox" value="Müşterilerimize akıllı veya internet tabanlı hizmetler sunuyoruz." checked={smartServices.includes("Müşterilerimize akıllı veya internet tabanlı hizmetler sunuyoruz.")} onChange={handleSmartServicesChange} /> Müşterilerimize akıllı veya internet tabanlı hizmetler sunuyoruz.
+        </label>
+        <label>
+          <input type="checkbox" value="Entegre ürün-hizmet sistemleri (paket/değer önerisi olarak ürün ve hizmetler) sunuyoruz." checked={smartServices.includes("Entegre ürün-hizmet sistemleri (paket/değer önerisi olarak ürün ve hizmetler) sunuyoruz.")} onChange={handleSmartServicesChange} /> Entegre ürün-hizmet sistemleri (paket/değer önerisi olarak ürün ve hizmetler) sunuyoruz.
+        </label>
+        <label>
+          <input type="checkbox" value="Müşterilerimize PAAS (Platform as a Service), IAAS (Infrastructure as a Service) veya SAAS (Software as a Service) gibi iş modelleri sunuyoruz." checked={smartServices.includes("Müşterilerimize PAAS (Platform as a Service), IAAS (Infrastructure as a Service) veya SAAS (Software as a Service) gibi iş modelleri sunuyoruz.")} onChange={handleSmartServicesChange} /> Müşterilerimize PAAS (Platform as a Service), IAAS (Infrastructure as a Service) veya SAAS (Software as a Service) gibi iş modelleri sunuyoruz.
+        </label>
+        <label>
+          <input type="checkbox" value="Müşterilerimize performansa dayalı iş modelleri (kullanım başına ödeme planları gibi) sunuyoruz." checked={smartServices.includes("Müşterilerimize performansa dayalı iş modelleri (kullanım başına ödeme planları gibi) sunuyoruz.")} onChange={handleSmartServicesChange} /> Müşterilerimize performansa dayalı iş modelleri (kullanım başına ödeme planları gibi) sunuyoruz.
+        </label>
       </div>
-              <button type="button" onClick={handleNext}>Next</button>
-              <button type="button" className="button" onClick={() => setCurrentPage(1)}>Go to Page 1</button>
-              <button type="button" className="button" onClick={() => setCurrentPage(2)}>Go to Page 2</button>
-              <button type="button" className="button" onClick={() => setCurrentPage(4)}>Go to Page 4</button>
-            </>
-          )}
+    </div>
 
-  {currentPage === 4 && (
-          <>
+    <div className="form-group">
+      <label>55. Şirketinizdeki üretim otomasyonunun seviyesi nedir? Lütfen bir adet seçenek işaretleyiniz. <span className="required-star">*</span></label>
+      <div className="radio-group">
+        <label>
+          <input type="radio" name="productionAutomationLevel" value="Üretim süreçleri manuel olarak yapılmaktadır." checked={productionAutomationLevel === "Üretim süreçleri manuel olarak yapılmaktadır."} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Üretim süreçleri manuel olarak yapılmaktadır.
+        </label>
+        <label>
+          <input type="radio" name="productionAutomationLevel" value="İnsan müdahalesi gerektiren makine ve ekipman uygulamaları" checked={productionAutomationLevel === "İnsan müdahalesi gerektiren makine ve ekipman uygulamaları"} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> İnsan müdahalesi gerektiren makine ve ekipman uygulamaları
+        </label>
+        <label>
+          <input type="radio" name="productionAutomationLevel" value="Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir)." checked={productionAutomationLevel === "Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir)."} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir).
+        </label>
+        <label>
+          <input type="radio" name="productionAutomationLevel" value="Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor" checked={productionAutomationLevel === "Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor"} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor
+        </label>
+        <label>
+          <input type="radio" name="productionAutomationLevel" value="Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip" checked={productionAutomationLevel === "Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip"} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip
+        </label>
+      </div>
+    </div>
+
+        <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+        <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+        <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+        </>
+      )}
+      {currentPage === 8 && (
+  <>
+      <div className="form-group">
+      <p class="page-parts">BT Sistemleri Peyzajı</p>
+      <p class="question-note">56'dan 58'e kadar olan soruları cevaplayın.</p>
+      <label>56. Şirketinizde aşağıdaki BT-Sistemlerinden hangilerini halihazırda kullanıyorsunuz? Ve bunların kullanım yoğunluğu nedir? (Lütfen her satır için geçerli olan cevabı seçiniz.) <span className="required-star">*</span></label>
+      <div className="bt-systems-usage">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>5-Tam işlevsellik</th>
+              <th>4-genişletilmiş işlevsellik</th>
+              <th>3-Temel işlevsellik</th>
+              <th>2-mevcut değil ancak kısa vadede olacak</th>
+              <th>1-mevcut değil ve kısa vadede olmayacak</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              { label: 'İçerik/Doküman Yönetim Sistemi (İYS/DYS)', key: 'iysDys' },
+              { label: 'Proje Yönetim Araçları (çevik yönetim dahil)', key: 'projectManagement' },
+              { label: 'Müşteri İlişkileri Yönetimi (CRM)', key: 'crm' },
+              { label: 'Ürün Verisi/Yaşam Döngüsü Yönetimi (PDM/PLM)', key: 'pdmPlm' },
+              { label: 'Bilgisayar Destekli Tasarım (CAD)', key: 'cad' },
+              { label: 'Elektronik CAD (ECAD)', key: 'ecad' },
+              { label: 'Bilgisayar Destekli Mühendislik (CAE) (FEM, CFD, MBS, ...)', key: 'cae' },
+              { label: 'Bilgisayar Destekli Üretim (CAM)', key: 'cam' },
+              { label: 'Kurumsal Kaynak Planlama (ERP)', key: 'erp' },
+              { label: 'Üretim Yürütme Sistemi (MES)', key: 'mes' },
+              { label: 'Üretim Operasyonları Yönetimi (MOM)', key: 'mom' },
+              { label: 'Tedarik zinciri yönetim araçları / network planlama araçları', key: 'supplyChain' },
+              { label: 'Tedarikçi entegrasyonu araçları (veri alışverişi platformu, sanal masaüstü, EDI...)', key: 'integrationTools' }
+            ].map((system) => (
+              <tr key={system.key}>
+                <td>{system.label}</td>
+                {[5, 4, 3, 2, 1].map((value) => (
+                  <td key={value}>
+                    <input
+                      type="radio"
+                      name={system.key}
+                      value={value}
+                      checked={btSystemsUsage[system.key] === value.toString()}
+                      onChange={(e) => setBtSystemsUsage({ ...btSystemsUsage, [system.key]: e.target.value })}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+      <div className="form-group question-57">
+            <label>57. Şirketinizde bu BT sistemlerinin mevcut olduğunu söyleyiniz. Lütfen şirketinizde halihazırda mevcut olan BT-Araç zincirlerini (sistemler arasında veri aktarımı ve iş akışları için ara yüzler) belirtir misiniz? Uygun olanları seçiniz. <span className="required-star">*</span></label>
+            <p class="question-note"><i>BİR ÖNCEKİ ENTEGRASYON SORUSUNUN TAKİP SORUSU</i></p>
+            <p class="question-note"><i>Bu soru, 57. soruda, 5-4-3 (Tam, Genişletilmiş, Temel işlevsellik) cevaplarını veren katılımcılar içindir.</i></p>
+            {[
+              'CRM-PLM',
+              'CRM-ERP',
+              'CAD – CAM',
+              'CAD – PLM',
+              'E-CAD – PLM',
+              'PLM – CAE (Simülasyon Platformu)',
+              'PLM – ERP',
+              'PLM – MES'
+            ].map((chain) => (
+              <div className="checkbox-group" key={chain}>
+                <input
+                  type="checkbox"
+                  value={chain}
+                  checked={btSystemChains.includes(chain)}
+                  onChange={handleBtSystemChainsChange}
+                />
+                <label>{chain}</label>
+              </div>
+            ))}
+          </div>
             <div className="form-group question-58">
-            <label>58. Üretim sürecinde kullandığınız ana makine kontrol yöntemi nedir? *</label>
-            <p>Lütfen aşağıdakilerden sadece birini seçin.</p>
-            <p><strong>SCADA'nın Tanımı:</strong> SCADA, Denetleyici Kontrol ve Veri Toplama anlamına gelir. Üretim, enerji üretimi ve altyapı sistemleri gibi endüstriyel süreçleri izlemek ve kontrol etmek için kullanılan bir sistemi ifade eder. SCADA sistemleri tipik olarak çeşitli sensörlerden ve cihazlardan gerçek zamanlı veri toplayan ve ardından elde edilen yazılım, donanım ve ağ bileşenlerinden oluşur. Bu veriler daha sonra bir kontrol odasındaki operatörlere gösterilerek operatörlerin bilinçli kararlar almalarına ve süreçleri kontrol etmelerine olanak tanır. SCADA sistemleri karmaşık endüstriyel operasyonların yönetilmesinde ve optimize edilmesinde çok önemli bir rol oynar.</p>
+            <label>58. Üretim sürecinde kullandığınız ana makine kontrol yöntemi nedir? <span className="required-star">*</span></label>
+            <p class="question-note">Lütfen aşağıdakilerden sadece birini seçin.</p>
+            <p class="question-note"><strong>SCADA'nın Tanımı:</strong> SCADA, Denetleyici Kontrol ve Veri Toplama anlamına gelir. Üretim, enerji üretimi ve altyapı sistemleri gibi endüstriyel süreçleri izlemek ve kontrol etmek için kullanılan bir sistemi ifade eder. SCADA sistemleri tipik olarak çeşitli sensörlerden ve cihazlardan gerçek zamanlı veri toplayan ve ardından elde edilen yazılım, donanım ve ağ bileşenlerinden oluşur. Bu veriler daha sonra bir kontrol odasındaki operatörlere gösterilerek operatörlerin bilinçli kararlar almalarına ve süreçleri kontrol etmelerine olanak tanır. SCADA sistemleri karmaşık endüstriyel operasyonların yönetilmesinde ve optimize edilmesinde çok önemli bir rol oynar.</p>
             <div className="bt-systems-usage">
               {[
                 'Röle tabanlı sistem uygulamaları',
@@ -1512,7 +1621,17 @@ const CompanyForm = () => {
               ))}
             </div>
           </div>
+          <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+            </>
+          )}
+
+  {currentPage === 9 && (
+          <>
           <div className="form-group question-59">
+          <p class="page-parts">Dijitalleşme Düzeyi Öz Değerlendirmesi</p>
+          <p class="question-note">59'dan 65'e kadar olan soruları cevaplayın.</p>
             <label>59. Aşağıdaki ifadelerden şirketinize en uygun olan seçeneği işaretleyiniz. *</label>
             <div className="bt-systems-usage">
               {[
@@ -1536,7 +1655,7 @@ const CompanyForm = () => {
           </div>
           <div className="form-group">
             <label>60. SORU 59'da 2-3-4 SEÇENEKLERİNİ İŞARETLEDİYSENİZ CEVAPLAYINIZ.</label>
-            <p>Şirketinizin tamamen dijitalleşmediğini söylediniz? Neden? Lütfen bu zorlukların dijitalleşmenizi ne derece etkilediğini belirtir misiniz?</p>
+            <label>Şirketinizin tamamen dijitalleşmediğini söylediniz? Neden? Lütfen bu zorlukların dijitalleşmenizi ne derece etkilediğini belirtir misiniz?</label>
             <div className="bt-systems-usage">
               <table>
                 <thead>
@@ -1712,10 +1831,8 @@ const CompanyForm = () => {
               ))}
             </div>
           </div>
-            <button type="submit" className="button">Submit</button>
-            <button type="button" className="button" onClick={() => setCurrentPage(1)}>Go to Page 1</button>
-            <button type="button" className="button" onClick={() => setCurrentPage(2)}>Go to Page 2</button>
-            <button type="button" className="button" onClick={() => setCurrentPage(3)}>Go to Page 3</button>
+            <button type="submit" className="button">Gönder</button>
+            <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
           </>
         )}
 

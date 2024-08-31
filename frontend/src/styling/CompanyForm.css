@@ -1,337 +1,226 @@
+body {
+  background-image: url('C:\Users\Msi\Desktop\METU-DTX-FORM\logo\3.jpg'); /* Arka plan resmi */
+  background-size: cover; /* Resmi tam ekran yapar */
+  background-position: center; /* Resmi ortalar */
+  background-repeat: no-repeat; /* Resmin tekrarlanmasını engeller */
+  background-attachment: fixed; /* Arka planın sabit kalmasını sağlar */
+}
+
 .form-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 50%; /* Formun genişliğini ayarlar */
+  max-width: 1200px; /* Formun maksimum genişliğini ayarlar */
+  margin: 0 auto; /* Formu yatayda ortalar */
+  padding: 25px !important; /* Formun iç boşluğunu ayarlar */
+  background-color: #fff; /* Formun arka plan rengini ayarlar */
+  border-radius: 8px; /* Formun köşelerini yuvarlar */
+  box-shadow: 0 0 10px rgba(148, 128, 128, 0.5) !important;/* Formun gölgesini ayarlar */
+  font-size: 14px; /* Formun genel yazı boyutunu ayarlar */
 }
 
 .intro-text {
-  background-color: #00695c;
-  color: white;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  background: linear-gradient(to bottom right, rgba(0, 191, 255, 0.4), rgba(8, 240, 213, 0.4)); /* Adjusted transparency */
+  padding: 20px; /* Giriş metninin iç boşluğunu ayarlar */
+  border-radius: 8px; /* Giriş metninin köşelerini yuvarlar */
+  margin-bottom: 20px; /* Giriş metninin alt boşluğunu ayarlar */
+  margin: auto; /* Üst ve alt boşluk, otomatik yan boşluk ile ortala */
+  font-size: 14px !important;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Flex öğelerini yatayda ortala */
+  text-align: center; /* Metni ortala */
 }
 
 .intro-text h1 {
-  margin-top: 0;
+  margin-top: 0; /* Giriş metninin başlığının üst boşluğunu sıfırlar */
+  color: #0b4547 !important;
+  width: 75%;
+  justify-content: center;
+  font-size: 30px;
 }
 
 .intro-text p {
-  margin: 10px 0;
-}
-
-h1 {
-  text-align: center;
-  color: #333;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-/* Apply consistent styles to all input types */
-input[type="text"],
-input[type="date"],
-input[type="email"],
-input[type="tel"],
-input[type="url"],
-input[type="number"],
-input[type="password"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-}
-
-.radio-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.name-inputs input {
-  flex: 1;
-}
-
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  margin: 10px 0; /* Giriş metninin paragraflarının üst ve alt boşluğunu ayarlar */
+  color: whitesmoke !important;
+  width: 90%;
+  justify-content: center;
   font-size: 16px;
 }
 
+h1 {
+  text-align: center; /* Başlığı ortalar */
+  color: #333; /* Başlığın rengini ayarlar */
+}
+
+.form-group {
+  margin-bottom: 20px !important; /* Sorular arasındaki boşluğu artırır */
+}
+
+.form-group label {
+  display: block; /* Etiketleri blok seviyesinde gösterir */
+  margin-bottom: 8px !important; /* Soru ile cevap kutusu arasındaki boşluğu azaltır */
+  font-weight: bold; /* Etiketlerin yazı kalınlığını ayarlar */
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="url"],
+.form-group input[type="number"],
+.form-group input[type="password"],
+.form-group select {
+  width: 100%; /* Girdi alanlarının genişliğini ayarlar */
+  padding: 8px; /* Girdi alanlarının iç boşluğunu ayarlar */
+  border: 1px solid #ddd; /* Girdi alanlarının kenarlığını ayarlar */
+  border-radius: 4px; /* Girdi alanlarının köşelerini yuvarlar */
+  box-sizing: border-box; /* Padding'in genişliğe dahil edilmesini sağlar */
+  margin-top: 0px; /* Cevap kutusunun üst boşluğunu ayarlar */
+}
+
+.radio-group {
+  display: flex; /* Radyo butonlarını esnek kutu modliyle gösterir */
+  flex-direction: column; /* Radyo butonlarını dikeyde hizalar */
+  gap: 8px !important; /* Radyo butonları arasındaki boşluğu ayarlar */
+}
+
+.name-inputs input {
+  flex: 1; /* İsim girdi alanlarının esnekliğini ayarlar */
+}
+
+button {
+  display: block; /* Butonları blok seviyesinde gösterir */
+  width: 100%; /* Butonların genişliğini ayarlar */
+  padding: 10px; /* Butonların iç boşluğunu ayarlar */
+  background-color: #4CAF50; /* Butonların arka plan rengini ayarlar */
+  color: white; /* Butonların yazı rengini ayarlar */
+  border: none; /* Butonların kenarlığını kaldırır */
+  border-radius: 4px; /* Butonların köşelerini yuvarlar */
+  cursor: pointer; /* Butonların imlecini işaretçi yapar */
+  font-size: 16px; /* Butonların yazı boyutunu ayarlar */
+}
+
 button:hover {
-  background-color: #45a049;
+  background-color: #45a049; /* Butonların üzerine gelindiğinde arka plan rengini değiştirir */
 }
 
-/* Add this new class */
 .required-star {
-  color: red; /* Red color for the star */
+  color: red; /* Zorunlu alan yıldızının rengini kırmızı yapar */
 }
 
 .bt-systems-usage table {
-  width: 100%;
-  border-collapse: collapse;
+  width: 100%; /* Tablo genişliğini ayarlar */
+  border-collapse: collapse; /* Tablo kenarlıklarını birleştirir */
 }
 
 .bt-systems-usage th, .bt-systems-usage td {
-  text-align: center;
-  padding: 8px;
-  border: 1px solid #ddd;
+  text-align: center; /* Tablo hücrelerini ortalar */
+  padding: 8px; /* Tablo hücrelerinin iç boşluğunu ayarlar */
+  border: 1px solid #ddd; /* Tablo hücrelerinin kenarlığını ayarlar */
 }
 
 .bt-systems-usage th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+  background-color: #f2f2f2; /* Tablo başlık hücrelerinin arka plan rengini ayarlar */
+  font-weight: bold; /* Tablo başlık hücrelerinin yazı kalınlığını ayarlar */
 }
 
 .bt-systems-usage td {
-  vertical-align: middle;
+  vertical-align: middle; /* Tablo veri hücrelerinin dikey hizalamasını ortalar */
 }
 
 .bt-systems-usage input[type="radio"] {
-  margin: 0 auto;
-  display: block;
+  margin: 0 auto; /* Radyo butonlarını yatayda ortalar */
+  display: block; /* Radyo butonlarını blok seviyesinde gösterir */
 }
 
 .checkbox-group {
-  display: inline;
-  align-items: center;
-  margin-bottom: 8px;
+  display: inline; /* Checkbox grubunu satır içi gösterir */
+  align-items: center; /* Checkbox grubunu dikeyde ortalar */
+  margin-bottom: 20px; /* Checkbox grubu alt boşluğunu ayarlar */
 }
 
 .checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
-  display: inline-block;
+  margin-right: 8px; /* Checkbox ile etiketi arasındaki boşluğu ayarlar */
+  display: inline-block; /* Checkbox'ı satır içi blok seviyesinde gösterir */
+  margin-bottom: 8px !important;
 }
 
 .checkbox-group label {
-  display: inline-block;
-  font-weight: normal; /* Ensure labels are not bold */
+  display: inline-block; /* Etiketleri satır içi blok seviyesinde gösterir */
+  font-weight: normal !important; /* Etiketlerin yazı kalınlığını normal yapar */
+}
+
+.radio-group label {
+  font-weight: normal !important; /* Etiketlerin yazı kalınlığını normal yapar */
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 10px; /* Seçenek kutuları ile yazılar arasındaki yatay boşluğu ayarlar */
+}
+
+.radio-group input[type="text"] {
+  margin-left: 0px !important; /* Metin kutusunun sol boşluğunu ayarlar */
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px; /* Seçenek kutuları ile yazılar arasındaki yatay boşluğu ayarlar */
+}
+
+.checkbox-group input[type="text"] {
+  margin-left: 0px !important; /* Metin kutusunun sol boşluğunu ayarlar */
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold; /* Ensure question labels are bold */
+  display: block; /* Form grubu etiketlerini blok seviyesinde gösterir */
+  margin-bottom: 20px; /* Form grubu etiketlerinin alt boşluğunu ayarlar */
+  font-weight: bold; /* Form grubu etiketlerinin yazı kalınlığını ayarlar */
 }
 
-.question-57 .checkbox-group {
-  display: block;
-  margin-bottom: 8px;
-}
-
-.question-57 .checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
-  display: inline-block;
-}
-
-.question-57 .checkbox-group label {
-  display: inline-block;
-  font-weight: normal; 
-}
-
-.question-58 .checkbox-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.question-58 .checkbox-group input[type="radio"] {
-  margin-right: 8px;
-}
-
-.question-58 .checkbox-group label {
-  font-weight: normal; 
-  margin: 0; 
-  flex: 1; 
-}
-
-.question-59 .checkbox-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.question-59 .checkbox-group input[type="radio"] {
-  margin-right: 8px;
-}
-
-.question-59 .checkbox-group label {
-  font-weight: normal; /* Ensure labels are not bold */
-  margin: 0; /* Remove any default margin */
-  flex: 1; /* Allow the label to take up the remaining space */
-}
-
-.question-64 .checkbox-group {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 8px;
-}
-
-.question-64 .checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
-}
-
-.question-64 .checkbox-group label {
-  font-weight: normal; /* Ensure labels are not bold */
-  margin: 0; /* Remove any default margin */
-  flex: 1; /* Allow the label to take up the remaining space */
-}
-
+.question-57 .checkbox-group,
+.question-58 .checkbox-group,
+.question-59 .checkbox-group,
+.question-64 .checkbox-group,
 .question-65 .checkbox-group {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 8px;
+  display: flex; /* Checkbox gruplarını esnek kutu modeliyle gösterir */
+  align-items: flex-start; /* Checkbox gruplarını dikeyde başa hizalar */
+  margin-bottom: 8px !important; /* Checkbox gruplarının alt boşluğunu ayarlar */
 }
 
+.question-57 .checkbox-group input[type="checkbox"],
+.question-64 .checkbox-group input[type="checkbox"],
 .question-65 .checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
+  margin-right: 8px !important; /* Checkbox ile etiketi arasındaki boşluğu ayarlar */
 }
 
+.question-57 .checkbox-group label,
+.question-58 .checkbox-group label,
+.question-59 .checkbox-group label,
+.question-64 .checkbox-group label,
 .question-65 .checkbox-group label {
-  font-weight: normal; /* Ensure labels are not bold */
-  margin: 0; /* Remove any default margin */
-  flex: 1; /* Allow the label to take up the remaining space */
+  font-weight: normal; /* Etiketlerin yazı kalınlığını normal yapar */
+  margin: 0; /* Etiketlerin varsayılan boşluğunu kaldırır */
+  flex: 1; /* Etiketlerin kalan alanı kaplamasını sağlar */
 }
 
-.bt-systems-usage table {
-  width: 100%;
-  border-collapse: collapse;
+.question-58 .checkbox-group input[type="radio"],
+.question-59 .checkbox-group input[type="radio"] {
+  margin-right: 8px; /* Radyo butonu ile etiketi arasındaki boşluğu ayarlar */
 }
 
-.bt-systems-usage th, .bt-systems-usage td {
-  text-align: center;
-  padding: 8px;
-  border: 1px solid #ddd;
+.question-note {
+  font-size: 14px; /* Yazının boyutunu ayarlar */
+  color: #555; /* Yazının rengini ayarlar (isteğe bağlı) */
+  margin-bottom: 8px !important; /* Yazının alt boşluğunu ayarlar (isteğe bağlı) */
+  text-align: left;
+  font-style: italic;
 }
 
-.bt-systems-usage th {
-  background-color: #f2f2f2;
+.page-parts {
+  font-size: 18px; /* Yazının boyutunu ayarlar */
+  color: black; /* Yazının rengini ayarlar (isteğe bağlı) */
+  margin-bottom: 8px !important; /* Yazının alt boşluğunu ayarlar (isteğe bağlı) */
+  text-align: left;
   font-weight: bold;
 }
 
-.bt-systems-usage td {
-  vertical-align: middle;
-}
-
-.bt-systems-usage input[type="radio"] {
-  margin: 0 auto;
-  display: block;
-}
-
-.checkbox-group {
-  display: inline;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
-  display: inline-block;
-}
-
-.checkbox-group label {
-  display: inline-block;
-  font-weight: normal; /* Ensure labels are not bold */
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold; /* Ensure question labels are bold */
-}
-
-.question-57 .checkbox-group {
-  display: block;
-  margin-bottom: 8px;
-}
-
-.question-57 .checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
-  display: inline-block;
-}
-
-.question-57 .checkbox-group label {
-  display: inline-block;
-  font-weight: normal; 
-}
-
-.question-58 .checkbox-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.question-58 .checkbox-group input[type="radio"] {
-  margin-right: 8px;
-}
-
-.question-58 .checkbox-group label {
-  font-weight: normal; 
-  margin: 0; 
-  flex: 1; 
-}
-
-.question-59 .checkbox-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.question-59 .checkbox-group input[type="radio"] {
-  margin-right: 8px;
-}
-
-.question-59 .checkbox-group label {
-  font-weight: normal; /* Ensure labels are not bold */
-  margin: 0; /* Remove any default margin */
-  flex: 1; /* Allow the label to take up the remaining space */
-}
-
-.question-64 .checkbox-group {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 8px;
-}
-
-.question-64 .checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
-}
-
-.question-64 .checkbox-group label {
-  font-weight: normal; /* Ensure labels are not bold */
-  margin: 0; /* Remove any default margin */
-  flex: 1; /* Allow the label to take up the remaining space */
-}
-
-.question-65 .checkbox-group {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 8px;
-}
-
-.question-65 .checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
-}
-
-.question-65 .checkbox-group label {
-  font-weight: normal; /* Ensure labels are not bold */
-  margin: 0; /* Remove any default margin */
-  flex: 1; /* Allow the label to take up the remaining space */
-}
