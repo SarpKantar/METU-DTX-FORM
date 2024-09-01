@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 import '../styling/CompanyForm.css';
+import { useAuth } from "../context/AuthContext";
 
 const CompanyForm = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const { currentUser } = useAuth(); // Kullanıcı kimliğini almak için
+  const [email, setEmail] = useState(currentUser ? currentUser.email : '');
+
+  const initialPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [companyName, setCompanyName] = useState('');
   const [participantName, setParticipantName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
   const [companyAddress, setCompanyAddress] = useState('');
   const [companyWebsite, setCompanyWebsite] = useState('');
   const [jobTitle, setJobTitle] = useState('');
@@ -54,7 +58,7 @@ const CompanyForm = () => {
   const [smartServices, setSmartServices] = useState([]);
   const [productionAutomationLevel, setProductionAutomationLevel] = useState('');
   const [optimalUse, setOptimalUse] = useState('');
-  const [salesReasons, setSalesReasons] = useState('');
+  const [salesReasons, setSalesReasons] = useState([]);
   const [valueRecovery, setValueRecovery] = useState('');
   const [supportModels, setSupportModels] = useState('');
   const [productStrategy, setProductStrategy] = useState(''); // Add this line
@@ -62,13 +66,102 @@ const CompanyForm = () => {
   const [digitalizationChallenges, setDigitalizationChallenges] = useState({});
   const [btSystemChains, setBtSystemChains] = useState([]); // Add this line
   const [machineControlMethod, setMachineControlMethod] = useState('');
-  const [otherResponse, setOtherResponse] = useState('');
   const [digitalTechnologyReasons, setDigitalTechnologyReasons] = useState({});
   const [digitalizationGoals, setDigitalizationGoals] = useState([]);
   const [managementApproach, setManagementApproach] = useState([]);
   const [otherJobTitle, setOtherJobTitle] = useState('');
   const [otherDepartment, setOtherDepartment] = useState('');
   const [otherDepartment35, setOtherDepartment35] = useState('');
+  const [otherResponse61, setOtherResponse61] = useState('');
+  const [otherResponse63, setOtherResponse63] = useState('');
+  const [btSystemsUsage36, setBtSystemsUsage36] = useState({});
+  const [btSystemsUsage37, setBtSystemsUsage37] = useState({});
+  const [btSystemsUsage42, setBtSystemsUsage42] = useState({});
+  const [btSystemsUsage43, setBtSystemsUsage43] = useState({});
+  const [btSystemsUsage56, setBtSystemsUsage56] = useState({});
+
+  
+  useEffect(() => {
+    const savedCurrentPage = localStorage.getItem('currentPage');
+    if (savedCurrentPage) {
+      setCurrentPage(parseInt(savedCurrentPage, 10));
+      console.log('Loaded currentPage from localStorage:', savedCurrentPage);
+    }
+  }, []); // Bu kancanın ilk sırada olduğundan emin olun
+  
+  useEffect(() => {
+    localStorage.setItem('currentPage', currentPage);
+    console.log('Saved currentPage to localStorage:', currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const savedFormData = JSON.parse(localStorage.getItem('formData'));
+    if (savedFormData) {
+      console.log('Loaded Saved Form Data:', savedFormData); // Konsol logu ekleyelim
+      setCompanyName(savedFormData.companyName || '');
+      setParticipantName(savedFormData.participantName || '');
+      setPhoneNumber(savedFormData.phoneNumber || '');
+      setCompanyAddress(savedFormData.companyAddress || '');
+      setCompanyWebsite(savedFormData.companyWebsite || '');
+      setJobTitle(savedFormData.jobTitle || '');
+      setOtherJobTitle(savedFormData.otherJobTitle || ''); // Diğer iş unvanını yükleyelim
+      setYearsInPosition(savedFormData.yearsInPosition || '');
+      setCompanyAge(savedFormData.companyAge || '');
+      setCompanySector(savedFormData.companySector || '');
+      setExportStatus(savedFormData.exportStatus || '');
+      setEExport(savedFormData.eExport || '');
+      setExportPercentage(savedFormData.exportPercentage || '');
+      setTargetRegions(savedFormData.targetRegions || []);
+      setDevelopmentAreas(savedFormData.developmentAreas || '');
+      setProductionAreas(savedFormData.productionAreas || '');
+      setRevenue2022(savedFormData.revenue2022 || '');
+      setRevenue2021(savedFormData.revenue2021 || '');
+      setInnovationBudgetCurrent(savedFormData.innovationBudgetCurrent || '');
+      setInnovationBudgetFuture(savedFormData.innovationBudgetFuture || '');
+      setTechInvestment(savedFormData.techInvestment || '');
+      setFullTimeEmployees(savedFormData.fullTimeEmployees || '');
+      setWhiteCollarEmployees(savedFormData.whiteCollarEmployees || '');
+      setBlueCollarEmployees(savedFormData.blueCollarEmployees || '');
+      setAssociateDegreeEmployees(savedFormData.associateDegreeEmployees || '');
+      setBachelorDegreeEmployees(savedFormData.bachelorDegreeEmployees || '');
+      setMasterDegreeEmployees(savedFormData.masterDegreeEmployees || '');
+      setPhdDegreeEmployees(savedFormData.phdDegreeEmployees || '');
+      setDepartments(savedFormData.departments || []);
+      setDigitalAssessment(savedFormData.digitalAssessment || '');
+      setSalesMarketingActivities(savedFormData.salesMarketingActivities || []);
+      setInnovationProjects(savedFormData.innovationProjects || '');
+      setProductVariety(savedFormData.productVariety || '');
+      setCircularDesign(savedFormData.circularDesign || '');
+      setDevelopmentPlans(Array.isArray(savedFormData.developmentPlans) ? savedFormData.developmentPlans : []);
+      setCustomerPreferences(savedFormData.customerPreferences || []);
+      setAdditionalStrategies(savedFormData.additionalStrategies || '');
+      setOptimizationConcepts(savedFormData.optimizationConcepts || '');
+      setProductDevelopmentMethod(savedFormData.productDevelopmentMethod || '');
+      setProductionStrategy(savedFormData.productionStrategy || '');
+      setProductConfiguration(savedFormData.productConfiguration || '');
+      setWorkflowProcesses(savedFormData.workflowProcesses || []);
+      setEngineeringDataManagement(savedFormData.engineeringDataManagement || []);
+      setSupplyChainManagement(savedFormData.supplyChainManagement || '');
+      setSmartProducts(savedFormData.smartProducts || '');
+      setSmartServices(savedFormData.smartServices || []);
+      setProductionAutomationLevel(savedFormData.productionAutomationLevel || '');
+      setBtSystemsUsage36(savedFormData.btSystemsUsage36 || {});
+      setBtSystemsUsage37(savedFormData.btSystemsUsage37 || {});
+      setBtSystemsUsage42(savedFormData.btSystemsUsage42 || {});
+      setBtSystemsUsage43(savedFormData.btSystemsUsage43 || {});
+      setBtSystemChains(savedFormData.btSystemChains || []);
+      setMachineControlMethod(savedFormData.machineControlMethod || '');
+      setDigitalizationStatus(savedFormData.digitalizationStatus || '');
+      setDigitalizationChallenges(savedFormData.digitalizationChallenges || {});
+      setOtherResponse61(savedFormData.otherResponse61 || '');
+      setDigitalTechnologyReasons(savedFormData.digitalTechnologyReasons || {});
+      setDigitalizationGoals(savedFormData.digitalizationGoals || []);
+      setManagementApproach(savedFormData.managementApproach || []);
+      setOtherResponse63(savedFormData.otherResponse63 || '');
+      setSalesReasons(savedFormData.salesReasons || []);
+      setOtherDepartment35(savedFormData.otherDepartment35 || '');
+    }
+  }, [email]);
 
   const [currentRelevance, setCurrentRelevance] = useState({
     hydraulicPneumatic: '',
@@ -86,7 +179,6 @@ const CompanyForm = () => {
     integratedServices: ''
   });
 
-  const [btSystemsUsage, setBtSystemsUsage] = useState({});
 
   const [businessTrends, setBusinessTrends] = useState({
     greenTechnology: '',
@@ -120,11 +212,26 @@ const CompanyForm = () => {
     valueNetworkComplexity: '' 
   });
 
+  const handleInputChange = (name, value) => {
+    const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+    savedFormData[name] = value;
+    localStorage.setItem('formData', JSON.stringify(savedFormData));
+    console.log('Saved Form Data:', savedFormData); // Konsol logu ekleyelim
+  };
+
+const handleJobTitleChange = (e) => {
+  const { value } = e.target;
+  setJobTitle(value);
+  if (value !== 'other') {
+    setOtherJobTitle('');
+    handleInputChange('otherJobTitle', '');
+  }
+  handleInputChange('jobTitle', value);
+};
+
   const navigate = useNavigate();
   const handleNext = (e) => {
     e.preventDefault(); // Formun varsayılan davranışını engelle
-
-    // Zorunlu alanları kontrol et
     const requiredFields = {
         1: [
             { field: companyName, questionNumber: 1 },
@@ -166,16 +273,16 @@ const CompanyForm = () => {
         4: [
             { field: productVariety, questionNumber: 34 },
             { field: salesReasons, questionNumber: 35 },
-            { field: btSystemsUsage, questionNumber: 36 },
-            { field: btSystemsUsage, questionNumber: 37 }
+            { field: btSystemsUsage36, questionNumber: 36 },
+            { field: btSystemsUsage37, questionNumber: 37 }
         ],
         5: [
             { field: circularDesign, questionNumber: 38 },
             { field: optimalUse, questionNumber: 39 },
             { field: valueRecovery, questionNumber: 40 },
             { field: supportModels, questionNumber: 41 },
-            { field: btSystemsUsage, questionNumber: 42 },
-            { field: btSystemsUsage, questionNumber: 43 },
+            { field: btSystemsUsage42, questionNumber: 42 },
+            { field: btSystemsUsage43, questionNumber: 43 },
             { field: productStrategy, questionNumber: 44 }
         ],
         6: [
@@ -194,13 +301,11 @@ const CompanyForm = () => {
             { field: productionAutomationLevel, questionNumber: 55 }
         ],
         8: [
-            { field: btSystemsUsage, questionNumber: 56 },
+            { field: btSystemsUsage56, questionNumber: 56 },
             { field: btSystemChains, questionNumber: 57 },
             { field: machineControlMethod, questionNumber: 58 }
         ]
     };
-
-    // Checkbox soruları için kontrol
     const checkboxQuestions = {
         2: [
             { field: targetRegions, questionNumber: 14 },
@@ -223,7 +328,6 @@ const CompanyForm = () => {
         ]
     };
 
-    // Zorunlu alanları kontrol et
     const missingFields = Object.entries(requiredFields)
         .filter(([key]) => currentPage === parseInt(key))
         .flatMap(([key, fields]) => fields.map(({ field, questionNumber }) => !field ? questionNumber : null))
@@ -240,7 +344,6 @@ const CompanyForm = () => {
         }
     }
 
-    // 36. ve 37. soruların kontrolü
     if (currentPage === 4) {
         const trends36 = [
             'Yeşil Teknoloji', 'CO2 ayak izi ve döngüsel ekonomi', 'Yaşam döngüsü değerlendirmeleri ve Yaşam döngüsü maliyet hesaplamaları',
@@ -261,13 +364,13 @@ const CompanyForm = () => {
         ];
 
         trends36.forEach((trend, index) => {
-            if (!btSystemsUsage[`trend-${index}`]) {
+            if (!btSystemsUsage36[`trend-${index}`]) {
                 missingFields.push(36);
             }
         });
 
         trends37.forEach((trend, index) => {
-            if (!btSystemsUsage[`trend-37-${index}`]) {
+            if (!btSystemsUsage37[`trend-37-${index}`]) {
                 missingFields.push(37);
             }
         });
@@ -278,11 +381,11 @@ const CompanyForm = () => {
         const components43 = Array.from({ length: 5 }, (_, i) => `component-43-${i}`);
 
         components42.forEach((component) => {
-            if (!btSystemsUsage[component]) missingFields.push(42);
+            if (!btSystemsUsage42[component]) missingFields.push(42);
         });
 
         components43.forEach((component) => {
-            if (!btSystemsUsage[component]) missingFields.push(43);
+            if (!btSystemsUsage43[component]) missingFields.push(43);
         });
     }
 
@@ -290,7 +393,7 @@ const CompanyForm = () => {
         const requiredKeys = [
             'iysDys', 'projectManagement', 'crm', 'pdmPlm', 'cad', 'ecad', 'cae', 'cam', 'erp', 'mes', 'mom', 'supplyChain', 'integrationTools'
         ];
-        const allAnswered = requiredKeys.every(key => btSystemsUsage[key]);
+        const allAnswered = requiredKeys.every(key => btSystemsUsage56[key]);
         if (!allAnswered) {
             missingFields.push(56);
         }
@@ -413,12 +516,17 @@ const CompanyForm = () => {
         smartProducts,
         smartServices,
         productionAutomationLevel,
-        btSystemsUsage,
+        btSystemsUsage36,
+        btSystemsUsage37,
+        btSystemsUsage42,
+        btSystemsUsage43,
+        btSystemsUsage56,
         machineControlMethod,
         digitalizationStatus,
         digitalizationChallenges,
         digitalTechnologyReasons,
-        otherResponse,
+        otherResponse61,
+        otherResponse63,
         digitalizationGoals,
         managementApproach
     };
@@ -433,6 +541,195 @@ const CompanyForm = () => {
     }
 };
 
+    const saveFormData = async (email, formData) => {
+      try {
+          await setDoc(doc(db, "companyForms", email), formData, { merge: true });
+      } catch (error) {
+          console.error("Error saving form data: ", error);
+      }
+    };
+
+    const loadFormData = async (email) => {
+      try {
+          const docRef = doc(db, "companyForms", email);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+              return docSnap.data();
+          } else {
+              console.log("No such document!");
+              return null;
+          }
+      } catch (error) {
+          console.error("Error loading form data: ", error);
+          return null;
+      }
+  };
+  const handleClearForm = (page) => {
+    const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+  
+    if (page === 1) {
+      setCompanyName('');
+      setParticipantName('');
+      setPhoneNumber('');
+      setEmail(currentUser ? currentUser.email : ''); // Email'i başlangıç değerine döndür
+      setCompanyAddress('');
+      setJobTitle('');
+      setYearsInPosition('');
+      setCompanyWebsite('');
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.companyName;
+      delete savedFormData.participantName;
+      delete savedFormData.phoneNumber;
+      delete savedFormData.email;
+      delete savedFormData.companyAddress;
+      delete savedFormData.jobTitle;
+      delete savedFormData.yearsInPosition;
+      delete savedFormData.companyWebsite;
+    } else if (page === 2) {
+      setCompanyAge('');
+      setCompanySector('');
+      setExportStatus('');
+      setEExport('');
+      setExportPercentage('');
+      setTargetRegions([]);
+      setDevelopmentAreas('');
+      setProductionAreas('');
+      setRevenue2022('');
+      setRevenue2021('');
+      setInnovationBudgetCurrent('');
+      setInnovationBudgetFuture('');
+      setTechInvestment('');
+      setFullTimeEmployees('');
+      setWhiteCollarEmployees('');
+      setBlueCollarEmployees('');
+      setAssociateDegreeEmployees('');
+      setBachelorDegreeEmployees('');
+      setMasterDegreeEmployees('');
+      setPhdDegreeEmployees('');
+      setDepartments([]);
+      setDigitalAssessment('');
+      setSalesMarketingActivities([]);
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.companyAge;
+      delete savedFormData.companySector;
+      delete savedFormData.exportStatus;
+      delete savedFormData.eExport;
+      delete savedFormData.exportPercentage;
+      delete savedFormData.targetRegions;
+      delete savedFormData.developmentAreas;
+      delete savedFormData.productionAreas;
+      delete savedFormData.revenue2022;
+      delete savedFormData.revenue2021;
+      delete savedFormData.innovationBudgetCurrent;
+      delete savedFormData.innovationBudgetFuture;
+      delete savedFormData.techInvestment;
+      delete savedFormData.fullTimeEmployees;
+      delete savedFormData.whiteCollarEmployees;
+      delete savedFormData.blueCollarEmployees;
+      delete savedFormData.associateDegreeEmployees;
+      delete savedFormData.bachelorDegreeEmployees;
+      delete savedFormData.masterDegreeEmployees;
+      delete savedFormData.phdDegreeEmployees;
+      delete savedFormData.departments;
+      delete savedFormData.digitalAssessment;
+      delete savedFormData.salesMarketingActivities;
+    } else if (page === 3) {
+      setDevelopmentPlans([]);
+      setInnovationProjects('');
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.developmentPlans;
+      delete savedFormData.innovationProjects;
+    } else if (page === 4) {
+      setProductVariety('');
+      setSalesReasons('');
+      setBtSystemsUsage36({});
+      setBtSystemsUsage37({});
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.productVariety;
+      delete savedFormData.salesReasons;
+      delete savedFormData.btSystemsUsage36;
+      delete savedFormData.btSystemsUsage37;
+    } else if (page === 5) {
+      setCircularDesign('');
+      setOptimalUse('');
+      setValueRecovery('');
+      setSupportModels('');
+      setBtSystemsUsage42({});
+      setBtSystemsUsage43({});
+      setProductStrategy('');
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.circularDesign;
+      delete savedFormData.optimalUse;
+      delete savedFormData.valueRecovery;
+      delete savedFormData.supportModels;
+      delete savedFormData.btSystemsUsage42;
+      delete savedFormData.btSystemsUsage43;
+      delete savedFormData.productStrategy;
+    } else if (page === 6) {
+      setAdditionalStrategies('');
+      setOptimizationConcepts('');
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.additionalStrategies;
+      delete savedFormData.optimizationConcepts;
+    } else if (page === 7) {
+      setProductDevelopmentMethod('');
+      setProductionStrategy('');
+      setProductConfiguration('');
+      setWorkflowProcesses([]);
+      setEngineeringDataManagement([]);
+      setSupplyChainManagement('');
+      setSmartProducts('');
+      setSmartServices([]);
+      setProductionAutomationLevel('');
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.productDevelopmentMethod;
+      delete savedFormData.productionStrategy;
+      delete savedFormData.productConfiguration;
+      delete savedFormData.workflowProcesses;
+      delete savedFormData.engineeringDataManagement;
+      delete savedFormData.supplyChainManagement;
+      delete savedFormData.smartProducts;
+      delete savedFormData.smartServices;
+      delete savedFormData.productionAutomationLevel;
+    } else if (page === 8) {
+      setBtSystemsUsage56({});
+      setBtSystemChains([]);
+      setMachineControlMethod('');
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.btSystemsUsage56;
+      delete savedFormData.btSystemChains;
+      delete savedFormData.machineControlMethod;
+    } else if (page === 9) {
+      setDigitalizationStatus('');
+      setDigitalizationChallenges({});
+      setOtherResponse61('');
+      setOtherResponse63('');
+      setDigitalTechnologyReasons({});
+      setDigitalizationGoals([]);
+      setManagementApproach([]);
+  
+      // LocalStorage'dan sadece bu sayfadaki verileri temizle
+      delete savedFormData.digitalizationStatus;
+      delete savedFormData.digitalizationChallenges;
+      delete savedFormData.otherResponse61;
+      delete savedFormData.otherResponse63;
+      delete savedFormData.digitalTechnologyReasons;
+      delete savedFormData.digitalizationGoals;
+      delete savedFormData.managementApproach;
+    }
+  
+    // Güncellenmiş form verilerini localStorage'a kaydedin
+    localStorage.setItem('formData', JSON.stringify(savedFormData));
+  };
+
   const handleBtSystemChainsChange = (e) => {
     const { value, checked } = e.target;
     setBtSystemChains((prev) =>
@@ -441,38 +738,54 @@ const CompanyForm = () => {
   };
 
   const handleSalesReasonsChange = (value) => {
-    setSalesReasons((prev) => {
-      if (prev.includes(value)) {
-        return prev.filter((item) => item !== value);
-      } else if (prev.length < 3) {
-        return [...prev, value];
+    setSalesReasons((prevReasons) => {
+      let updatedReasons;
+      if (prevReasons.includes(value)) {
+        updatedReasons = prevReasons.filter((reason) => reason !== value);
+      } else {
+        if (prevReasons.length < 3) {
+          updatedReasons = [...prevReasons, value];
+        } else {
+          alert("En fazla 3 seçenek işaretleyebilirsiniz.");
+          return prevReasons;
+        }
       }
-      return prev;
+      // Güncellenmiş state'i localStorage'a kaydedin
+      const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+      savedFormData.salesReasons = updatedReasons;
+      localStorage.setItem('formData', JSON.stringify(savedFormData));
+      console.log('Saved Form Data:', savedFormData); // Konsol logu ekleyelim
+      return updatedReasons;
     });
   };
 
-  const handleJobTitleChange = (e) => {
-    setJobTitle(e.target.value);
-    if (e.target.value !== 'other') {
-      setOtherJobTitle('');
-    }
+  const handleTargetRegionsChange = (e) => {
+      const value = e.target.value;
+      const updatedRegions = targetRegions.includes(value)
+          ? targetRegions.filter((region) => region !== value)
+          : [...targetRegions, value];
+      setTargetRegions(updatedRegions);
+      handleInputChange('targetRegions', updatedRegions);
   };
 
   const handleDepartmentsChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setDepartments([...departments, value]);
-    } else {
-      setDepartments(departments.filter((department) => department !== value));
-    }
+      const value = e.target.value;
+      const updatedDepartments = departments.includes(value)
+          ? departments.filter((department) => department !== value)
+          : [...departments, value];
+      setDepartments(updatedDepartments);
+      handleInputChange('departments', updatedDepartments);
   };
 
   const handleSalesMarketingActivitiesChange = (e) => {
-    const { value, checked } = e.target;
-    setSalesMarketingActivities((prev) =>
-      checked ? [...prev, value] : prev.filter((v) => v !== value)
-    );
+      const value = e.target.value;
+      const updatedActivities = salesMarketingActivities.includes(value)
+          ? salesMarketingActivities.filter((activity) => activity !== value)
+          : [...salesMarketingActivities, value];
+      setSalesMarketingActivities(updatedActivities);
+      handleInputChange('salesMarketingActivities', updatedActivities);
   };
+
 
   const handleManagementApproachChange = (e) => {
     const { name, checked } = e.target;
@@ -484,12 +797,15 @@ const CompanyForm = () => {
   };
 
   const handleDevelopmentPlansChange = (e) => {
-    const { value, checked } = e.target;
-    setDevelopmentPlans((prev) =>
-      checked ? [...prev, value] : prev.filter((v) => v !== value)
-    );
+    const value = e.target.value;
+    const updatedDevelopmentPlans = developmentPlans.includes(value)
+      ? developmentPlans.filter((plan) => plan !== value)
+      : [...developmentPlans, value];
+    console.log('Updated Development Plans:', updatedDevelopmentPlans); // Konsol logu ekleyelim
+    setDevelopmentPlans(updatedDevelopmentPlans);
+    handleInputChange('developmentPlans', updatedDevelopmentPlans);
   };
-
+    
   const handleCustomerPreferencesChange = (e) => {
     const { value, checked } = e.target;
     setCustomerPreferences((prev) =>
@@ -526,15 +842,6 @@ const CompanyForm = () => {
       ...businessTrends,
       [name]: value
     });
-  };
-
-  const handleTargetRegionsChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setTargetRegions([...targetRegions, value]);
-    } else {
-      setTargetRegions(targetRegions.filter((region) => region !== value));
-    }
   };
 
   const handleProductStrategyChange = (e) => {
@@ -585,538 +892,809 @@ const handleSmartServicesChange = (e) => {
 
       <form onSubmit={handleSubmit}>
       {currentPage === 1 && (
-        <>
-         <div className="form-group">
-         <p class="page-parts">Katılımcı Bilgisi</p>
-         <p class="question-note">1'den 8'e kadar olan soruları cevaplayın.</p>
-        </div>
-
-        <div className="form-group">
-        <label>1. Şirket adı <span className="required-star">*</span></label>
-        <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Cevabınızı girin" required />
-        </div>
-
-        <div className="form-group">
-          <label>2. Katılımcının adı <span className="required-star">*</span></label>
-          <input type="text" value={participantName} onChange={(e) => setParticipantName(e.target.value)} placeholder="Cevabınızı girin" required />
-        </div>
-
-        <div className="form-group">
-          <label>3. Telefon numarası <span className="required-star">*</span></label>
-          <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="Cevabınızı girin" required />
-        </div>
-
-        <div className="form-group">
-          <label>4. Katılımcının e-postası <span className="required-star">*</span></label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Cevabınızı girin" required />
-        </div>
-
-        <div className="form-group">
-          <label>5. Şirket Adresi <span className="required-star">*</span></label>
-          <input type="text" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} placeholder="Cevabınızı girin" required />
-        </div>
-
-        <div className="form-group">
-          <label>6. Şirket Websitesi URL'si</label>
-          <input type="url" value={companyWebsite} onChange={(e) => setCompanyWebsite(e.target.value)} placeholder="Cevabınızı girin" />
-        </div>
-
-        <div className="form-group">
-          <label>7. Şirketteki ünvanınız <span className="required-star">*</span></label>
-          <div className="radio-group">
-            {["Şirket sahibi", "Genel Müdür/CEO", "BT Müdürü/CTO/CDO", "Üretim Müdürü", "AR-GE Müdürü", "Proje Direktörü (Dijital Dönüşüm)", "İş Geliştirme Müdürü", "Endüstriyel Tasarımcı", "Pazarlama Müdürü", "Satış Müdürü", "Yönetici (diğer)"].map((title) => (
-              <label key={title}>
-                <input type="radio" value={title} checked={jobTitle === title} onChange={handleJobTitleChange} />
-                {title}
-              </label>
-            ))}
-            <label style={{ display: 'flex', alignItems: 'center' }}>
-              <input type="radio" value="other" checked={jobTitle === 'other'} onChange={handleJobTitleChange} />
-              <input type="text" value={otherJobTitle} onChange={(e) => setOtherJobTitle(e.target.value)} placeholder="Diğer" style={{ marginLeft: '10px' }} />
-            </label>
+      <>
+          <div className="form-group">
+              <p className="page-parts">Katılımcı Bilgisi</p>
+              <p className="question-note">1'den 8'e kadar olan soruları cevaplayın.</p>
           </div>
-        </div>
-        <div className="form-group">
-          <label>8. Bu pozisyonda kaç yıldır çalışıyorsunuz? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={yearsInPosition}
-            onChange={(e) => setYearsInPosition(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
+
+          <div className="form-group">
+              <label>1. Şirket adı <span className="required-star">*</span></label>
+              <input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => {
+                      setCompanyName(e.target.value);
+                      handleInputChange('companyName', e.target.value);
+                  }}
+                  placeholder="Cevabınızı girin"
+                  required
+              />
+          </div>
+
+          <div className="form-group">
+              <label>2. Katılımcının adı <span className="required-star">*</span></label>
+              <input
+                  type="text"
+                  value={participantName}
+                  onChange={(e) => {
+                      setParticipantName(e.target.value);
+                      handleInputChange('participantName', e.target.value);
+                  }}
+                  placeholder="Cevabınızı girin"
+                  required
+              />
+          </div>
+
+          <div className="form-group">
+              <label>3. Telefon numarası <span className="required-star">*</span></label>
+              <input
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(e) => {
+                      setPhoneNumber(e.target.value);
+                      handleInputChange('phoneNumber', e.target.value);
+                  }}
+                  placeholder="Cevabınızı girin"
+                  required
+              />
+          </div>
+
+          <div className="form-group">
+              <label>4. Katılımcının e-postası <span className="required-star">*</span></label>
+              <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                      setEmail(e.target.value);
+                      handleInputChange('email', e.target.value);
+                  }}
+                  placeholder="Cevabınızı girin"
+                  required
+              />
+          </div>
+
+          <div className="form-group">
+              <label>5. Şirket Adresi <span className="required-star">*</span></label>
+              <input
+                  type="text"
+                  value={companyAddress}
+                  onChange={(e) => {
+                      setCompanyAddress(e.target.value);
+                      handleInputChange('companyAddress', e.target.value);
+                  }}
+                  placeholder="Cevabınızı girin"
+                  required
+              />
+          </div>
+
+          <div className="form-group">
+              <label>6. Şirket Websitesi URL'si</label>
+              <input
+                  type="url"
+                  value={companyWebsite}
+                  onChange={(e) => {
+                      setCompanyWebsite(e.target.value);
+                      handleInputChange('companyWebsite', e.target.value);
+                  }}
+                  placeholder="Cevabınızı girin"
+              />
+          </div>
+
+          <div className="form-group">
+              <label>7. Şirketteki ünvanınız <span className="required-star">*</span></label>
+              <div className="radio-group">
+                  {["Şirket sahibi", "Genel Müdür/CEO", "BT Müdürü/CTO/CDO", "Üretim Müdürü", "AR-GE Müdürü", "Proje Direktörü (Dijital Dönüşüm)", "İş Geliştirme Müdürü", "Endüstriyel Tasarımcı", "Pazarlama Müdürü", "Satış Müdürü", "Yönetici (diğer)"].map((title) => (
+                      <label key={title}>
+                          <input
+                              type="radio"
+                              value={title}
+                              checked={jobTitle === title}
+                              onChange={handleJobTitleChange}
+                          />
+                          {title}
+                      </label>
+                  ))}
+                  <label style={{ display: 'flex', alignItems: 'center' }}>
+                      <input
+                          type="radio"
+                          value="other"
+                          checked={jobTitle === 'other'}
+                          onChange={handleJobTitleChange}
+                      />
+                      <input
+                          type="text"
+                          value={otherJobTitle}
+                          onChange={(e) => {
+                              setOtherJobTitle(e.target.value);
+                              handleInputChange('otherJobTitle', e.target.value);
+                          }}
+                          placeholder="Diğer"
+                          style={{ marginLeft: '10px' }}
+                      />
+                  </label>
+              </div>
+          </div>
+
+          <div className="form-group">
+              <label>8. Bu pozisyonda kaç yıldır çalışıyorsunuz? <span className="required-star">*</span></label>
+              <input
+                  type="number"
+                  value={yearsInPosition}
+                  onChange={(e) => {
+                      setYearsInPosition(e.target.value);
+                      handleInputChange('yearsInPosition', e.target.value);
+                  }}
+                  placeholder="Cevabınızı girin"
+                  required
+              />
+          </div>
         <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
         <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+        <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
         </>
-      )}
-      {currentPage === 2 && (
+      )}{currentPage === 2 && (
         <>
-        <div className="form-group">
-        <p class="page-parts">Şirket Profili</p>
-        <p class="question-note">9'dan 31'e kadar olan soruları cevaplayın.</p>
-        <label>9. Şirketiniz kaç yaşındadır? <span className="required-star">*</span></label>
-        <div className="radio-group">
-          <label><input type="radio" name="companyAge" value="Yeni kuruluş - 1 yaşından küçük" checked={companyAge === "Yeni kuruluş - 1 yaşından küçük"} onChange={() => setCompanyAge("Yeni kuruluş - 1 yaşından küçük")} required /> Yeni kuruluş – 1 yaşından küçük</label>
-          <label><input type="radio" name="companyAge" value="1 - 2 yaş" checked={companyAge === "1 - 2 yaş"} onChange={() => setCompanyAge("1 - 2 yaş")} required /> 1 - 2 yaş</label>
-          <label><input type="radio" name="companyAge" value="3 - 5 yaş" checked={companyAge === "3 - 5 yaş"} onChange={() => setCompanyAge("3 - 5 yaş")} required /> 3 - 5 yaş</label>
-          <label><input type="radio" name="companyAge" value="6 - 15 yaş" checked={companyAge === "6 - 15 yaş"} onChange={() => setCompanyAge("6 - 15 yaş")} required /> 6 - 15 yaş</label>
-          <label><input type="radio" name="companyAge" value="16 - 30 yaş" checked={companyAge === "16 - 30 yaş"} onChange={() => setCompanyAge("16 - 30 yaş")} required /> 16 - 30 yaş</label>
-          <label><input type="radio" name="companyAge" value="31 + yaş" checked={companyAge === "31 + yaş"} onChange={() => setCompanyAge("31 + yaş")} required /> 31 + yaş</label>
-        </div>
-        </div>
-        <div className="form-group">
-          <label>10. İşletmenizin sektörü nedir? <span className="required-star">*</span></label>
-          <p class="question-note">Ekli NACE listesine bakınız.</p>
-          <p class="question-note"><strong>(Makine ve otomotiv dışında bir sektör ise veya şirket bu iki sektörden birinin tedarikçisi değil ise, lütfen ankete devam etmeyiniz.)</strong></p>
-          <input
-            type="text"
-            value={companySector}
-            onChange={(e) => setCompanySector(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>11. Hizmetlerinizi/ürünlerinizi ihraç ediyor musunuz? <span className="required-star">*</span></label>
-          <div className="radio-group">
-            {["Evet doğrudan", "Evet, aracılar vasıtasıyla", "Hayır, etmiyoruz"].map((option) => (
-              <label key={option}>
-                <input type="radio" name="exportStatus" value={option} checked={exportStatus === option} onChange={() => setExportStatus(option)} required /> {option}
+          <div className="form-group">
+            <p className="page-parts">Şirket Profili</p>
+            <p className="question-note">9'dan 31'e kadar olan soruları cevaplayın.</p>
+            <label>9. Şirketiniz kaç yaşındadır? <span className="required-star">*</span></label>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="companyAge"
+                  value="Yeni kuruluş - 1 yaşından küçük"
+                  checked={companyAge === "Yeni kuruluş - 1 yaşından küçük"}
+                  onChange={() => {
+                    setCompanyAge("Yeni kuruluş - 1 yaşından küçük");
+                    handleInputChange('companyAge', "Yeni kuruluş - 1 yaşından küçük");
+                  }}
+                  required
+                /> Yeni kuruluş – 1 yaşından küçük
               </label>
-            ))}
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>12. E-ihracat yapıyor musunuz? <span className="required-star">*</span></label>
-          <div className="radio-group">
-            {["Evet", "Hayır"].map((option) => (
-              <label key={option}>
-                <input type="radio" name="eExport" value={option} checked={eExport === option} onChange={() => setEExport(option)} required /> {option}
+              <label>
+                <input
+                  type="radio"
+                  name="companyAge"
+                  value="1 - 2 yaş"
+                  checked={companyAge === "1 - 2 yaş"}
+                  onChange={() => {
+                    setCompanyAge("1 - 2 yaş");
+                    handleInputChange('companyAge', "1 - 2 yaş");
+                  }}
+                  required
+                /> 1 - 2 yaş
               </label>
-            ))}
-          </div>
-        </div>
-        <div className="form-group">
-          <label>13. İhracatın toplam cironuz içindeki yüzdesi nedir?</label>
-          <p class="question-note">(Soru 11 ve Soru 12 EVET kodlandı ise İHRACAT ve E-İHRACAT VARDIR).</p>
-          <input
-            type="text"
-            value={exportPercentage}
-            onChange={(e) => setExportPercentage(e.target.value)}
-            placeholder="Cevabınızı girin"
-          />
-        </div>
-        <div className="form-group">
-          <label>14. Gelecek yıl ihracat yapmayı hedeflediğiniz bölgeler var mı? <span className="required-star">*</span></label>
-          <div className="checkbox-group">
-            {["Afrika ülkeleri", "Avrupa Birliği ülkeleri", "Türki Cumhuriyetler", "Diğer Amerika Ülkeleri", "Diğer Asya Ülkeleri", "Diğer Ülkeler", "Kuzey Amerika Serbest Ticaret Bölgesi", "Okyanus Ülkeleri", "Orta Doğu Ülkeleri", "Serbest Bölgeler", "Uzakdoğu Ülkeleri"].map((region) => (
-              <label key={region}>
-                <input type="checkbox" value={region} checked={targetRegions.includes(region)} onChange={handleTargetRegionsChange} /> {region}
+              <label>
+                <input
+                  type="radio"
+                  name="companyAge"
+                  value="3 - 5 yaş"
+                  checked={companyAge === "3 - 5 yaş"}
+                  onChange={() => {
+                    setCompanyAge("3 - 5 yaş");
+                    handleInputChange('companyAge', "3 - 5 yaş");
+                  }}
+                  required
+                /> 3 - 5 yaş
               </label>
-            ))}
-          </div>
-        </div>
-        <div className="form-group">
-          <label>15. Geliştirme sahalarınızın sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={developmentAreas}
-            onChange={(e) => setDevelopmentAreas(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>16. Üretim sahalarınızın sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={productionAreas}
-            onChange={(e) => setProductionAreas(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>17. 2022 yılındaki Cironuz nedir? <span className="required-star">*</span></label>
-          <div className="radio-group">
-            {["0 - 3 Milyon TL (mikro)", "3 - 25 Milyon TL (small)", "25 - 125 Milyon TL (orta)", "125 - 500 Milyon TL (büyük)", "+ 500 Milyon TL"].map((option) => (
-              <label key={option}>
-                <input type="radio" name="revenue2022" value={option} checked={revenue2022 === option} onChange={() => setRevenue2022(option)} required /> {option}
+              <label>
+                <input
+                  type="radio"
+                  name="companyAge"
+                  value="6 - 15 yaş"
+                  checked={companyAge === "6 - 15 yaş"}
+                  onChange={() => {
+                    setCompanyAge("6 - 15 yaş");
+                    handleInputChange('companyAge', "6 - 15 yaş");
+                  }}
+                  required
+                /> 6 - 15 yaş
               </label>
-            ))}
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>18. 2021 yılındaki cironuz nedir? <span className="required-star">*</span></label>
-          <div className="radio-group">
-            {["0 - 3 Milyon TL (mikro)", "3 - 25 Milyon TL (küçük)", "25 - 125 Milyon TL (orta)", "125 - 500 Milyon TL (büyük)", "+ 500 Milyon TL"].map((option) => (
-              <label key={option}>
-                <input type="radio" name="revenue2021" value={option} checked={revenue2021 === option} onChange={() => setRevenue2021(option)} required /> {option}
+              <label>
+                <input
+                  type="radio"
+                  name="companyAge"
+                  value="16 - 30 yaş"
+                  checked={companyAge === "16 - 30 yaş"}
+                  onChange={() => {
+                    setCompanyAge("16 - 30 yaş");
+                    handleInputChange('companyAge', "16 - 30 yaş");
+                  }}
+                  required
+                /> 16 - 30 yaş
               </label>
-            ))}
-          </div>
-        </div>
-        <div className="form-group">
-          <label>19. Bu yıl toplam cironuzun ne kadarını inovasyon ve AR-GE faaliyetlerine ayırmayı planlıyorsunuz? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={innovationBudgetCurrent}
-            onChange={(e) => setInnovationBudgetCurrent(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>20. Önümüzdeki üç yıl içinde toplam cironuzun ne kadarını inovasyon ve Ar-Ge faaliyetlerine ayırmayı planlıyorsunuz? <span className="required-star">*</span></label>
-          <p class="question-note">(Yüzde yazınız)</p>
-          <input
-            type="number"
-            value={innovationBudgetFuture}
-            onChange={(e) => setInnovationBudgetFuture(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>21. Son üç yıldaki teknoloji yatırımınız ne kadardır? <span className="required-star">*</span></label>
-          <p class="question-note">TL/Cironuzdaki yüzdelik payı</p>
-          <input
-            type="text"
-            value={techInvestment}
-            onChange={(e) => setTechInvestment(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>22. Şirketinizdeki tam zamanlı çalışan sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={fullTimeEmployees}
-            onChange={(e) => setFullTimeEmployees(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>23. Şirketinizdeki beyaz yaka sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={whiteCollarEmployees}
-            onChange={(e) => setWhiteCollarEmployees(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>24. Şirketinizdeki mavi yaka sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={blueCollarEmployees}
-            onChange={(e) => setBlueCollarEmployees(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>25. Şirketinizdeki ön lisans mezunu çalışan sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={associateDegreeEmployees}
-            onChange={(e) => setAssociateDegreeEmployees(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>26. Şirketinizdeki üniversite (lisans) mezunu çalışan sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={bachelorDegreeEmployees}
-            onChange={(e) => setBachelorDegreeEmployees(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>27. Şirketinizdeki yüksek lisans (Master) dereceli çalışan sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={masterDegreeEmployees}
-            onChange={(e) => setMasterDegreeEmployees(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>28. Şirketinizdeki doktora dereceli çalışan sayısı nedir? <span className="required-star">*</span></label>
-          <input
-            type="number"
-            value={phdDegreeEmployees}
-            onChange={(e) => setPhdDegreeEmployees(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>29. Aşağıda listelenen departmanlardan hangileri şirketinizde mevcuttur? <span className="required-star">*</span></label>
-          <div className="checkbox-group">
-            {["AR-GE ve Teknoloji Geliştirme", "Sertifikalı AR-GE Merkezi", "Tasarım/Ürün Geliştirme", "Sertifikalı Tasarım Merkezi", "Endüstri Mühendisliği", "Üretim/İmalat", "Lojistik", "Finans", "Satış & Pazarlama", "Satın alma", "Dış Ticaret ve İhracat"].map((department) => (
-              <label key={department}>
-                <input type="checkbox" value={department} checked={departments.includes(department)} onChange={handleDepartmentsChange} /> {department}
+              <label>
+                <input
+                  type="radio"
+                  name="companyAge"
+                  value="31 + yaş"
+                  checked={companyAge === "31 + yaş"}
+                  onChange={() => {
+                    setCompanyAge("31 + yaş");
+                    handleInputChange('companyAge', "31 + yaş");
+                  }}
+                  required
+                /> 31 + yaş
               </label>
-            ))}
-            <label style={{ display: 'flex', alignItems: 'center' }}>
-              <input type="checkbox" value="other" checked={departments.includes('other')} onChange={handleDepartmentsChange} />
-              <input type="text" value={otherDepartment} onChange={(e) => setOtherDepartment(e.target.value)} placeholder="Diğer" style={{ marginLeft: '10px' }} />
-            </label>
+            </div>
           </div>
-        </div>
-        <div className="form-group">
-          <label>30. Herhangi bir dijitalleşme değerlendirmesine katıldınız mı? Cevabınız evet ise hangi değerlendirme yöntemine veya hizmetine katıldınız? <span className="required-star">*</span></label>
-          <p class="question-note">Eğer soruya cevabınız evet ise lütfen değerlendirmenin adını ve ofisini yazınız.</p>
-          <input
-            type="text"
-            value={digitalAssessment}
-            onChange={(e) => setDigitalAssessment(e.target.value)}
-            placeholder="Cevabınızı girin"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>31. Lütfen bize şirketinizin satış ve pazarlama yaklaşımından bahsedin. Şirketiniz aşağıdaki faaliyetlerden hangilerini gerçekleştiriyor? <span className="required-star">*</span></label>
-          <div className="checkbox-group">
-            {[
-              "Şirketin sosyal medya hesabı var (Linkedin, Instagram, Facebook vb.)",
-              "Şirketin işleyen bir web sayfası var",
-              "Şirket e-ticaret yapıyor (kendi web sitesi)",
-              "Şirket çevrimiçi pazar yeri üzerinden satış yapıyor (amazon vb)",
-              "Şirket tele pazarlama yapıyor",
-              "Şirket düzenli olarak fuarlara katılıyor",
-              "Şirket aktif olarak reklam veriyor",
-              "Şirket eşleştirme etkinliklerine katılıyor"
-            ].map((activity) => (
-              <label key={activity}>
-                <input type="checkbox" value={activity} checked={salesMarketingActivities.includes(activity)} onChange={handleSalesMarketingActivitiesChange} /> {activity}
+          <div className="form-group">
+            <label>10. İşletmenizin sektörü nedir? <span className="required-star">*</span></label>
+            <p className="question-note">Ekli NACE listesine bakınız.</p>
+            <p className="question-note"><strong>(Makine ve otomotiv dışında bir sektör ise veya şirket bu iki sektörden birinin tedarikçisi değil ise, lütfen ankete devam etmeyiniz.)</strong></p>
+            <input
+              type="text"
+              value={companySector}
+              onChange={(e) => {
+                setCompanySector(e.target.value);
+                handleInputChange('companySector', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>11. Hizmetlerinizi/ürünlerinizi ihraç ediyor musunuz? <span className="required-star">*</span></label>
+            <div className="radio-group">
+              {["Evet doğrudan", "Evet, aracılar vasıtasıyla", "Hayır, etmiyoruz"].map((option) => (
+                <label key={option}>
+                  <input
+                    type="radio"
+                    name="exportStatus"
+                    value={option}
+                    checked={exportStatus === option}
+                    onChange={() => {
+                      setExportStatus(option);
+                      handleInputChange('exportStatus', option);
+                    }}
+                    required
+                  /> {option}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label>12. E-ihracat yapıyor musunuz? <span className="required-star">*</span></label>
+            <div className="radio-group">
+              {["Evet", "Hayır"].map((option) => (
+                <label key={option}>
+                  <input
+                    type="radio"
+                    name="eExport"
+                    value={option}
+                    checked={eExport === option}
+                    onChange={() => {
+                      setEExport(option);
+                      handleInputChange('eExport', option);
+                    }}
+                    required
+                  /> {option}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label>13. İhracatın toplam cironuz içindeki yüzdesi nedir?</label>
+            <p className="question-note">(Soru 11 ve Soru 12 EVET kodlandı ise İHRACAT ve E-İHRACAT VARDIR).</p>
+            <input
+              type="text"
+              value={exportPercentage}
+              onChange={(e) => {
+                setExportPercentage(e.target.value);
+                handleInputChange('exportPercentage', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+            />
+          </div>
+          <div className="form-group">
+            <label>14. Gelecek yıl ihracat yapmayı hedeflediğiniz bölgeler var mı? <span className="required-star">*</span></label>
+            <div className="checkbox-group">
+              {["Afrika ülkeleri", "Avrupa Birliği ülkeleri", "Türki Cumhuriyetler", "Diğer Amerika Ülkeleri", "Diğer Asya Ülkeleri", "Diğer Ülkeler", "Kuzey Amerika Serbest Ticaret Bölgesi", "Okyanus Ülkeleri", "Orta Doğu Ülkeleri", "Serbest Bölgeler", "Uzakdoğu Ülkeleri"].map((region) => (
+                <label key={region}>
+                  <input
+                    type="checkbox"
+                    value={region}
+                    checked={targetRegions.includes(region)}
+                    onChange={handleTargetRegionsChange}
+                  /> {region}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label>15. Geliştirme sahalarınızın sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={developmentAreas}
+              onChange={(e) => {
+                setDevelopmentAreas(e.target.value);
+                handleInputChange('developmentAreas', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>16. Üretim sahalarınızın sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={productionAreas}
+              onChange={(e) => {
+                setProductionAreas(e.target.value);
+                handleInputChange('productionAreas', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>17. 2022 yılındaki Cironuz nedir? <span className="required-star">*</span></label>
+            <div className="radio-group">
+              {["0 - 3 Milyon TL (mikro)", "3 - 25 Milyon TL (small)", "25 - 125 Milyon TL (orta)", "125 - 500 Milyon TL (büyük)", "+ 500 Milyon TL"].map((option) => (
+                <label key={option}>
+                  <input
+                    type="radio"
+                    name="revenue2022"
+                    value={option}
+                    checked={revenue2022 === option}
+                    onChange={() => {
+                      setRevenue2022(option);
+                      handleInputChange('revenue2022', option);
+                    }}
+                    required
+                  /> {option}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label>18. 2021 yılındaki cironuz nedir? <span className="required-star">*</span></label>
+            <div className="radio-group">
+              {["0 - 3 Milyon TL (mikro)", "3 - 25 Milyon TL (küçük)", "25 - 125 Milyon TL (orta)", "125 - 500 Milyon TL (büyük)", "+ 500 Milyon TL"].map((option) => (
+                <label key={option}>
+                  <input
+                    type="radio"
+                    name="revenue2021"
+                    value={option}
+                    checked={revenue2021 === option}
+                    onChange={() => {
+                      setRevenue2021(option);
+                      handleInputChange('revenue2021', option);
+                    }}
+                    required
+                  /> {option}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label>19. Bu yıl toplam cironuzun ne kadarını inovasyon ve AR-GE faaliyetlerine ayırmayı planlıyorsunuz? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={innovationBudgetCurrent}
+              onChange={(e) => {
+                setInnovationBudgetCurrent(e.target.value);
+                handleInputChange('innovationBudgetCurrent', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>20. Önümüzdeki üç yıl içinde toplam cironuzun ne kadarını inovasyon ve Ar-Ge faaliyetlerine ayırmayı planlıyorsunuz? <span className="required-star">*</span></label>
+            <p className="question-note">(Yüzde yazınız)</p>
+            <input
+              type="number"
+              value={innovationBudgetFuture}
+              onChange={(e) => {
+                setInnovationBudgetFuture(e.target.value);
+                handleInputChange('innovationBudgetFuture', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>21. Son üç yıldaki teknoloji yatırımınız ne kadardır? <span className="required-star">*</span></label>
+            <p className="question-note">TL/Cironuzdaki yüzdelik payı</p>
+            <input
+              type="text"
+              value={techInvestment}
+              onChange={(e) => {
+                setTechInvestment(e.target.value);
+                handleInputChange('techInvestment', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>22. Şirketinizdeki tam zamanlı çalışan sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={fullTimeEmployees}
+              onChange={(e) => {
+                setFullTimeEmployees(e.target.value);
+                handleInputChange('fullTimeEmployees', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>23. Şirketinizdeki beyaz yaka sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={whiteCollarEmployees}
+              onChange={(e) => {
+                setWhiteCollarEmployees(e.target.value);
+                handleInputChange('whiteCollarEmployees', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>24. Şirketinizdeki mavi yaka sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={blueCollarEmployees}
+              onChange={(e) => {
+                setBlueCollarEmployees(e.target.value);
+                handleInputChange('blueCollarEmployees', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>25. Şirketinizdeki ön lisans mezunu çalışan sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={associateDegreeEmployees}
+              onChange={(e) => {
+                setAssociateDegreeEmployees(e.target.value);
+                handleInputChange('associateDegreeEmployees', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>26. Şirketinizdeki üniversite (lisans) mezunu çalışan sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={bachelorDegreeEmployees}
+              onChange={(e) => {
+                setBachelorDegreeEmployees(e.target.value);
+                handleInputChange('bachelorDegreeEmployees', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>27. Şirketinizdeki yüksek lisans (Master) dereceli çalışan sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={masterDegreeEmployees}
+              onChange={(e) => {
+                setMasterDegreeEmployees(e.target.value);
+                handleInputChange('masterDegreeEmployees', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>28. Şirketinizdeki doktora dereceli çalışan sayısı nedir? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={phdDegreeEmployees}
+              onChange={(e) => {
+                setPhdDegreeEmployees(e.target.value);
+                handleInputChange('phdDegreeEmployees', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>29. Aşağıda listelenen departmanlardan hangileri şirketinizde mevcuttur? <span className="required-star">*</span></label>
+            <div className="checkbox-group">
+              {["AR-GE ve Teknoloji Geliştirme", "Sertifikalı AR-GE Merkezi", "Tasarım/Ürün Geliştirme", "Sertifikalı Tasarım Merkezi", "Endüstri Mühendisliği", "Üretim/İmalat", "Lojistik", "Finans", "Satış & Pazarlama", "Satın alma", "Dış Ticaret ve İhracat"].map((department) => (
+                <label key={department}>
+                  <input
+                    type="checkbox"
+                    value={department}
+                    checked={departments.includes(department)}
+                    onChange={handleDepartmentsChange}
+                  /> {department}
+                </label>
+              ))}
+              <label style={{ display: 'flex', alignItems: 'center' }}>
+                <input
+                  type="checkbox"
+                  value="other"
+                  checked={departments.includes('other')}
+                  onChange={handleDepartmentsChange}
+                />
+                <input
+                  type="text"
+                  value={otherDepartment}
+                  onChange={(e) => {
+                    setOtherDepartment(e.target.value);
+                    handleInputChange('otherDepartment', e.target.value);
+                  }}
+                  placeholder="Diğer"
+                  style={{ marginLeft: '10px' }}
+                />
               </label>
-            ))}
+            </div>
           </div>
-        </div>
+          <div className="form-group">
+            <label>30. Herhangi bir dijitalleşme değerlendirmesine katıldınız mı? Cevabınız evet ise hangi değerlendirme yöntemine veya hizmetine katıldınız? <span className="required-star">*</span></label>
+            <p className="question-note">Eğer soruya cevabınız evet ise lütfen değerlendirmenin adını ve ofisini yazınız.</p>
+            <input
+              type="text"
+              value={digitalAssessment}
+              onChange={(e) => {
+                setDigitalAssessment(e.target.value);
+                handleInputChange('digitalAssessment', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>31. Lütfen bize şirketinizin satış ve pazarlama yaklaşımından bahsedin. Şirketiniz aşağıdaki faaliyetlerden hangilerini gerçekleştiriyor? <span className="required-star">*</span></label>
+            <div className="checkbox-group">
+              {[
+                "Şirketin sosyal medya hesabı var (Linkedin, Instagram, Facebook vb.)",
+                "Şirketin işleyen bir web sayfası var",
+                "Şirket e-ticaret yapıyor (kendi web sitesi)",
+                "Şirket çevrimiçi pazar yeri üzerinden satış yapıyor (amazon vb)",
+                "Şirket tele pazarlama yapıyor",
+                "Şirket düzenli olarak fuarlara katılıyor",
+                "Şirket aktif olarak reklam veriyor",
+                "Şirket eşleştirme etkinliklerine katılıyor"
+              ].map((activity) => (
+                <label key={activity}>
+                  <input
+                    type="checkbox"
+                    value={activity}
+                    checked={salesMarketingActivities.includes(activity)}
+                    onChange={handleSalesMarketingActivitiesChange}
+                  /> {activity}
+                </label>
+              ))}
+            </div>
+          </div>
               <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+              <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
 
         </>
       )}
       {currentPage === 3 && (
-  <>
-    <div className="form-group">
-    <p class="page-parts">Şirket Stratejisi</p>
-    <p class="question-note">32. ve 33. soruları cevaplayın.</p>
-      <label>32. Şirketinizde aşağıdakilerden herhangi biri var mı? Lütfen geçerli olanları seçiniz. <span className="required-star">*</span></label>
-      <div className="checkbox-group">
-        <label>
-          <input
-            type="checkbox"
-            value="Şirket gelişim planı"
-            checked={developmentPlans.includes("Şirket gelişim planı")}
-            onChange={handleDevelopmentPlansChange}
-          /> Şirket gelişim planı: Bir iş geliştirme planı, işletmenin hem uzun hem de kısa vadeli hedeflerini ve bunlara nasıl ulaşmayı planladıklarını gösteren yazılı bir belgedir.
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="İş planı"
-            checked={developmentPlans.includes("İş planı")}
-            onChange={handleDevelopmentPlansChange}
-          /> İş planı: Bir iş planı, hedeflerini ve bunlara ulaşmak için planlarını vurgulayan belgelenmiş bir stratejidir. Bir şirketin pazara açılma planını, finansal projeksiyonlarını, pazar araştırmasını, iş amacını ve misyon beyanını ana hatlarıyla belirtir.
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="Finansal plan"
-            checked={developmentPlans.includes("Finansal plan")}
-            onChange={handleDevelopmentPlansChange}
-          /> Finansal plan: Finansal planlama, gelecekteki finansal hedefleri ve bunlara nasıl ulaşılacağını belirlemek için mevcut finansal durumu değerlendirme sürecidir. Finansal plan, bir şirketin finansal büyümesi için yol haritası görevini gören bir belgedir.
-        </label>
-      </div>
-    </div>
-    <div className="form-group">
-      <label>33. Son beş yılda şirketinizde inovasyonla ilgili kaç proje yürüttünüz? <span className="required-star">*</span></label>
-      <input
-        type="number"
-        value={innovationProjects}
-        onChange={(e) => setInnovationProjects(e.target.value)}
-        placeholder="Cevabınızı girin"
-        required
-      />
-    </div>
+        <>
+          <div className="form-group">
+            <p className="page-parts">Şirket Stratejisi</p>
+            <p className="question-note">32. ve 33. soruları cevaplayın.</p>
+            <label>32. Şirketinizde aşağıdakilerden herhangi biri var mı? Lütfen geçerli olanları seçiniz. <span className="required-star">*</span></label>
+            <div className="checkbox-group">
+              {[
+                { value: "Şirket gelişim planı", label: "Şirket gelişim planı: Bir iş geliştirme planı, işletmenin hem uzun hem de kısa vadeli hedeflerini ve bunlara nasıl ulaşmayı planladıklarını gösteren yazılı bir belgedir." },
+                { value: "İş planı", label: "İş planı: Bir iş planı, hedeflerini ve bunlara ulaşmak için planlarını vurgulayan belgelenmiş bir stratejidir. Bir şirketin pazara açılma planını, finansal projeksiyonlarını, pazar araştırmasını, iş amacını ve misyon beyanını ana hatlarıyla belirtir." },
+                { value: "Finansal plan", label: "Finansal plan: Finansal planlama, gelecekteki finansal hedefleri ve bunlara nasıl ulaşılacağını belirlemek için mevcut finansal durumu değerlendirme sürecidir. Finansal plan, bir şirketin finansal büyümesi için yol haritası görevini gören bir belgedir." }
+              ].map((plan) => (
+                <label key={plan.value}>
+                  <input  
+                    type="checkbox"
+                    value={plan.value}
+                    checked={developmentPlans.includes(plan.value)}
+                    onChange={handleDevelopmentPlansChange}
+                  /> {plan.label}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label>33. Son beş yılda şirketinizde inovasyonla ilgili kaç proje yürüttünüz? <span className="required-star">*</span></label>
+            <input
+              type="number"
+              value={innovationProjects}
+              onChange={(e) => {
+                setInnovationProjects(e.target.value);
+                handleInputChange('innovationProjects', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
+            />
+          </div>
               <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+              <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
 
     </>
       )}
-    {currentPage === 4 && (
-  <>
-    <div className="form-group">
-    <p class="page-parts">Ürün Portföyü ve Ürün Oluşturma</p>
-    <p class="question-note">34'ten 37'ye kadar olan soruları cevaplayın.</p>
-      <label>34. Lütfen ürün çeşitliliğinizi belirtir misiniz? Kaç farklı/özgün ürün çeşidi/aileşi üretiyorsunuz? <span className="required-star">*</span></label>
-      <input
-        type="number"
-        value={productVariety}
-        onChange={(e) => setProductVariety(e.target.value)}
-        placeholder="Cevabınızı girin"
-        required
-      />
-    </div>
-    <div className="form-group">
-      <label>35. Müşterilerinizin ürünlerinizi/hizmetlerinizi rakiplerinize tercih etmesinin en önemli üç nedeni nedir? <span className="required-star">*</span></label>
-      <p className="question-note">En fazla 3 seçenek işaretleyiniz.</p>
-      <div className="checkbox-group">
-        {[
-          "Fiyat avantajı", "Ürün kalitesi", "Özel/Niş ürün", "Hızlı vade/kısa teslimat süresi",
-          "Sürdürülebilir/Ekolojik Ürünler/Hizmetler/Uygulamalar", "Koleksiyon (Çeşitlilik)",
-          "Esnek üretim", "Güvenilirlik", "Bilgi/Ustalık", "İnovasyon seviyesi", "Teknoloji Liderliği"
-        ].map((reason) => (
-          <label key={reason}>
+      {currentPage === 4 && (
+        <>
+          <div className="form-group">
+            <p className="page-parts">Ürün Portföyü ve Ürün Oluşturma</p>
+            <p className="question-note">34'ten 37'ye kadar olan soruları cevaplayın.</p>
+            <label>34. Lütfen ürün çeşitliliğinizi belirtir misiniz? Kaç farklı/özgün ürün çeşidi/aileşi üretiyorsunuz? <span className="required-star">*</span></label>
             <input
-              type="checkbox"
-              value={reason}
-              checked={salesReasons.includes(reason)}
-              onChange={(e) => handleSalesReasonsChange(e.target.value)}
+              type="number"
+              value={productVariety}
+              onChange={(e) => {
+                setProductVariety(e.target.value);
+                handleInputChange('productVariety', e.target.value);
+              }}
+              placeholder="Cevabınızı girin"
+              required
             />
-            {reason}
-          </label>
-        ))}
-        <label style={{ display: 'flex', alignItems: 'center' }}>
-          <input
-            type="checkbox"
-            value="other35"
-            checked={salesReasons.includes('other35')}
-            onChange={(e) => handleSalesReasonsChange(e.target.value)}
-          />
-          <input
-            type="text"
-            value={otherDepartment35}
-            onChange={(e) => setOtherDepartment35(e.target.value)}
-            placeholder="Diğer"
-            style={{ marginLeft: '10px' }}
-          />
-        </label>
-      </div>
-    </div>
-    <div className="form-group">
-        <label>36. Her bir trend mevcut işinizi nasıl etkiliyor? <span className="required-star">*</span></label>
-        <p class="question-note">Lütfen her satır için geçerli olan cevabı seçiniz.</p>
-        <div className="bt-systems-usage">
-          <table>
-            <thead>
-              <tr>
-                <th>Trend</th>
-                <th>5-Çok olumlu</th>
-                <th>4-Olumlu</th>
-                <th>3-Ne olumlu ne olumsuz</th>
-                <th>2-Olumsuz</th>
-                <th>1-Çok olumsuz</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                'Yeşil Teknoloji',
-                'CO2 ayak izi ve döngüsel ekonomi',
-                'Yaşam döngüsü değerlendirmeleri ve Yaşam döngüsü maliyet hesaplamaları',
-                'Uyumluluk ve yeni düzenlemeler',
-                'BT sistemlerinin operasyonel güvenliği ve veri yönetimi',
-                'Müşteri yolculuğunun karmaşıklığı (tüm ürün yaşam döngüsü aşamalarında kişiselleştirilmiş teklifler ve hizmetler)',
-                'Ürün bireyselleştirme',
-                'Mekatronik sistemler',
-                'Ürünlerde yazılım tanımlı özellikler/ürünlerde gömülü yazılım',
-                'Otonom, dinamik olarak ağa bağlı gibi özelliklere sahip daha büyük bir sistemin parçası olan karmaşık sistemler/ürünler',
-                'Ürün-Hizmet Sistemleri (entegre ürün ve hizmet paketleri, varsa hizmetlerin ayrı fiyatlandırılması)',
-                'Dijital hizmetler ve iş modelleri',
-                'Paylaşım ekonomisi',
-                'Veri ekonomisi (uzaktan hizmetlerden gelir elde etme, kestirimci bakım için)',
-                'Sistem Mühendisliği, ITSM, karmaşık sistemler için geliştirme yöntemleri',
-                'Dijital süreklilik/ uçtan uca entegrasyon',
-                'Karmaşık sistemlerin simülasyonu ve gerçek zamanlı simülasyon',
-                'Yapay zeka',
-                'Dijital ikiz',
-                'Dijital Platformlar ve (Çoklu) Bulut Bilişimi'
-              ].map((trend, index) => (
-                <tr key={index}>
-                  <td>{trend}</td>
-                  {[5, 4, 3, 2, 1].map((value) => (
-                    <td key={value}>
-                      <input
-                        type="radio"
-                        name={`trend-${index}`}
-                        value={value}
-                        checked={btSystemsUsage[`trend-${index}`] === value.toString()}
-                        onChange={(e) => setBtSystemsUsage({ ...btSystemsUsage, [`trend-${index}`]: e.target.value })}
-                      />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          </div>
+          <div className="form-group">
+          <label>35. Müşterilerinizin ürünlerinizi/hizmetlerinizi rakiplerinize tercih etmesinin en önemli üç nedeni nedir? <span className="required-star">*</span></label>
+          <p className="question-note">En fazla 3 seçenek işaretleyiniz.</p>
+          <div className="checkbox-group">
+            {[
+              "Fiyat avantajı", "Ürün kalitesi", "Özel/Niş ürün", "Hızlı vade/kısa teslimat süresi",
+              "Sürdürülebilir/Ekolojik Ürünler/Hizmetler/Uygulamalar", "Koleksiyon (Çeşitlilik)",
+              "Esnek üretim", "Güvenilirlik", "Bilgi/Ustalık", "İnovasyon seviyesi", "Teknoloji Liderliği"
+            ].map((reason) => (
+              <label key={reason}>
+                <input
+                  type="checkbox"
+                  value={reason}
+                  checked={salesReasons.includes(reason)}
+                  onChange={(e) => {
+                    handleSalesReasonsChange(e.target.value);
+                  }}
+                />
+                {reason}
+              </label>
+            ))}
+            <label style={{ display: 'flex', alignItems: 'center' }}>
+              <input
+                type="checkbox"
+                value="other35"
+                checked={salesReasons.includes('other35')}
+                onChange={(e) => {
+                  handleSalesReasonsChange(e.target.value);
+                }}
+              />
+              <input
+                type="text"
+                value={otherDepartment35}
+                onChange={(e) => {
+                  setOtherDepartment35(e.target.value);
+                  handleInputChange('otherDepartment35', e.target.value);
+                }}
+                placeholder="Diğer"
+                style={{ marginLeft: '10px' }}
+              />
+            </label>
+          </div>
         </div>
-      </div>
-      <div className="form-group">
-        <label>37. Her bir trend mevcut işinizi nasıl etkiliyor? <span className="required-star">*</span></label>
-        <p class="question-note">Lütfen her satır için geçerli olan cevabı seçiniz.</p>
-        <div className="bt-systems-usage">
-          <table>
-            <thead>
-              <tr>
-                <th>Trend</th>
-                <th>5-Çok olumlu</th>
-                <th>4-Olumlu</th>
-                <th>3-Ne olumlu ne olumsuz</th>
-                <th>2-Olumsuz</th>
-                <th>1-Çok olumsuz</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                'Nesnelerin interneti',
-                'Sanal gerçeklik ortamları ve arayüzler (AR/VR)',
-                'Blokzincir teknolojisi',
-                'Veri formatları ve veri aktarımı için yeni (açık) standartlar',
-                'Robotik süreç otomasyonu',
-                'Yetenekler savaşı',
-                'Yeni iş (mobil çalışma, yaratıcılık, sanal işbirliği)',
-                'Çeviklik ve kendi kendini organize eden ekipler',
-                'Değer yaratma ağlarının karmaşıklığı ve eksik dayanıklılığı'
-              ].map((trend, index) => (
-                <tr key={index}>
-                  <td>{trend}</td>
-                  {[5, 4, 3, 2, 1].map((value) => (
-                    <td key={value}>
-                      <input
-                        type="radio"
-                        name={`trend-37-${index}`}
-                        value={value}
-                        checked={btSystemsUsage[`trend-37-${index}`] === value.toString()}
-                        onChange={(e) => setBtSystemsUsage({ ...btSystemsUsage, [`trend-37-${index}`]: e.target.value })}
-                      />
-                    </td>
+          <div className="form-group">
+            <label>36. Her bir trend mevcut işinizi nasıl etkiliyor? <span className="required-star">*</span></label>
+            <p className="question-note">Lütfen her satır için geçerli olan cevabı seçiniz.</p>
+            <div className="bt-systems-usage">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Trend</th>
+                    <th>5-Çok olumlu</th>
+                    <th>4-Olumlu</th>
+                    <th>3-Ne olumlu ne olumsuz</th>
+                    <th>2-Olumsuz</th>
+                    <th>1-Çok olumsuz</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    'Yeşil Teknoloji',
+                    'CO2 ayak izi ve döngüsel ekonomi',
+                    'Yaşam döngüsü değerlendirmeleri ve Yaşam döngüsü maliyet hesaplamaları',
+                    'Uyumluluk ve yeni düzenlemeler',
+                    'BT sistemlerinin operasyonel güvenliği ve veri yönetimi',
+                    'Müşteri yolculuğunun karmaşıklığı (tüm ürün yaşam döngüsü aşamalarında kişiselleştirilmiş teklifler ve hizmetler)',
+                    'Ürün bireyselleştirme',
+                    'Mekatronik sistemler',
+                    'Ürünlerde yazılım tanımlı özellikler/ürünlerde gömülü yazılım',
+                    'Otonom, dinamik olarak ağa bağlı gibi özelliklere sahip daha büyük bir sistemin parçası olan karmaşık sistemler/ürünler',
+                    'Ürün-Hizmet Sistemleri (entegre ürün ve hizmet paketleri, varsa hizmetlerin ayrı fiyatlandırılması)',
+                    'Dijital hizmetler ve iş modelleri',
+                    'Paylaşım ekonomisi',
+                    'Veri ekonomisi (uzaktan hizmetlerden gelir elde etme, kestirimci bakım için)',
+                    'Sistem Mühendisliği, ITSM, karmaşık sistemler için geliştirme yöntemleri',
+                    'Dijital süreklilik/ uçtan uca entegrasyon',
+                    'Karmaşık sistemlerin simülasyonu ve gerçek zamanlı simülasyon',
+                    'Yapay zeka',
+                    'Dijital ikiz',
+                    'Dijital Platformlar ve (Çoklu) Bulut Bilişimi'
+                  ].map((trend, index) => (
+                    <tr key={index}>
+                      <td>{trend}</td>
+                      {[5, 4, 3, 2, 1].map((value) => (
+                        <td key={value}>
+                          <input
+                            type="radio"
+                            name={`trend-36-${index}`}
+                            value={value}
+                            checked={btSystemsUsage36[`trend-36-${index}`] === value.toString()}
+                            onChange={(e) => {
+                              setBtSystemsUsage36({ ...btSystemsUsage36, [`trend-36-${index}`]: e.target.value });
+                              handleInputChange(`btSystemsUsage36-trend-36-${index}`, e.target.value);
+                            }}
+                          />
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
-      <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
-      <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="form-group">
+            <label>37. Her bir trend mevcut işinizi nasıl etkiliyor? <span className="required-star">*</span></label>
+            <p className="question-note">Lütfen her satır için geçerli olan cevabı seçiniz.</p>
+            <div className="bt-systems-usage">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Trend</th>
+                    <th>5-Çok olumlu</th>
+                    <th>4-Olumlu</th>
+                    <th>3-Ne olumlu ne olumsuz</th>
+                    <th>2-Olumsuz</th>
+                    <th>1-Çok olumsuz</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    'Nesnelerin interneti',
+                    'Sanal gerçeklik ortamları ve arayüzler (AR/VR)',
+                    'Blokzincir teknolojisi',
+                    'Veri formatları ve veri aktarımı için yeni (açık) standartlar',
+                    'Robotik süreç otomasyonu',
+                    'Yetenekler savaşı',
+                    'Yeni iş (mobil çalışma, yaratıcılık, sanal işbirliği)',
+                    'Çeviklik ve kendi kendini organize eden ekipler',
+                    'Değer yaratma ağlarının karmaşıklığı ve eksik dayanıklılığı'
+                  ].map((trend, index) => (
+                    <tr key={index}>
+                      <td>{trend}</td>
+                      {[5, 4, 3, 2, 1].map((value) => (
+                        <td key={value}>
+                          <input
+                            type="radio"
+                            name={`trend-37-${index}`}
+                            value={value}
+                            checked={btSystemsUsage37[`trend-37-${index}`] === value.toString()}
+                            onChange={(e) => {
+                              setBtSystemsUsage37({ ...btSystemsUsage37, [`trend-37-${index}`]: e.target.value });
+                              handleInputChange(`btSystemsUsage37-trend-37-${index}`, e.target.value);
+                            }}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+          <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
         </>
       )}
       {currentPage === 5 && (
@@ -1194,8 +1772,8 @@ const handleSmartServicesChange = (e) => {
                         type="radio"
                         name={`component-42-${index}`}
                         value={value}
-                        checked={btSystemsUsage[`component-42-${index}`] === value.toString()}
-                        onChange={(e) => setBtSystemsUsage({ ...btSystemsUsage, [`component-42-${index}`]: e.target.value })}
+                        checked={btSystemsUsage42[`component-42-${index}`] === value.toString()}
+                        onChange={(e) => setBtSystemsUsage42({ ...btSystemsUsage42, [`component-42-${index}`]: e.target.value })}
                       />
                     </td>
                   ))}
@@ -1235,8 +1813,8 @@ const handleSmartServicesChange = (e) => {
                         type="radio"
                         name={`component-43-${index}`}
                         value={value}
-                        checked={btSystemsUsage[`component-43-${index}`] === value.toString()}
-                        onChange={(e) => setBtSystemsUsage({ ...btSystemsUsage, [`component-43-${index}`]: e.target.value })}
+                        checked={btSystemsUsage43[`component-43-${index}`] === value.toString()}
+                        onChange={(e) => setBtSystemsUsage43({ ...btSystemsUsage43, [`component-43-${index}`]: e.target.value })}
                       />
                     </td>
                   ))}
@@ -1299,6 +1877,7 @@ const handleSmartServicesChange = (e) => {
               <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+              <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
 
   </>
 )}
@@ -1328,6 +1907,7 @@ const handleSmartServicesChange = (e) => {
           <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
           <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
           <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+          <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
 
         </>
       )}
@@ -1516,6 +2096,7 @@ const handleSmartServicesChange = (e) => {
         <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
         <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
         <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+        <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
         </>
       )}
       {currentPage === 8 && (
@@ -1560,8 +2141,8 @@ const handleSmartServicesChange = (e) => {
                       type="radio"
                       name={system.key}
                       value={value}
-                      checked={btSystemsUsage[system.key] === value.toString()}
-                      onChange={(e) => setBtSystemsUsage({ ...btSystemsUsage, [system.key]: e.target.value })}
+                      checked={btSystemsUsage56[system.key] === value.toString()}
+                      onChange={(e) => setBtSystemsUsage56({ ...btSystemsUsage56, [system.key]: e.target.value })}
                     />
                   </td>
                 ))}
@@ -1624,215 +2205,216 @@ const handleSmartServicesChange = (e) => {
           <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
           <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
           <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
+          <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
             </>
           )}
-
-  {currentPage === 9 && (
-          <>
-          <div className="form-group question-59">
-          <p class="page-parts">Dijitalleşme Düzeyi Öz Değerlendirmesi</p>
-          <p class="question-note">59'dan 65'e kadar olan soruları cevaplayın.</p>
-            <label>59. Aşağıdaki ifadelerden şirketinize en uygun olan seçeneği işaretleyiniz. *</label>
-            <div className="bt-systems-usage">
-              {[
-                '1- Dijitalleşmiş bir şirketiz, ciromuzun önemli bir kısmını dijital kapasitemizi (modelleme, prototipleme, test etme, satış) geliştirmeye ayırıyoruz.',
-                '2- Şirketimizin dijitalleşmiş olduğunu söylemek zor, ancak yakın zamanda dijital dönüşüm için bir miktar bütçe harcadık.',
-                '3- Şirketimiz ağırlıklı olarak dijital olmayan üretim ve satışa odaklanmıştır; şimdiye kadar dijital tasarım / modelleme / prototipleme / satış konusunda herhangi bir çalışma yapmadık, ancak yakın gelecekte dijitalleşmeye yatırım yapmayı planlıyoruz.',
-                '4- Şirketimiz ağırlıklı olarak dijital olmayan üretim ve satışa odaklanmıştır; şimdiye kadar dijital tasarım / modelleme / prototipleme / satış konusunda herhangi bir çalışma yapmadık, yakın gelecekte yapacağımızı sanmıyoruz.'
-              ].map((status, index) => (
-                <div className="checkbox-group" key={index}>
-                  <input
-                    type="radio"
-                    name="digitalizationStatus"
-                    value={status}
-                    checked={digitalizationStatus === status}
-                    onChange={(e) => setDigitalizationStatus(e.target.value)}
-                  />
-                  <label>{status}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="form-group">
-            <label>60. SORU 59'da 2-3-4 SEÇENEKLERİNİ İŞARETLEDİYSENİZ CEVAPLAYINIZ.</label>
-            <label>Şirketinizin tamamen dijitalleşmediğini söylediniz? Neden? Lütfen bu zorlukların dijitalleşmenizi ne derece etkilediğini belirtir misiniz?</label>
-            <div className="bt-systems-usage">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Zorluk</th>
-                    <th>5-Çok etkiliyor</th>
-                    <th>4-Etkiliyor</th>
-                    <th>3-Biraz etkiliyor</th>
-                    <th>2-Pek etkilemiyor</th>
-                    <th>1-Hiç etkilemiyor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    'Üretimimiz dijital üretim metodları gerektirmiyor',
-                    'Dijital teknoloji sağlayıcıları yetersiz',
-                    'Katı süreçlerimiz ve/veya kurumsal yapılarımız var',
-                    'Mali sorunlarımız/bütçe yetersizliğimiz var',
-                    'Dijital dönüşüm pahalı',
-                    'İş yükümüz çok fazla',
-                    'Çalışanlarımız değişim sürecine katılma konusunda isteksiz',
-                    'Yönetimimiz dijital dönüşümü düşünmüyor',
-                    'Mevcut BT sistemlerimiz kısıtlı (eski/güncellenmiş versiyonu/kötü BT sistemleri, eksik yazılımlar, genel olarak eksik yazılım sistemleri dahil)',
-                    'Yetersiz devlet teşvikleri',
-                    'Dijital dönüşüm için gerekli kalifiye personelimiz yok (Dijital dönüşümle ilgili yanlış/eksik çalışan becerileri)',
-                    'Tüketicilerimiz bu teknolojiyi talep etmiyor',
-                    'Rakiplerimizin hiçbiri bu teknolojiye sahip değil',
-                    'Nitelikli uzmanlara ulaşamıyoruz/bulamıyoruz',
-                    'Kısıtlı envanterimiz var (eski makinelerden dijital süreçlere entegrasyonu, eski makinelerden elde edilen verilerin dijital sistemlerde kullanılamaması)',
-                    'Erişiminizin kısıtlayıcı ve sınırlayıcı olması (örneğin, geniş bant erişiminin olmaması)',
-                    'Dijital dönüşüm için eksik veya belirsiz düzenlemeler (örneğin, geleceğe yönelik veri alışverişi formatlarının, yazılım mimarilerinin, dokümantasyon düzenlemelerinin seçimine ilişkin endişeler)',
-                    'Faydalarından emin değiliz',
-                    'Yenilikçi olmayan bir şirket kültürümüz var',
-                    'Dijitalleşme stratejimiz ve yol haritamız yok'
-                  ].map((challenge, index) => (
-                    <tr key={index}>
-                      <td>{challenge}</td>
-                      {[5, 4, 3, 2, 1].map((value) => (
-                        <td key={value}>
-                          <input
-                            type="radio"
-                            name={`digitalizationChallenge-${index}`}
-                            value={value}
-                            checked={digitalizationChallenges[`digitalizationChallenge-${index}`] === value.toString()}
-                            onChange={(e) => setDigitalizationChallenges({ ...digitalizationChallenges, [`digitalizationChallenge-${index}`]: e.target.value })}
-                          />
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className="form-group">
-            <label>61. DİĞER (Lütfen yazınız)</label>
+{currentPage === 9 && (
+    <>
+    <div className="form-group question-59">
+    <p class="page-parts">Dijitalleşme Düzeyi Öz Değerlendirmesi</p>
+    <p class="question-note">59'dan 65'e kadar olan soruları cevaplayın.</p>
+      <label>59. Aşağıdaki ifadelerden şirketinize en uygun olan seçeneği işaretleyiniz. <span className="required-star">*</span></label>
+      <div className="bt-systems-usage">
+        {[
+          '1- Dijitalleşmiş bir şirketiz, ciromuzun önemli bir kısmını dijital kapasitemizi (modelleme, prototipleme, test etme, satış) geliştirmeye ayırıyoruz.',
+          '2- Şirketimizin dijitalleşmiş olduğunu söylemek zor, ancak yakın zamanda dijital dönüşüm için bir miktar bütçe harcadık.',
+          '3- Şirketimiz ağırlıklı olarak dijital olmayan üretim ve satışa odaklanmıştır; şimdiye kadar dijital tasarım / modelleme / prototipleme / satış konusunda herhangi bir çalışma yapmadık, ancak yakın gelecekte dijitalleşmeye yatırım yapmayı planlıyoruz.',
+          '4- Şirketimiz ağırlıklı olarak dijital olmayan üretim ve satışa odaklanmıştır; şimdiye kadar dijital tasarım / modelleme / prototipleme / satış konusunda herhangi bir çalışma yapmadık, yakın gelecekte yapacağımızı sanmıyoruz.'
+        ].map((status, index) => (
+          <div className="checkbox-group" key={index}>
             <input
-              type="text"
-              name="otherResponse"
-              value={otherResponse}
-              onChange={(e) => setOtherResponse(e.target.value)}
-              placeholder="Yanıtınızı girin"
+              type="radio"
+              name="digitalizationStatus"
+              value={status}
+              checked={digitalizationStatus === status}
+              onChange={(e) => setDigitalizationStatus(e.target.value)}
             />
+            <label>{status}</label>
           </div>
-          <div className="form-group">
-            <label>62. Aşağıdaki dijital teknolojileri kullanma sebeplerinin şirketiniz için önem derecesini belirtir misiniz? *</label>
-            <div className="bt-systems-usage">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Sebepler</th>
-                    <th>5-Çok önemli</th>
-                    <th>4-Önemli</th>
-                    <th>3-Ne önemli ne önemsiz</th>
-                    <th>2-Pek önemli değil</th>
-                    <th>1-Hiç önemli değil</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    'Yeni müşterilerin taleplerini karşılama',
-                    'COVID-19 sırasında dijitalleşmenin öneminin artması',
-                    'Rekabette geride kalma endişeleri',
-                    'Geleceğe daha kolay ve hızlı uyum sağlama',
-                    'Üretim ve süreç verimliliği',
-                    'Hizmetlerin sağlanmasının kolaylaştırılması',
-                    'Müşteri talep ve beklentilerini yakından analiz etme',
-                    'Sektörde lider olma',
-                    'Pazara sunma süresinde azalma',
-                    'Süreç ve ürün kalitesinin artması',
-                    'Düşük ürün geliştirme ve üretim maliyetleri',
-                    'Verilerin etkin kullanımı'
-                  ].map((reason, index) => (
-                    <tr key={index}>
-                      <td>{reason}</td>
-                      {[5, 4, 3, 2, 1].map((value) => (
-                        <td key={value}>
-                          <input
-                            type="radio"
-                            name={`digitalTechnologyReason-${index}`}
-                            value={value}
-                            checked={digitalTechnologyReasons[`digitalTechnologyReason-${index}`] === value.toString()}
-                            onChange={(e) => setDigitalTechnologyReasons({ ...digitalTechnologyReasons, [`digitalTechnologyReason-${index}`]: e.target.value })}
-                          />
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className="form-group">
-            <label>63. DİĞER (Lütfen yazınız)</label>
+        ))}
+      </div>
+    </div>
+    <div className="form-group">
+      <label>60. SORU 59'da 2-3-4 SEÇENEKLERİNİ İŞARETLEDİYSENİZ CEVAPLAYINIZ.</label>
+      <label>Şirketinizin tamamen dijitalleşmediğini söylediniz? Neden? Lütfen bu zorlukların dijitalleşmenizi ne derece etkilediğini belirtir misiniz?</label>
+      <div className="bt-systems-usage">
+        <table>
+          <thead>
+            <tr>
+              <th>Zorluk</th>
+              <th>5-Çok etkiliyor</th>
+              <th>4-Etkiliyor</th>
+              <th>3-Biraz etkiliyor</th>
+              <th>2-Pek etkilemiyor</th>
+              <th>1-Hiç etkilemiyor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              'Üretimimiz dijital üretim metodları gerektirmiyor',
+              'Dijital teknoloji sağlayıcıları yetersiz',
+              'Katı süreçlerimiz ve/veya kurumsal yapılarımız var',
+              'Mali sorunlarımız/bütçe yetersizliğimiz var',
+              'Dijital dönüşüm pahalı',
+              'İş yükümüz çok fazla',
+              'Çalışanlarımız değişim sürecine katılma konusunda isteksiz',
+              'Yönetimimiz dijital dönüşümü düşünmüyor',
+              'Mevcut BT sistemlerimiz kısıtlı (eski/güncellenmiş versiyonu/kötü BT sistemleri, eksik yazılımlar, genel olarak eksik yazılım sistemleri dahil)',
+              'Yetersiz devlet teşvikleri',
+              'Dijital dönüşüm için gerekli kalifiye personelimiz yok (Dijital dönüşümle ilgili yanlış/eksik çalışan becerileri)',
+              'Tüketicilerimiz bu teknolojiyi talep etmiyor',
+              'Rakiplerimizin hiçbiri bu teknolojiye sahip değil',
+              'Nitelikli uzmanlara ulaşamıyoruz/bulamıyoruz',
+              'Kısıtlı envanterimiz var (eski makinelerden dijital süreçlere entegrasyonu, eski makinelerden elde edilen verilerin dijital sistemlerde kullanılamaması)',
+              'Erişiminizin kısıtlayıcı ve sınırlayıcı olması (örneğin, geniş bant erişiminin olmaması)',
+              'Dijital dönüşüm için eksik veya belirsiz düzenlemeler (örneğin, geleceğe yönelik veri alışverişi formatlarının, yazılım mimarilerinin, dokümantasyon düzenlemelerinin seçimine ilişkin endişeler)',
+              'Faydalarından emin değiliz',
+              'Yenilikçi olmayan bir şirket kültürümüz var',
+              'Dijitalleşme stratejimiz ve yol haritamız yok'
+            ].map((challenge, index) => (
+              <tr key={index}>
+                <td>{challenge}</td>
+                {[5, 4, 3, 2, 1].map((value) => (
+                  <td key={value}>
+                    <input
+                      type="radio"
+                      name={`digitalizationChallenge-${index}`}
+                      value={value}
+                      checked={digitalizationChallenges[`digitalizationChallenge-${index}`] === value.toString()}
+                      onChange={(e) => setDigitalizationChallenges({ ...digitalizationChallenges, [`digitalizationChallenge-${index}`]: e.target.value })}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div className="form-group">
+      <label>61. DİĞER (Lütfen yazınız)</label>
+      <input
+        type="text"
+        name="otherResponse61"
+        value={otherResponse61}
+        onChange={(e) => setOtherResponse61(e.target.value)}
+        placeholder="Yanıtınızı girin"
+      />
+    </div>
+    <div className="form-group">
+      <label>62. Aşağıdaki dijital teknolojileri kullanma sebeplerinin şirketiniz için önem derecesini belirtir misiniz? <span className="required-star">*</span></label>
+      <div className="bt-systems-usage">
+        <table>
+          <thead>
+            <tr>
+              <th>Sebepler</th>
+              <th>5-Çok önemli</th>
+              <th>4-Önemli</th>
+              <th>3-Ne önemli ne önemsiz</th>
+              <th>2-Pek önemli değil</th>
+              <th>1-Hiç önemli değil</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              'Yeni müşterilerin taleplerini karşılama',
+              'COVID-19 sırasında dijitalleşmenin öneminin artması',
+              'Rekabette geride kalma endişeleri',
+              'Geleceğe daha kolay ve hızlı uyum sağlama',
+              'Üretim ve süreç verimliliği',
+              'Hizmetlerin sağlanmasının kolaylaştırılması',
+              'Müşteri talep ve beklentilerini yakından analiz etme',
+              'Sektörde lider olma',
+              'Pazara sunma süresinde azalma',
+              'Süreç ve ürün kalitesinin artması',
+              'Düşük ürün geliştirme ve üretim maliyetleri',
+              'Verilerin etkin kullanımı'
+            ].map((reason, index) => (
+              <tr key={index}>
+                <td>{reason}</td>
+                {[5, 4, 3, 2, 1].map((value) => (
+                  <td key={value}>
+                    <input
+                      type="radio"
+                      name={`digitalTechnologyReason-${index}`}
+                      value={value}
+                      checked={digitalTechnologyReasons[`digitalTechnologyReason-${index}`] === value.toString()}
+                      onChange={(e) => setDigitalTechnologyReasons({ ...digitalTechnologyReasons, [`digitalTechnologyReason-${index}`]: e.target.value })}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div className="form-group">
+      <label>63. DİĞER (Lütfen yazınız)</label>
+      <input
+        type="text"
+        name="otherResponse63"
+        value={otherResponse63}
+        onChange={(e) => setOtherResponse63(e.target.value)}
+        placeholder="Yanıtınızı girin"
+      />
+    </div>
+    <div className="form-group question-64">
+      <label>64. Aşağıdaki ifadelerden şirketinizin dijitalleşme hedefleri veya stratejisine en çok uyan ifadeleri seçiniz. <span className="required-star">*</span></label>
+      <div className="bt-systems-usage">
+        {[
+          'Yönetim toplantılarımızda dijitalleşme ve dijital dönüşüm konularını düzenli olarak görüşüyoruz.',
+          'Dijitalleşme hedeflerimiz şirket yönetimimiz ve ona bağlı çalışanlarımız tarafından geliştirilmektedir.',
+          'Resmi ve belgelenmiş dijitalleşme hedeflerimiz var; bu hedefler şirketimizin stratejik hedefleriyle bağlantılı.',
+          'Şirketimizde dijitalleşme ve dijital dönüşüm bağlamındaki girişimlerin planlanması, yönetilmesi ve yürütülmesinden sorumlu bir pozisyonumuz (CDO – Baş Dijital Sorumlusu gibi bir rol tanımıyla) bulunmaktadır.',
+          'Resmi ve belgelenmiş bir dijitalleşme stratejimiz var.',
+          'Dijitalleşme stratejimiz şirketimizin iş stratejisiyle bağlantılıdır.',
+          'Dijitalleşme stratejimiz düzenli olarak gözden geçirilmektedir.',
+          'Dijitalleşme stratejisi ölçütlerimiz ve ilgili KPI’larımız/hedeflerimiz mevcuttur.',
+          'Dijitalleşme stratejisi sürecimiz ve stratejinin güncellenmesi şirket içindeki tüm çalışanlara şeffaf bir şekilde aktarılmaktadır.',
+          'Kuruluşumuzu, ürünlerimizi veya süreçlerimizi dijitalleştirmek için bütçe ve kaynak ayırdığımız programlarımız ve projelerimiz var.',
+          'Dijitalleşme stratejimiz mevcut değil.'
+        ].map((goal, index) => (
+          <div className="checkbox-group" key={index}>
             <input
-              type="text"
-              name="otherResponse"
-              value={otherResponse}
-              onChange={(e) => setOtherResponse(e.target.value)}
-              placeholder="Yanıtınızı girin"
+              type="checkbox"
+              name={`digitalizationGoal-${index}`}
+              checked={digitalizationGoals.includes(`digitalizationGoal-${index}`)}
+              onChange={handleCheckboxChange}
             />
+            <label>{goal}</label>
           </div>
-          <div className="form-group question-64">
-            <label>64. Aşağıdaki ifadelerden şirketinizin dijitalleşme hedefleri veya stratejisine en çok uyan ifadeleri seçiniz. *</label>
-            <div className="bt-systems-usage">
-              {[
-                'Yönetim toplantılarımızda dijitalleşme ve dijital dönüşüm konularını düzenli olarak görüşüyoruz.',
-                'Dijitalleşme hedeflerimiz şirket yönetimimiz ve ona bağlı çalışanlarımız tarafından geliştirilmektedir.',
-                'Resmi ve belgelenmiş dijitalleşme hedeflerimiz var; bu hedefler şirketimizin stratejik hedefleriyle bağlantılı.',
-                'Şirketimizde dijitalleşme ve dijital dönüşüm bağlamındaki girişimlerin planlanması, yönetilmesi ve yürütülmesinden sorumlu bir pozisyonumuz (CDO – Baş Dijital Sorumlusu gibi bir rol tanımıyla) bulunmaktadır.',
-                'Resmi ve belgelenmiş bir dijitalleşme stratejimiz var.',
-                'Dijitalleşme stratejimiz şirketimizin iş stratejisiyle bağlantılıdır.',
-                'Dijitalleşme stratejimiz düzenli olarak gözden geçirilmektedir.',
-                'Dijitalleşme stratejisi ölçütlerimiz ve ilgili KPI’larımız/hedeflerimiz mevcuttur.',
-                'Dijitalleşme stratejisi sürecimiz ve stratejinin güncellenmesi şirket içindeki tüm çalışanlara şeffaf bir şekilde aktarılmaktadır.',
-                'Kuruluşumuzu, ürünlerimizi veya süreçlerimizi dijitalleştirmek için bütçe ve kaynak ayırdığımız programlarımız ve projelerimiz var.',
-                'Dijitalleşme stratejimiz mevcut değil.'
-              ].map((goal, index) => (
-                <div className="checkbox-group" key={index}>
-                  <input
-                    type="checkbox"
-                    name={`digitalizationGoal-${index}`}
-                    checked={digitalizationGoals.includes(`digitalizationGoal-${index}`)}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label>{goal}</label>
-                </div>
-              ))}
-            </div>
-          </div>
+        ))}
+      </div>
+    </div>
 
-          <div className="form-group question-65">
-            <label>65. Yönetiminizin dijital dönüşümü yönlendirme ve gerçekleştirme ile ilgili yaklaşımını ve kapasitesini şu ifadelere bakarak belirtir misiniz? Uygun olan tüm şıkları seçebilirsiniz. *</label>
-            <div className="bt-systems-usage">
-              {[
-                'Yönetim dijital dönüşüme, akıllı ürün ve hizmetlerin gerekliliklerine ve dijital teknolojilere/trendlere aşina değildir.',
-                'Yönetim, dijital dönüşümün gerektirdiği değişikliklerin farkındadır, ancak yanıt vermeden veya girişimleri geliştirmek için dış taraflara bağlı kalmadan önce meslektaşları tarafından kitlesel olarak benimsenmesini beklemeyi tercih etmektedir. (Bekle ve gör)',
-                'Yönetim, stratejik bir bakış açısına ve dijital dönüşümün yarattığı fırsat ve tehditleri detaylı analiz etme yetisine sahiptir ve bunu erken benimseyenlerden olmak için bir plan hazırlamaktadır. (Hızlı takipçi)',
-                'Yönetim, son teknoloji ve trendlere yararlanıyor ve erken benimseyenlerden olmak için sürdürülebilir bir plan geliştiriyor, şirket içinde dijitalleşmeyi başarılı uygulamak için kaynakları verimli bir şekilde organize ve koordine ediyor. (Hız belirleyici)',
-                'Yönetim, dijital dönüşümle ilgili net bir vizyona ve hayal gücüne sahip, kurumsal dönüşüm çerçevesini değişen ihtiyaçlara ve teknoloji trendlerine kendi bağımsız kararlarıyla uyarlayıp uygulayabiliyor.',
-                'Yönetim, sürekli olarak gözden geçirilen, izlenen ve sürdürülebilir bir plan uygulayabiliyor.',
-                'Yönetim, personeli dijital dönüşüme motive etmek ve hazırlamak için her bir personel grubuyla özel iletişim kuruyor.'
-              ].map((approach, index) => (
-                <div className="checkbox-group" key={index}>
-                  <input
-                    type="checkbox"
-                    name={`managementApproach-${index}`}
-                    checked={managementApproach.includes(`managementApproach-${index}`)}
-                    onChange={handleManagementApproachChange}
-                  />
-                  <label>{approach}</label>
-                </div>
-              ))}
-            </div>
+    <div className="form-group question-65">
+      <label>65. Yönetiminizin dijital dönüşümü yönlendirme ve gerçekleştirme ile ilgili yaklaşımını ve kapasitesini şu ifadelere bakarak belirtir misiniz? Uygun olan tüm şıkları seçebilirsiniz. <span className="required-star">*</span></label>
+      <div className="bt-systems-usage">
+        {[
+          'Yönetim dijital dönüşüme, akıllı ürün ve hizmetlerin gerekliliklerine ve dijital teknolojilere/trendlere aşina değildir.',
+          'Yönetim, dijital dönüşümün gerektirdiği değişikliklerin farkındadır, ancak yanıt vermeden veya girişimleri geliştirmek için dış taraflara bağlı kalmadan önce meslektaşları tarafından kitlesel olarak benimsenmesini beklemeyi tercih etmektedir. (Bekle ve gör)',
+          'Yönetim, stratejik bir bakış açısına ve dijital dönüşümün yarattığı fırsat ve tehditleri detaylı analiz etme yetisine sahiptir ve bunu erken benimseyenlerden olmak için bir plan hazırlamaktadır. (Hızlı takipçi)',
+          'Yönetim, son teknoloji ve trendlere yararlanıyor ve erken benimseyenlerden olmak için sürdürülebilir bir plan geliştiriyor, şirket içinde dijitalleşmeyi başarılı uygulamak için kaynakları verimli bir şekilde organize ve koordine ediyor. (Hız belirleyici)',
+          'Yönetim, dijital dönüşümle ilgili net bir vizyona ve hayal gücüne sahip, kurumsal dönüşüm çerçevesini değişen ihtiyaçlara ve teknoloji trendlerine kendi bağımsız kararlarıyla uyarlayıp uygulayabiliyor.',
+          'Yönetim, sürekli olarak gözden geçirilen, izlenen ve sürdürülebilir bir plan uygulayabiliyor.',
+          'Yönetim, personeli dijital dönüşüme motive etmek ve hazırlamak için her bir personel grubuyla özel iletişim kuruyor.'
+        ].map((approach, index) => (
+          <div className="checkbox-group" key={index}>
+            <input
+              type="checkbox"
+              name={`managementApproach-${index}`}
+              checked={managementApproach.includes(`managementApproach-${index}`)}
+              onChange={handleManagementApproachChange}
+            />
+            <label>{approach}</label>
           </div>
+        ))}
+      </div>
+    </div>
             <button type="submit" className="button">Gönder</button>
             <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+            <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
           </>
         )}
 
