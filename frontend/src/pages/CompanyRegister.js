@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import '../styling/RegisterPage.css';
 
 const CompanyRegister = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState(''); // New state for name
-  const [surname, setSurname] = useState(''); // New state for surname
   const [companyName, setCompanyName] = useState(''); // New state for company name
   const navigate = useNavigate();
 
@@ -35,13 +33,17 @@ const CompanyRegister = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Store additional user information in Firestore
-      await setDoc(doc(db, 'users', user.uid), {
+      // Create a new document in 'companyUsers' and get the generated ID
+      const companyDocRef = await addDoc(collection(db, 'companyUsers'), {
         email: user.email,
-        userType: 'company',
-        name: name, // Include name
-        surname: surname, // Include surname
         companyName: companyName // Include company name
+      });
+
+      // Store the generated companyID in the document
+      await setDoc(doc(db, 'companyUsers', companyDocRef.id), {
+        email: user.email,
+        companyName: companyName,
+        companyID: companyDocRef.id // Assign the generated companyID
       });
 
       // Send email verification
@@ -99,5 +101,4 @@ const CompanyRegister = () => {
     </div>
   );
 };
-
 export default CompanyRegister;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { jsPDF } from 'jspdf';
 import { saveAs } from 'file-saver';
 import '../styling/AssessorDashboard.css';
@@ -16,9 +16,19 @@ const AssessorDashboard = () => {
       navigate('/login');
     } else {
       const fetchCompanyForms = async () => {
-        const querySnapshot = await getDocs(collection(db, 'companyForms'));
-        const forms = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setCompanyForms(forms);
+        const userObj = JSON.parse(user);
+        const assessorDoc = await getDoc(doc(db, 'assessorUsers', userObj.uid));
+        
+        if (assessorDoc.exists()) {
+          const assignedCompanyIDs = assessorDoc.data().assignedCompanyIDs;
+
+          const querySnapshot = await getDocs(collection(db, 'companyForms'));
+          const forms = querySnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .filter(form => assignedCompanyIDs.includes(form.id)); // Filter by assigned company IDs
+
+          setCompanyForms(forms);
+        }
       };
 
       fetchCompanyForms();
@@ -30,7 +40,7 @@ const AssessorDashboard = () => {
     sessionStorage.removeItem('userType');
     navigate('/login', { replace: true });
   };
-  
+
   const downloadPDF = (form) => {
     const doc = new jsPDF();
     doc.text(JSON.stringify(form, null, 2), 10, 10);
@@ -59,14 +69,14 @@ const AssessorDashboard = () => {
           {companyForms.map(form => (
             <li key={form.id}>
               <span>{form.companyName}</span>
-              <button onClick={() => downloadPDF(form)}>Download PDF</button>
-              <button onClick={() => downloadWord(form)}>Download Word</button>
+              <button className="download-button" onClick={() => downloadPDF(form)}>Download PDF</button>
+              <button className="download-button" onClick={() => downloadWord(form)}>Download Word</button>
             </li>
           ))}
         </ul>
         <button className="button" onClick={handleAssessment}>Fill Assessment Form</button>
         <button className="button" onClick={handleBack}>Back</button>
-        <button className="button" onClick={handleLogout}>Log Out</button> {/* Added Logout Button */}
+        <button className="button" onClick={handleLogout}>Log Out</button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { collection, addDoc, doc, setDoc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc, getDoc ,getDocs, doc, query, where } from 'firebase/firestore';
 import '../styling/CompanyForm.css';
 import { useAuth } from "../context/AuthContext";
 
@@ -72,6 +72,7 @@ const CompanyForm = () => {
   const [otherJobTitle, setOtherJobTitle] = useState('');
   const [otherDepartment, setOtherDepartment] = useState('');
   const [otherDepartment35, setOtherDepartment35] = useState('');
+  const [companyID, setCompanyID] = useState(''); // State for companyID
   const [otherResponse61, setOtherResponse61] = useState('');
   const [otherResponse63, setOtherResponse63] = useState('');
   const [btSystemsUsage36, setBtSystemsUsage36] = useState({});
@@ -229,7 +230,30 @@ const handleJobTitleChange = (e) => {
   handleInputChange('jobTitle', value);
 };
 
+  useEffect(() => {
+    const fetchCompanyID = async () => {
+      const user = JSON.parse(sessionStorage.getItem('user'));
+      if (user) {
+        console.log('User UID:', user.uid); // Debugging line
+        // Query the companyUsers collection using the user's email
+        const querySnapshot = await getDocs(query(collection(db, 'companyUsers'), where('email', '==', user.email)));
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0]; // Get the first matching document
+          console.log('User Document Data:', userDoc.data()); // Debugging line
+          setCompanyID(userDoc.data().companyID); // Set the companyID from Firestore
+        } else {
+          console.error('No such document in companyUsers collection!'); // Debugging line
+        }
+      } else {
+        console.error('No user found in sessionStorage!'); // Debugging line
+      }
+    };
+
+    fetchCompanyID();
+  }, []);
+
   const navigate = useNavigate();
+
   const handleNext = (e) => {
     e.preventDefault(); // Formun varsayılan davranışını engelle
     const requiredFields = {
@@ -469,6 +493,7 @@ const handleJobTitleChange = (e) => {
         participantName,
         phoneNumber,
         email,
+        companyID,
         companyAddress,
         companyWebsite,
         jobTitle,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { addDoc, doc, setDoc,collection } from 'firebase/firestore';
 import '../styling/RegisterPage.css';
 
 const AssessorRegister = () => {
@@ -11,9 +11,8 @@ const AssessorRegister = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState(''); // New state for name
   const [surname, setSurname] = useState(''); // New state for surname
-  const [companyName, setCompanyName] = useState(''); // New state for company name
   const navigate = useNavigate();
-
+  const [assignedCompanyIDs, setAssignedCompanyIDs] = useState([]); // New state for assigned company IDs
   const handleRegister = async () => {
     if (password !== confirmPassword) {
       alert('Passwords do not match');
@@ -35,13 +34,19 @@ const AssessorRegister = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Store additional user information in Firestore
-      await setDoc(doc(db, 'users', user.uid), {
+      const companyDocRef = await addDoc(collection(db, 'assessorUsers'), {
         email: user.email,
-        userType: 'assessor',
         name: name, // Include name
         surname: surname, // Include surname
-        companyName: companyName // Include company name
+        assignedCompanyIDs: [], // Initialize assignedCompanyIDs as an empty array
+      });
+      // Store additional user information in Firestore
+      await setDoc(doc(db, 'assessorUsers', companyDocRef.id), {
+        email: user.email,
+        name: name, // Include name
+        surname: surname, // Include surname
+        assignedCompanyIDs: [], // Initialize assignedCompanyIDs as an empty array
+        assessorID: companyDocRef.id
       });
 
       // Send email verification
