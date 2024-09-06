@@ -161,6 +161,8 @@ const CompanyForm = () => {
       setOtherResponse63(savedFormData.otherResponse63 || '');
       setSalesReasons(savedFormData.salesReasons || []);
       setOtherDepartment35(savedFormData.otherDepartment35 || '');
+
+    //localStorage.setItem('formData', JSON.stringify(savedFormData));
     }
   }, [email]);
 
@@ -219,6 +221,36 @@ const CompanyForm = () => {
     localStorage.setItem('formData', JSON.stringify(savedFormData));
     console.log('Saved Form Data:', savedFormData); // Konsol logu ekleyelim
   };
+
+const handleBtSystemsUsage36Change = (name, value) => {
+  setBtSystemsUsage36((prevState) => ({
+    ...prevState,
+    [name]: value,
+  }));
+
+  const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+  savedFormData.btSystemsUsage36 = {
+    ...savedFormData.btSystemsUsage36,
+    [name]: value,
+  };
+  localStorage.setItem('formData', JSON.stringify(savedFormData));
+  console.log('Saved Form Data:', savedFormData);
+};
+
+const handleBtSystemsUsage37Change = (name, value) => {
+  setBtSystemsUsage37((prevState) => ({
+    ...prevState,
+    [name]: value,
+  }));
+
+  const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+  savedFormData.btSystemsUsage37 = {
+    ...savedFormData.btSystemsUsage37,
+    [name]: value,
+  };
+  localStorage.setItem('formData', JSON.stringify(savedFormData));
+  console.log('Saved Form Data:', savedFormData);
+};
 
 const handleJobTitleChange = (e) => {
   const { value } = e.target;
@@ -370,36 +402,41 @@ const handleJobTitleChange = (e) => {
 
     if (currentPage === 4) {
         const trends36 = [
-            'Yeşil Teknoloji', 'CO2 ayak izi ve döngüsel ekonomi', 'Yaşam döngüsü değerlendirmeleri ve Yaşam döngüsü maliyet hesaplamaları',
-            'Uyumluluk ve yeni düzenlemeler', 'BT sistemlerinin operasyonel güvenliği ve veri yönetimi',
-            'Müşteri yolculuğunun karmaşıklığı (tüm ürün yaşam döngüsü aşamalarında kişiselleştirilmiş teklifler ve hizmetler)',
-            'Ürün bireyselleştirme', 'Mekatronik sistemler', 'Ürünlerde yazılım tanımlı özellikler/ürünlerde gömülü yazılım',
-            'Otonom, dinamik olarak ağa bağlı gibi özelliklere sahip daha büyük bir sistemin parçası olan karmaşık sistemler/ürünler',
-            'Ürün-Hizmet Sistemleri (entegre ürün ve hizmet paketleri, varsa hizmetlerin ayrı fiyatlandırılması)',
-            'Dijital hizmetler ve iş modelleri', 'Paylaşım ekonomisi', 'Veri ekonomisi (uzaktan hizmetlerden gelir elde etme, kestirimci bakım için)',
-            'Sistem Mühendisliği, ITSM, karmaşık sistemler için geliştirme yöntemleri', 'Dijital süreklilik/ uçtan uca entegrasyon',
-            'Karmaşık sistemlerin simülasyonu ve gerçek zamanlı simülasyon', 'Yapay zeka', 'Dijital ikiz', 'Dijital Platformlar ve (Çoklu) Bulut Bilişimi'
+          'Yeşil Teknoloji', 'CO2 ayak izi ve döngüsel ekonomi', 'Yaşam döngüsü değerlendirmeleri ve Yaşam döngüsü maliyet hesaplamaları',
+          'Uyumluluk ve yeni düzenlemeler', 'BT sistemlerinin operasyonel güvenliği ve veri yönetimi',
+          'Müşteri yolculuğunun karmaşıklığı (tüm ürün yaşam döngüsü aşamalarında kişiselleştirilmiş teklifler ve hizmetler)',
+          'Ürün bireyselleştirme', 'Mekatronik sistemler', 'Ürünlerde yazılım tanımlı özellikler/ürünlerde gömülü yazılım',
+          'Otonom, dinamik olarak ağa bağlı gibi özelliklere sahip daha büyük bir sistemin parçası olan karmaşık sistemler/ürünler',
+          'Ürün-Hizmet Sistemleri (entegre ürün ve hizmet paketleri, varsa hizmetlerin ayrı fiyatlandırılması)',
+          'Dijital hizmetler ve iş modelleri', 'Paylaşım ekonomisi', 'Veri ekonomisi (uzaktan hizmetlerden gelir elde etme, kestirimci bakım için)',
+          'Sistem Mühendisliği, ITSM, karmaşık sistemler için geliştirme yöntemleri', 'Dijital süreklilik/ uçtan uca entegrasyon',
+          'Karmaşık sistemlerin simülasyonu ve gerçek zamanlı simülasyon', 'Yapay zeka', 'Dijital ikiz', 'Dijital Platformlar ve (Çoklu) Bulut Bilişimi'
         ];
         const trends37 = [
-            'Nesnelerin interneti', 'Sanal gerçeklik ortamları ve arayüzler (AR/VR)', 'Blokzincir teknolojisi',
-            'Veri formatları ve veri aktarımı için yeni (açık) standartlar', 'Robotik süreç otomasyonu', 'Yetenekler savaşı',
-            'Yeni iş (mobil çalışma, yaratıcılık, sanal işbirliği)', 'Çeviklik ve kendi kendini organize eden ekipler',
-            'Değer yaratma ağlarının karmaşıklığı ve eksik dayanıklılığı'
+          'Nesnelerin interneti', 'Sanal gerçeklik ortamları ve arayüzler (AR/VR)', 'Blokzincir teknolojisi',
+          'Veri formatları ve veri aktarımı için yeni (açık) standartlar', 'Robotik süreç otomasyonu', 'Yetenekler savaşı',
+          'Yeni iş (mobil çalışma, yaratıcılık, sanal işbirliği)', 'Çeviklik ve kendi kendini organize eden ekipler',
+          'Değer yaratma ağlarının karmaşıklığı ve eksik dayanıklılığı'
         ];
 
-        trends36.forEach((trend, index) => {
-            if (!btSystemsUsage36[`trend-${index}`]) {
-                missingFields.push(36);
-            }
+        const isTrend36Missing = trends36.some((_, index) => {
+          const key = `btSystemsUsage36-trend-36-${index}`;
+          return !btSystemsUsage36[key];
         });
 
-        trends37.forEach((trend, index) => {
-            if (!btSystemsUsage37[`trend-37-${index}`]) {
-                missingFields.push(37);
-            }
+        const isTrend37Missing = trends37.some((_, index) => {
+          const key = `btSystemsUsage37-trend-37-${index}`;
+          return !btSystemsUsage37[key];
         });
-    }
 
+        if (isTrend36Missing) {
+          missingFields.push(36);
+        }
+
+        if (isTrend37Missing) {
+          missingFields.push(37);
+        }
+      }
     if (currentPage === 5) {
         const components42 = Array.from({ length: 5 }, (_, i) => `component-42-${i}`);
         const components43 = Array.from({ length: 5 }, (_, i) => `component-43-${i}`);
@@ -1649,15 +1686,14 @@ const handleSmartServicesChange = (e) => {
                       <td>{trend}</td>
                       {[5, 4, 3, 2, 1].map((value) => (
                         <td key={value}>
-                          <input
-                            type="radio"
-                            name={`trend-36-${index}`}
-                            value={value}
-                            checked={btSystemsUsage36[`trend-36-${index}`] === value.toString()}
-                            onChange={(e) => {
-                              setBtSystemsUsage36({ ...btSystemsUsage36, [`trend-36-${index}`]: e.target.value });
-                              handleInputChange(`btSystemsUsage36-trend-36-${index}`, e.target.value);
-                            }}
+                        <input
+                          type="radio"
+                          name={`btSystemsUsage36-trend-36-${index}`}
+                          value={value}
+                          checked={btSystemsUsage36[`btSystemsUsage36-trend-36-${index}`] === value.toString()}
+                          onChange={(e) => {
+                            handleBtSystemsUsage36Change(`btSystemsUsage36-trend-36-${index}`, e.target.value);
+                          }}
                           />
                         </td>
                       ))}
@@ -1698,15 +1734,14 @@ const handleSmartServicesChange = (e) => {
                       <td>{trend}</td>
                       {[5, 4, 3, 2, 1].map((value) => (
                         <td key={value}>
-                          <input
-                            type="radio"
-                            name={`trend-37-${index}`}
-                            value={value}
-                            checked={btSystemsUsage37[`trend-37-${index}`] === value.toString()}
-                            onChange={(e) => {
-                              setBtSystemsUsage37({ ...btSystemsUsage37, [`trend-37-${index}`]: e.target.value });
-                              handleInputChange(`btSystemsUsage37-trend-37-${index}`, e.target.value);
-                            }}
+                        <input
+                          type="radio"
+                          name={`btSystemsUsage37-trend-37-${index}`}
+                          value={value}
+                          checked={btSystemsUsage37[`btSystemsUsage37-trend-37-${index}`] === value.toString()}
+                          onChange={(e) => {
+                            handleBtSystemsUsage37Change(`btSystemsUsage37-trend-37-${index}`, e.target.value);
+                          }}
                           />
                         </td>
                       ))}
@@ -1732,7 +1767,12 @@ const handleSmartServicesChange = (e) => {
       <input
         type="text"
         value={circularDesign}
-        onChange={(e) => setCircularDesign(e.target.value)}
+        onChange={(e) => {
+          setCircularDesign(e.target.value);
+          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+          savedFormData.circularDesign = e.target.value;
+          localStorage.setItem('formData', JSON.stringify(savedFormData));
+        }}
         placeholder="Cevabınızı girin"
         required
       />
@@ -1742,7 +1782,12 @@ const handleSmartServicesChange = (e) => {
       <input
         type="text"
         value={optimalUse}
-        onChange={(e) => setOptimalUse(e.target.value)}
+        onChange={(e) => {
+          setOptimalUse(e.target.value);
+          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+          savedFormData.optimalUse = e.target.value;
+          localStorage.setItem('formData', JSON.stringify(savedFormData));
+        }}
         placeholder="Cevabınızı girin"
         required
       />
@@ -1752,7 +1797,12 @@ const handleSmartServicesChange = (e) => {
       <input
         type="text"
         value={valueRecovery}
-        onChange={(e) => setValueRecovery(e.target.value)}
+        onChange={(e) => {
+          setValueRecovery(e.target.value);
+          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+          savedFormData.valueRecovery = e.target.value;
+          localStorage.setItem('formData', JSON.stringify(savedFormData));
+        }}
         placeholder="Cevabınızı girin"
         required
       />
@@ -1762,7 +1812,12 @@ const handleSmartServicesChange = (e) => {
       <input
         type="text"
         value={supportModels}
-        onChange={(e) => setSupportModels(e.target.value)}
+        onChange={(e) => {
+          setSupportModels(e.target.value);
+          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+          savedFormData.supportModels = e.target.value;
+          localStorage.setItem('formData', JSON.stringify(savedFormData));
+        }}
         placeholder="Cevabınızı girin"
         required
       />
