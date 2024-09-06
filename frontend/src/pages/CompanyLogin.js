@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { auth } from '../firebase';
 import '../styling/LoginPage.css';
 
 const CompanyLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState(''); // State for error message
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,14 +32,8 @@ const CompanyLogin = () => {
       // Store user session in sessionStorage
       sessionStorage.setItem('user', JSON.stringify(user));
 
-      // Check user type in Firestore
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
-      if (userDoc.exists() && userDoc.data().userType === 'company') {
-        sessionStorage.setItem('userType', 'company');
-        navigate('/company-dashboard');
-      } else {
-        setErrorMessage('Not authorized as company user'); // Set error message
-      }
+      // Directly navigate to the company dashboard
+      navigate('/company-dashboard');
     } catch (error) {
       console.error('Error logging in:', error);
       setErrorMessage('Login failed. Please check your credentials.'); // Set error message
@@ -71,7 +64,7 @@ const CompanyLogin = () => {
         required
       />
       <button className="button" onClick={handleLogin}>Login</button>
-      <button className="button" onClick={handleBack}>Back</button> {/* Back button */}
+      <button className="button" onClick={handleBack}>Back</button>
       {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
     </div>
   );

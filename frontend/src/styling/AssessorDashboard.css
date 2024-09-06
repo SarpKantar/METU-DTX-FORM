@@ -29,6 +29,17 @@ li {
   margin-bottom: 10px;
 }
 
+.download-button{
+  background-color: #058b00;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
 .button {
   background-color: #00008b;
   color: white;

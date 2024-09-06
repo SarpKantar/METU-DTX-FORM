@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDocs, query, where, collection } from 'firebase/firestore';
 import '../styling/LoginPage.css';
 
 const AssessorLogin = () => {
@@ -27,25 +27,24 @@ const AssessorLogin = () => {
   const handleLogin = async () => {
     setErrorMessage(''); // Clear previous error message
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-      // Store user session in sessionStorage
-      sessionStorage.setItem('user', JSON.stringify(user));
+        // Store user session in sessionStorage
+        sessionStorage.setItem('user', JSON.stringify(user));
 
-      // Check user type in Firestore
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
-      if (userDoc.exists() && userDoc.data().userType === 'assessor') {
-        sessionStorage.setItem('userType', 'assessor');
-        navigate('/assessor-dashboard');
-      } else {
-        setErrorMessage('Not authorized as assessor user'); // Set error message
-      }
+        // Check user in the assessorUsers collection by email
+        const querySnapshot = await getDocs(query(collection(db, 'assessorUsers'), where('email', '==', email)));
+        if (!querySnapshot.empty) {
+            navigate('/assessor-dashboard');
+        } else {
+            setErrorMessage('Not authorized as assessor user'); // Set error message
+        }
     } catch (error) {
-      console.error('Error logging in:', error);
-      setErrorMessage('Login failed. Please check your credentials.'); // Set error message
+        console.error('Error logging in:', error);
+        setErrorMessage('Login failed. Please check your credentials.'); // Set error message
     }
-  };
+};
 
   const handleBack = () => {
     navigate('/login'); // Always navigate to the login page
