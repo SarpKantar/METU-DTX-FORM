@@ -31,12 +31,12 @@ body, html {
 }
 
 .login-box {
-  background-color: rgb(63, 48, 48);
+  background: linear-gradient(90deg, #004085da, #0070a3e8); /* Butonlar için geçişli mavi tonlar */
   padding: 20px;
-  border-radius: 55px;
+  border-radius: 20px;
   width: 90%; /* Make width responsive */
   max-width: 400px; /* Set a maximum width */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for a lifted effect */
+  box-shadow: 0 2px 5px rgba(6, 2, 43, 0.2); /* Subtle shadow for a lifted effect */
   display: flex;
   flex-direction: column;
   justify-content: center;

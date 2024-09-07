@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { collection, addDoc, doc, setDoc, getDoc ,getDocs, doc, query, where } from 'firebase/firestore';
+import { collection, addDoc, setDoc, getDoc ,getDocs, doc, query, where } from 'firebase/firestore';
 import '../styling/CompanyForm.css';
 import { useAuth } from "../context/AuthContext";
 
@@ -131,12 +131,18 @@ const CompanyForm = () => {
       setDigitalAssessment(savedFormData.digitalAssessment || '');
       setSalesMarketingActivities(savedFormData.salesMarketingActivities || []);
       setInnovationProjects(savedFormData.innovationProjects || '');
+      
       setProductVariety(savedFormData.productVariety || '');
       setCircularDesign(savedFormData.circularDesign || '');
+      setOptimalUse(savedFormData.optimalUse || '');
+      setValueRecovery(savedFormData.valueRecovery || '');
+      setSupportModels(savedFormData.supportModels || '');
+
       setDevelopmentPlans(Array.isArray(savedFormData.developmentPlans) ? savedFormData.developmentPlans : []);
       setCustomerPreferences(savedFormData.customerPreferences || []);
       setAdditionalStrategies(savedFormData.additionalStrategies || '');
       setOptimizationConcepts(savedFormData.optimizationConcepts || '');
+      
       setProductDevelopmentMethod(savedFormData.productDevelopmentMethod || '');
       setProductionStrategy(savedFormData.productionStrategy || '');
       setProductConfiguration(savedFormData.productConfiguration || '');
@@ -145,12 +151,16 @@ const CompanyForm = () => {
       setSupplyChainManagement(savedFormData.supplyChainManagement || '');
       setSmartProducts(savedFormData.smartProducts || '');
       setSmartServices(savedFormData.smartServices || []);
+      
       setProductionAutomationLevel(savedFormData.productionAutomationLevel || '');
       setBtSystemsUsage36(savedFormData.btSystemsUsage36 || {});
       setBtSystemsUsage37(savedFormData.btSystemsUsage37 || {});
+      
       setBtSystemsUsage42(savedFormData.btSystemsUsage42 || {});
       setBtSystemsUsage43(savedFormData.btSystemsUsage43 || {});
-      setBtSystemChains(savedFormData.btSystemChains || []);
+      setProductStrategy(savedFormData.productStrategy || '');
+
+      
       setMachineControlMethod(savedFormData.machineControlMethod || '');
       setDigitalizationStatus(savedFormData.digitalizationStatus || '');
       setDigitalizationChallenges(savedFormData.digitalizationChallenges || {});
@@ -160,60 +170,14 @@ const CompanyForm = () => {
       setManagementApproach(savedFormData.managementApproach || []);
       setOtherResponse63(savedFormData.otherResponse63 || '');
       setSalesReasons(savedFormData.salesReasons || []);
+      
       setOtherDepartment35(savedFormData.otherDepartment35 || '');
 
+      setBtSystemsUsage56(savedFormData.btSystemsUsage56 || {});
+      setBtSystemChains(savedFormData.btSystemChains || []);
     //localStorage.setItem('formData', JSON.stringify(savedFormData));
     }
   }, [email]);
-
-  const [currentRelevance, setCurrentRelevance] = useState({
-    hydraulicPneumatic: '',
-    electronics: '',
-    software: '',
-    relatedServices: '',
-    integratedServices: ''
-  });
-  
-  const [futureRelevance, setFutureRelevance] = useState({
-    hydraulicPneumatic: '',
-    electronics: '',
-    software: '',
-    relatedServices: '',
-    integratedServices: ''
-  });
-
-
-  const [businessTrends, setBusinessTrends] = useState({
-    greenTechnology: '',
-    co2Footprint: '',
-    lifecycleAssessments: '',
-    complianceRegulations: '',
-    itSecurity: '',
-    customerJourneyComplexity: '',
-    productCustomization: '',
-    mechatronicSystems: '',
-    embeddedSoftware: '',
-    complexSystems: '',
-    productServiceSystems: '',
-    digitalServices: '',
-    sharingEconomy: '',
-    dataEconomy: '',
-    systemEngineering: '',
-    digitalContinuity: '',
-    complexSystemSimulation: '',
-    artificialIntelligence: '',
-    digitalTwin: '',
-    digitalPlatforms: '',
-    internetOfThings: '', 
-    arVr: '', 
-    blockchain: '', 
-    dataStandards: '', 
-    roboticProcessAutomation: '', 
-    talentWar: '', 
-    newWork: '', 
-    agileTeams: '', 
-    valueNetworkComplexity: '' 
-  });
 
   const handleInputChange = (name, value) => {
     const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
@@ -603,29 +567,6 @@ const handleJobTitleChange = (e) => {
     }
 };
 
-    const saveFormData = async (email, formData) => {
-      try {
-          await setDoc(doc(db, "companyForms", email), formData, { merge: true });
-      } catch (error) {
-          console.error("Error saving form data: ", error);
-      }
-    };
-
-    const loadFormData = async (email) => {
-      try {
-          const docRef = doc(db, "companyForms", email);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-              return docSnap.data();
-          } else {
-              console.log("No such document!");
-              return null;
-          }
-      } catch (error) {
-          console.error("Error loading form data: ", error);
-          return null;
-      }
-  };
   const handleClearForm = (page) => {
     const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
   
@@ -793,10 +734,23 @@ const handleJobTitleChange = (e) => {
   };
 
   const handleBtSystemChainsChange = (e) => {
-    const { value, checked } = e.target;
-    setBtSystemChains((prev) =>
-      checked ? [...prev, value] : prev.filter((v) => v !== value)
-    );
+    const value = e.target.value;
+    setBtSystemChains((prev) => {
+      const newState = [...prev];
+      if (newState.includes(value)) {
+        const updatedState = newState.filter((item) => item !== value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.btSystemChains = updatedState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return updatedState;
+      } else {
+        newState.push(value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.btSystemChains = newState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return newState;
+      }
+    });
   };
 
   const handleSalesReasonsChange = (value) => {
@@ -850,12 +804,23 @@ const handleJobTitleChange = (e) => {
 
 
   const handleManagementApproachChange = (e) => {
-    const { name, checked } = e.target;
-    if (checked) {
-      setManagementApproach([...managementApproach, name]);
-    } else {
-      setManagementApproach(managementApproach.filter((approach) => approach !== name));
-    }
+    const value = e.target.name;
+    setManagementApproach((prev) => {
+      const newState = [...prev];
+      if (newState.includes(value)) {
+        const updatedState = newState.filter((item) => item !== value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.managementApproach = updatedState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return updatedState;
+      } else {
+        newState.push(value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.managementApproach = newState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return newState;
+      }
+    });
   };
 
   const handleDevelopmentPlansChange = (e) => {
@@ -867,72 +832,93 @@ const handleJobTitleChange = (e) => {
     setDevelopmentPlans(updatedDevelopmentPlans);
     handleInputChange('developmentPlans', updatedDevelopmentPlans);
   };
-    
-  const handleCustomerPreferencesChange = (e) => {
-    const { value, checked } = e.target;
-    setCustomerPreferences((prev) =>
-      checked ? [...prev, value] : prev.filter((v) => v !== value)
-    );
-  };
 
   const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    if (checked) {
-      setDigitalizationGoals([...digitalizationGoals, name]);
-    } else {
-      setDigitalizationGoals(digitalizationGoals.filter((goal) => goal !== name));
-    }
-  };
-
-  const handleCurrentRelevanceChange = (e) => {
-    const { name, value } = e.target;
-    setCurrentRelevance({
-      ...currentRelevance,
-      [name]: value
-    });
-  };
-  const handleFutureRelevanceChange = (e) => {
-    const { name, value } = e.target;
-    setFutureRelevance({
-      ...futureRelevance,
-      [name]: value
-    });
-  };
-  const handleBusinessTrendsChange = (e) => {
-    const { name, value } = e.target;
-    setBusinessTrends({
-      ...businessTrends,
-      [name]: value
+    const value = e.target.name;
+    setDigitalizationGoals((prev) => {
+      const newState = [...prev];
+      if (newState.includes(value)) {
+        const updatedState = newState.filter((item) => item !== value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.digitalizationGoals = updatedState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return updatedState;
+      } else {
+        newState.push(value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.digitalizationGoals = newState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return newState;
+      }
     });
   };
 
   const handleProductStrategyChange = (e) => {
     setProductStrategy(e.target.value);
+    const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+    savedFormData.productStrategy = e.target.value;
+    localStorage.setItem('formData', JSON.stringify(savedFormData));
   };
 
   const handleWorkflowProcessesChange = (e) => {
-    if (!e.target) return;
-    const { value } = e.target;
-    setWorkflowProcesses((prev) =>
-        prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-    );
-};
+    const value = e.target.value;
+    setWorkflowProcesses((prev) => {
+      const newState = [...prev];
+      if (newState.includes(value)) {
+        const updatedState = newState.filter((item) => item !== value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.workflowProcesses = updatedState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return updatedState;
+      } else {
+        newState.push(value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.workflowProcesses = newState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return newState;
+      }
+    });
+  };
+  
+  const handleEngineeringDataManagementChange = (e) => {
+    const value = e.target.value;
+    setEngineeringDataManagement((prev) => {
+      const newState = [...prev];
+      if (newState.includes(value)) {
+        const updatedState = newState.filter((item) => item !== value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.engineeringDataManagement = updatedState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return updatedState;
+      } else {
+        newState.push(value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.engineeringDataManagement = newState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return newState;
+      }
+    });
+  };
 
-const handleEngineeringDataManagementChange = (e) => {
-    if (!e.target) return;
-    const { value } = e.target;
-    setEngineeringDataManagement((prev) =>
-        prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-    );
-};
-
-const handleSmartServicesChange = (e) => {
-    if (!e.target) return;
-    const { value } = e.target;
-    setSmartServices((prev) =>
-        prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-    );
-};
+  const handleSmartServicesChange = (e) => {
+    const value = e.target.value;
+    setSmartServices((prev) => {
+      const newState = [...prev];
+      if (newState.includes(value)) {
+        const updatedState = newState.filter((item) => item !== value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.smartServices = updatedState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return updatedState;
+      } else {
+        newState.push(value);
+        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+        savedFormData.smartServices = newState;
+        localStorage.setItem('formData', JSON.stringify(savedFormData));
+        return newState;
+      }
+    });
+  };
 
   return (
     <div className="form-container">
@@ -956,7 +942,15 @@ const handleSmartServicesChange = (e) => {
       {currentPage === 1 && (
       <>
           <div className="form-group">
+          <div className="form-header"> 
               <p className="page-parts">Katılımcı Bilgisi</p>
+              <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+            </div>
               <p className="question-note">1'den 8'e kadar olan soruları cevaplayın.</p>
           </div>
 
@@ -1091,14 +1085,22 @@ const handleSmartServicesChange = (e) => {
                   required
               />
           </div>
-        <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
+          <button type="button" className="gradient-button" onClick={handleNext}> İleri </button>
         <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-        <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
         </>
       )}{currentPage === 2 && (
         <>
           <div className="form-group">
-            <p className="page-parts">Şirket Profili</p>
+          <div className="form-header"> 
+              <p className="page-parts">Şirket Profili</p>
+              <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+            </div>
+
             <p className="question-note">9'dan 31'e kadar olan soruları cevaplayın.</p>
             <label>9. Şirketiniz kaç yaşındadır? <span className="required-star">*</span></label>
             <div className="radio-group">
@@ -1534,17 +1536,27 @@ const handleSmartServicesChange = (e) => {
               ))}
             </div>
           </div>
-              <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
-              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+
+          <div className="button-container"> 
+              <button type="button" className="gradient-button light-gradient-button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="gradient-button" onClick={handleNext}> İleri </button>
+          </div>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-              <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
 
         </>
       )}
       {currentPage === 3 && (
         <>
-          <div className="form-group">
+        <div className="form-group">
+          <div className="form-header"> 
             <p className="page-parts">Şirket Stratejisi</p>
+              <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+            </div>
             <p className="question-note">32. ve 33. soruları cevaplayın.</p>
             <label>32. Şirketinizde aşağıdakilerden herhangi biri var mı? Lütfen geçerli olanları seçiniz. <span className="required-star">*</span></label>
             <div className="checkbox-group">
@@ -1577,17 +1589,25 @@ const handleSmartServicesChange = (e) => {
               required
             />
           </div>
-              <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
-              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+          <div className="button-container"> 
+              <button type="button" className="gradient-button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="gradient-button" onClick={handleNext}> İleri </button>
+          </div>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-              <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
-
     </>
       )}
       {currentPage === 4 && (
         <>
           <div className="form-group">
+            <div className="form-header"> 
             <p className="page-parts">Ürün Portföyü ve Ürün Oluşturma</p>
+            <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+            </div>
             <p className="question-note">34'ten 37'ye kadar olan soruları cevaplayın.</p>
             <label>34. Lütfen ürün çeşitliliğinizi belirtir misiniz? Kaç farklı/özgün ürün çeşidi/aileşi üretiyorsunuz? <span className="required-star">*</span></label>
             <input
@@ -1751,16 +1771,27 @@ const handleSmartServicesChange = (e) => {
               </table>
             </div>
           </div>
-          <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
-          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+          <div className="button-container"> 
+              <button type="button" className="gradient-button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="gradient-button" onClick={handleNext}> İleri </button>
+          </div>
           <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-          <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
         </>
       )}
       {currentPage === 5 && (
   <>
     <div className="form-group">
+    <div className="form-header"> 
     <p class="page-parts">Lütfen seçim yaparak şirketinizin döngüsel ekonomiye yaklaşımını belirtiniz.</p>
+            <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+            </div>
+
+
     <p class="page-parts">Bunları şirketinizde uyguluyor musunuz, evet ise nasıl? Lütfen bize biraz detay veriniz ve döngüsel ekonominin her başlığı hakkında yorum yapınız.</p>
     <p class="question-note">38'ten 44'e kadar olan soruları cevaplayın.</p>
       <label>38. Döngüsel Tasarım/Üretim: Döngüsel Tasarım/Üretim modelleri, bir ürünün geliştirme aşamasına odaklanır. Ürünlerin ve varlıkların döngüsel kaynak verimliliğini artırmayı amaçlar. Ürünler daha uzun süre dayanacak ve bakım, onarımı, yükseltilmesi, yenilenmesi, yeniden üretilmesi veya geri dönüştürülmesi daha kolay olacak şekilde tasarlanır. Buna ek olarak, biyo-bazlı veya tamamen geri dönüştürülebilir malzemeler gibi yeni malzemeler geliştirilir veya kullanılır. <span className="required-star">*</span></label>
@@ -1769,9 +1800,7 @@ const handleSmartServicesChange = (e) => {
         value={circularDesign}
         onChange={(e) => {
           setCircularDesign(e.target.value);
-          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
-          savedFormData.circularDesign = e.target.value;
-          localStorage.setItem('formData', JSON.stringify(savedFormData));
+          handleInputChange('circularDesign', e.target.value);
         }}
         placeholder="Cevabınızı girin"
         required
@@ -1784,9 +1813,7 @@ const handleSmartServicesChange = (e) => {
         value={optimalUse}
         onChange={(e) => {
           setOptimalUse(e.target.value);
-          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
-          savedFormData.optimalUse = e.target.value;
-          localStorage.setItem('formData', JSON.stringify(savedFormData));
+          handleInputChange('optimalUse', e.target.value);
         }}
         placeholder="Cevabınızı girin"
         required
@@ -1799,9 +1826,7 @@ const handleSmartServicesChange = (e) => {
         value={valueRecovery}
         onChange={(e) => {
           setValueRecovery(e.target.value);
-          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
-          savedFormData.valueRecovery = e.target.value;
-          localStorage.setItem('formData', JSON.stringify(savedFormData));
+          handleInputChange('valueRecovery', e.target.value);
         }}
         placeholder="Cevabınızı girin"
         required
@@ -1814,9 +1839,7 @@ const handleSmartServicesChange = (e) => {
         value={supportModels}
         onChange={(e) => {
           setSupportModels(e.target.value);
-          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
-          savedFormData.supportModels = e.target.value;
-          localStorage.setItem('formData', JSON.stringify(savedFormData));
+          handleInputChange('supportModels', e.target.value);
         }}
         placeholder="Cevabınızı girin"
         required
@@ -1850,10 +1873,15 @@ const handleSmartServicesChange = (e) => {
                     <td key={value}>
                       <input
                         type="radio"
-                        name={`component-42-${index}`}
-                        value={value}
-                        checked={btSystemsUsage42[`component-42-${index}`] === value.toString()}
-                        onChange={(e) => setBtSystemsUsage42({ ...btSystemsUsage42, [`component-42-${index}`]: e.target.value })}
+                          name={`component-42-${index}`}
+                          value={value}
+                          checked={btSystemsUsage42[`component-42-${index}`] === value.toString()}
+                          onChange={(e) => {
+                          setBtSystemsUsage42({ ...btSystemsUsage42, [`component-42-${index}`]: e.target.value });
+                          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                          savedFormData.btSystemsUsage42 = { ...btSystemsUsage42, [`component-42-${index}`]: e.target.value };
+                          localStorage.setItem('formData', JSON.stringify(savedFormData));
+                        }}
                       />
                     </td>
                   ))}
@@ -1889,13 +1917,18 @@ const handleSmartServicesChange = (e) => {
                   <td>{component}</td>
                   {[4, 3, 2, 1].map((value) => (
                     <td key={value}>
-                      <input
-                        type="radio"
-                        name={`component-43-${index}`}
-                        value={value}
-                        checked={btSystemsUsage43[`component-43-${index}`] === value.toString()}
-                        onChange={(e) => setBtSystemsUsage43({ ...btSystemsUsage43, [`component-43-${index}`]: e.target.value })}
-                      />
+                    <input
+                      type="radio"
+                      name={`component-43-${index}`}
+                      value={value}
+                      checked={btSystemsUsage43[`component-43-${index}`] === value.toString()}
+                      onChange={(e) => {
+                        setBtSystemsUsage43({ ...btSystemsUsage43, [`component-43-${index}`]: e.target.value });
+                        const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                        savedFormData.btSystemsUsage43 = { ...btSystemsUsage43, [`component-43-${index}`]: e.target.value };
+                        localStorage.setItem('formData', JSON.stringify(savedFormData));
+                      }}
+                    />
                     </td>
                   ))}
                 </tr>
@@ -1954,23 +1987,38 @@ const handleSmartServicesChange = (e) => {
         </label>
       </div>
     </div>
-              <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
-              <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+    <div className="button-container"> 
+              <button type="button" className="gradient-button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="gradient-button" onClick={handleNext}> İleri </button>
+          </div>
               <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-              <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
-
   </>
 )}
 {currentPage === 6 && (
   <>
     <div className="form-group">
+      <div className="form-header"> 
     <p class="page-parts">Değer Zinciri Stratejileri</p>
+
+    <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+            </div>
+
     <p class="question-note">45. ve 46. soruları cevaplayın.</p>
       <label>45. Bunun dışında başka geçerli olan stratejiler var mı? Eğer cevabınız evet ise lütfen yazınız.</label>
       <input
         type="text"
         value={additionalStrategies}
-        onChange={(e) => setAdditionalStrategies(e.target.value)}
+        onChange={(e) => {
+          setAdditionalStrategies(e.target.value);
+          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+          savedFormData.additionalStrategies = e.target.value;
+          localStorage.setItem('formData', JSON.stringify(savedFormData));
+        }}
         placeholder="Enter your answer"
       />
     </div>
@@ -1980,71 +2028,142 @@ const handleSmartServicesChange = (e) => {
             <input
               type="text"
               value={optimizationConcepts}
-              onChange={(e) => setOptimizationConcepts(e.target.value)}
+              onChange={(e) => {
+                setOptimizationConcepts(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.optimizationConcepts = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }}
               placeholder="Enter your answer"
             />
           </div>
-          <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
-          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+          <div className="button-container"> 
+              <button type="button" className="gradient-button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="gradient-button" onClick={handleNext}> İleri </button>
+          </div>
           <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-          <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
-
         </>
       )}
       {currentPage === 7 && (
         <>
           <div className="form-group">
+            <div className="form-header"> 
             <p className="page-parts">Ürün Oluşturma</p>
+
+
+            <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+            </div>
+
             <p className="question-note">47'den 55'e kadar olan soruları cevaplayın.</p>
-            <label>47. Ürün geliştirme yönteminiz nedir? <span className="required-star">*</span></label>
-            <div className="radio-group">
-              <label>
-                <input type="radio" name="productDevelopmentMethod" value="Kontrat/sözleşmeli ürün geliştirme" checked={productDevelopmentMethod === "Kontrat/sözleşmeli ürün geliştirme"} onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kontrat/sözleşmeli ürün geliştirme
-              </label>
-              <label>
-                <input type="radio" name="productDevelopmentMethod" value="Kendi ürünlerinin kurum içi geliştirilmesi" checked={productDevelopmentMethod === "Kendi ürünlerinin kurum içi geliştirilmesi"} onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kendi ürünlerinin kurum içi geliştirilmesi
-              </label>
-              <label>
-                <input type="radio" name="productDevelopmentMethod" value="Kendi ürün geliştirmesi yok" checked={productDevelopmentMethod === "Kendi ürün geliştirmesi yok"} onChange={(e) => setProductDevelopmentMethod(e.target.value)} /> Kendi ürün geliştirmesi yok
-              </label>
-            </div>
+          <label>47. Ürün geliştirme yönteminiz nedir? <span className="required-star">*</span></label>
+          <div className="radio-group">
+            <label>
+              <input type="radio" name="productDevelopmentMethod" value="Kontrat/sözleşmeli ürün geliştirme" checked={productDevelopmentMethod === "Kontrat/sözleşmeli ürün geliştirme"} onChange={(e) => {
+                setProductDevelopmentMethod(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.productDevelopmentMethod = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }} /> Kontrat/sözleşmeli ürün geliştirme
+            </label>
+            <label>
+              <input type="radio" name="productDevelopmentMethod" value="Kendi ürünlerinin kurum içi geliştirilmesi" checked={productDevelopmentMethod === "Kendi ürünlerinin kurum içi geliştirilmesi"} onChange={(e) => {
+                setProductDevelopmentMethod(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.productDevelopmentMethod = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }} /> Kendi ürünlerinin kurum içi geliştirilmesi
+            </label>
+            <label>
+              <input type="radio" name="productDevelopmentMethod" value="Kendi ürün geliştirmesi yok" checked={productDevelopmentMethod === "Kendi ürün geliştirmesi yok"} onChange={(e) => {
+                setProductDevelopmentMethod(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.productDevelopmentMethod = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }} /> Kendi ürün geliştirmesi yok
+            </label>
           </div>
+        </div>
 
-          <div className="form-group">
-            <label>48. Üretim Stratejinizi/Yaklaşımınızı nasıl tanımlarsınız? <span className="required-star">*</span></label>
-            <div className="radio-group">
-              <label>
-                <input type="radio" name="productionStrategy" value="Tek seferlik üretim / Tek lot" checked={productionStrategy === "Tek seferlik üretim / Tek lot"} onChange={(e) => setProductionStrategy(e.target.value)} /> Tek seferlik üretim / Tek lot
-              </label>
-              <label>
-                <input type="radio" name="productionStrategy" value="Küçük seri üretim" checked={productionStrategy === "Küçük seri üretim"} onChange={(e) => setProductionStrategy(e.target.value)} /> Küçük seri üretim
-              </label>
-              <label>
-                <input type="radio" name="productionStrategy" value="Seri üretim" checked={productionStrategy === "Seri üretim"} onChange={(e) => setProductionStrategy(e.target.value)} /> Seri üretim
-              </label>
-            </div>
-          </div>
+        <div className="form-group">
+        <label>48. Üretim Stratejinizi/Yaklaşımınızı nasıl tanımlarsınız? <span className="required-star">*</span></label>
+        <div className="radio-group">
+          <label>
+            <input type="radio" name="productionStrategy" value="Tek seferlik üretim / Tek lot" checked={productionStrategy === "Tek seferlik üretim / Tek lot"} onChange={(e) => {
+              setProductionStrategy(e.target.value);
+              const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+              savedFormData.productionStrategy = e.target.value;
+              localStorage.setItem('formData', JSON.stringify(savedFormData));
+            }} /> Tek seferlik üretim / Tek lot
+          </label>
+          <label>
+            <input type="radio" name="productionStrategy" value="Küçük seri üretim" checked={productionStrategy === "Küçük seri üretim"} onChange={(e) => {
+              setProductionStrategy(e.target.value);
+              const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+              savedFormData.productionStrategy = e.target.value;
+              localStorage.setItem('formData', JSON.stringify(savedFormData));
+            }} /> Küçük seri üretim
+          </label>
+          <label>
+            <input type="radio" name="productionStrategy" value="Seri üretim" checked={productionStrategy === "Seri üretim"} onChange={(e) => {
+              setProductionStrategy(e.target.value);
+              const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+              savedFormData.productionStrategy = e.target.value;
+              localStorage.setItem('formData', JSON.stringify(savedFormData));
+            }} /> Seri üretim
+          </label>
+        </div>
+      </div>
 
-          <div className="form-group">
-            <label>49. Ürünlerinizi nasıl yapılandırıyor ve modelliyorsunuz? Lütfen, uygun olan bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
-            <div className="radio-group">
-              <label>
-                <input type="radio" name="productConfiguration" value="Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır" checked={productConfiguration === "Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır"} onChange={(e) => setProductConfiguration(e.target.value)} /> Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır
-              </label>
-              <label>
-                <input type="radio" name="productConfiguration" value="Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır." checked={productConfiguration === "Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır."} onChange={(e) => setProductConfiguration(e.target.value)} /> Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır.
-              </label>
-              <label>
-                <input type="radio" name="productConfiguration" value="Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir." checked={productConfiguration === "Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir."} onChange={(e) => setProductConfiguration(e.target.value)} /> Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir.
-              </label>
-              <label>
-                <input type="radio" name="productConfiguration" value="Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)" checked={productConfiguration === "Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)"} onChange={(e) => setProductConfiguration(e.target.value)} /> Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)
-              </label>
-              <label>
-                <input type="radio" name="productConfiguration" value="Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)" checked={productConfiguration === "Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)"} onChange={(e) => setProductConfiguration(e.target.value)} /> Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)
-              </label>
-            </div>
-          </div>
+      <div className="form-group">
+      <label>49. Ürünlerinizi nasıl yapılandırıyor ve modelliyorsunuz? Lütfen, uygun olan bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
+      <div className="radio-group">
+        <label>
+          <input type="radio" name="productConfiguration" value="Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır" checked={productConfiguration === "Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır"} onChange={(e) => {
+            setProductConfiguration(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productConfiguration = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Bilgi, belgelere dayalı olarak yönetilir ve belgelerde saklanır
+        </label>
+        <label>
+          <input type="radio" name="productConfiguration" value="Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır." checked={productConfiguration === "Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır."} onChange={(e) => {
+            setProductConfiguration(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productConfiguration = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarına bağlanır.
+        </label>
+        <label>
+          <input type="radio" name="productConfiguration" value="Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir." checked={productConfiguration === "Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir."} onChange={(e) => {
+            setProductConfiguration(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productConfiguration = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Hiyerarşik ürün yapıları kullanılmaktadır. Öznitelikler ve meta veriler ürün yapılarıyla bağlantılıdır. Bu, mekanik, elektrik/elektronik veya yazılım gibi ilgili tüm alanlar için geçerlidir.
+        </label>
+        <label>
+          <input type="radio" name="productConfiguration" value="Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)" checked={productConfiguration === "Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)"} onChange={(e) => {
+            setProductConfiguration(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productConfiguration = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Alana özgü ürün yapıları (mekanik, elektrik/elektronik, yazılım) entegre edilmiştir (örneğin çoklu CAD malzeme listesi)
+        </label>
+        <label>
+          <input type="radio" name="productConfiguration" value="Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)" checked={productConfiguration === "Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)"} onChange={(e) => {
+            setProductConfiguration(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productConfiguration = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Alt sistem modeli ve alana özgü modeller temel unsurlarımızdır (gereksinimler, işlevler, ürünler ve test durumları çift yönlü olarak bağlantılıdır)
+        </label>
+      </div>
+    </div>
 
           <div className="form-group">
             <label>50. Ürün oluşturma sürecinizdeki iş akışları ve süreçler nasıl uygulanıyor? Lütfen, uygun olanların hepsini işaretleyiniz. <span className="required-star">*</span></label>
@@ -2089,45 +2208,89 @@ const handleSmartServicesChange = (e) => {
           </div>
 
           <div className="form-group">
-            <label>52. Tedarik zinciri yönetiminizi (SCM) nasıl gerçekleştiriyorsunuz? Lütfen bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
-            <div className="radio-group">
-              <label>
-                <input type="radio" name="supplyChainManagement" value="Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir." checked={supplyChainManagement === "Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir.
-              </label>
-              <label>
-                <input type="radio" name="supplyChainManagement" value="Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür." checked={supplyChainManagement === "Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür.
-              </label>
-              <label>
-                <input type="radio" name="supplyChainManagement" value="Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır." checked={supplyChainManagement === "Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır.
-              </label>
-              <label>
-                <input type="radio" name="supplyChainManagement" value="Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir." checked={supplyChainManagement === "Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir.
-              </label>
-              <label>
-                <input type="radio" name="supplyChainManagement" value="Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir." checked={supplyChainManagement === "Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir."} onChange={(e) => setSupplyChainManagement(e.target.value)} /> Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir.
-              </label>
-            </div>
+          <label>52. Tedarik zinciri yönetiminizi (SCM) nasıl gerçekleştiriyorsunuz? Lütfen bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
+          <div className="radio-group">
+            <label>
+              <input type="radio" name="supplyChainManagement" value="Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir." checked={supplyChainManagement === "Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir."} onChange={(e) => {
+                setSupplyChainManagement(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.supplyChainManagement = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }} /> Tedarik zinciri süreçleri açıkça tanımlanmamıştır. Tedarik zinciri içindeki her kuruluş, kendi yönetim sistemlerini kullanarak süreçlerini ayrı ayrı yönetir.
+            </label>
+            <label>
+              <input type="radio" name="supplyChainManagement" value="Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür." checked={supplyChainManagement === "Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür."} onChange={(e) => {
+                setSupplyChainManagement(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.supplyChainManagement = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }} /> Tedarik zinciri süreçleri, manuel ve kâğıt tabanlı araçların desteğiyle insanlar tarafından tanımlanır ve yürütülür.
+            </label>
+            <label>
+              <input type="radio" name="supplyChainManagement" value="Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır." checked={supplyChainManagement === "Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır."} onChange={(e) => {
+                setSupplyChainManagement(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.supplyChainManagement = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }} /> Tanımlanmış tedarik zinciri entegrasyon süreçleri, dijital araçların desteğiyle insanlar tarafından tamamlanır.
+            </label>
+            <label>
+              <input type="radio" name="supplyChainManagement" value="Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir." checked={supplyChainManagement === "Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir."} onChange={(e) => {
+                setSupplyChainManagement(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.supplyChainManagement = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }} /> Dijitalleştirilmiş tedarik zinciri süreçleri ve sistemleri, sınırlı insan müdahalesi ile değer zinciri boyunca iş ortakları ve müşteriler arasında güvenli bir şekilde entegre edilir.
+            </label>
+            <label>
+              <input type="radio" name="supplyChainManagement" value="Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir." checked={supplyChainManagement === "Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir."} onChange={(e) => {
+                setSupplyChainManagement(e.target.value);
+                const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                savedFormData.supplyChainManagement = e.target.value;
+                localStorage.setItem('formData', JSON.stringify(savedFormData));
+              }} /> Otomatik tedarik zinciri süreçleri ve sistemleri verileri aktif olarak analiz etmekte ve bunlara tepki vermektedir. Tedarik zinciri birlikte çalışabilirliği güvenli ve gerçek zamanlı iletişim yeteneğine sahiptir.
+            </label>
           </div>
+        </div>
 
-          <div className="form-group">
-            <label>53. Müşterinize akıllı ürünler sunuyor musunuz? Lütfen, uygun olan bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
-            <p className="question-note"><strong>Akıllı ürünlerin tanımı:</strong> Akıllı ürün, akıllı teknolojilerle donatılmış ve internete veya diğer ağlara bağlanabilen bir üründür. Bu ürünler tipik olarak uzaktan kontrol edilebilir, izlenebilir veya otomatikleştirilebilir. Akıllı ürünlere örnek olarak akıllı telefonlar, akıllı termostatlar ve güvenlik sistemleri gibi akıllı ev cihazları, akıllı TV'ler, akıllı saatler ve diğer birçok bağlı cihaz verilebilir.
-            </p>
-            <div className="radio-group">
-              <label>
-                <input type="radio" name="smartProducts" value="Akıllı ürünümüz yok" checked={smartProducts === "Akıllı ürünümüz yok"} onChange={(e) => setSmartProducts(e.target.value)} /> Akıllı ürünümüz yok
-              </label>
-              <label>
-                <input type="radio" name="smartProducts" value="Bazı ürünlerimiz akıllı" checked={smartProducts === "Bazı ürünlerimiz akıllı"} onChange={(e) => setSmartProducts(e.target.value)} /> Bazı ürünlerimiz akıllı
-              </label>
-              <label>
-                <input type="radio" name="smartProducts" value="Ürünlerimizin yaklaşık %50'si akıllı" checked={smartProducts === "Ürünlerimizin yaklaşık %50'si akıllı"} onChange={(e) => setSmartProducts(e.target.value)} /> Ürünlerimizin yaklaşık %50'si akıllı
-              </label>
-              <label>
-                <input type="radio" name="smartProducts" value="Hepsi veya tamamına yakın ürünümüz akıllı" checked={smartProducts === "Hepsi veya tamamına yakın ürünümüz akıllı"} onChange={(e) => setSmartProducts(e.target.value)} /> Hepsi veya tamamına yakın ürünümüz akıllı
-              </label>
-            </div>
-          </div>
+        <div className="form-group">
+        <label>53. Müşterinize akıllı ürünler sunuyor musunuz? Lütfen, uygun olan bir seçenek işaretleyiniz. <span className="required-star">*</span></label>
+        <p className="question-note"><strong>Akıllı ürünlerin tanımı:</strong> Akıllı ürün, akıllı teknolojilerle donatılmış ve internete veya diğer ağlara bağlanabilen bir üründür. Bu ürünler tipik olarak uzaktan kontrol edilebilir, izlenebilir veya otomatikleştirilebilir. Akıllı ürünlere örnek olarak akıllı telefonlar, akıllı termostatlar ve güvenlik sistemleri gibi akıllı ev cihazları, akıllı TV'ler, akıllı saatler ve diğer birçok bağlı cihaz verilebilir.</p>
+        <div className="radio-group">
+          <label>
+            <input type="radio" name="smartProducts" value="Akıllı ürünümüz yok" checked={smartProducts === "Akıllı ürünümüz yok"} onChange={(e) => {
+              setSmartProducts(e.target.value);
+              const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+              savedFormData.smartProducts = e.target.value;
+              localStorage.setItem('formData', JSON.stringify(savedFormData));
+            }} /> Akıllı ürünümüz yok
+          </label>
+          <label>
+            <input type="radio" name="smartProducts" value="Bazı ürünlerimiz akıllı" checked={smartProducts === "Bazı ürünlerimiz akıllı"} onChange={(e) => {
+              setSmartProducts(e.target.value);
+              const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+              savedFormData.smartProducts = e.target.value;
+              localStorage.setItem('formData', JSON.stringify(savedFormData));
+            }} /> Bazı ürünlerimiz akıllı
+          </label>
+          <label>
+            <input type="radio" name="smartProducts" value="Ürünlerimizin yaklaşık %50'si akıllı" checked={smartProducts === "Ürünlerimizin yaklaşık %50'si akıllı"} onChange={(e) => {
+              setSmartProducts(e.target.value);
+              const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+              savedFormData.smartProducts = e.target.value;
+              localStorage.setItem('formData', JSON.stringify(savedFormData));
+            }} /> Ürünlerimizin yaklaşık %50'si akıllı
+          </label>
+          <label>
+            <input type="radio" name="smartProducts" value="Hepsi veya tamamına yakın ürünümüz akıllı" checked={smartProducts === "Hepsi veya tamamına yakın ürünümüz akıllı"} onChange={(e) => {
+              setSmartProducts(e.target.value);
+              const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+              savedFormData.smartProducts = e.target.value;
+              localStorage.setItem('formData', JSON.stringify(savedFormData));
+            }} /> Hepsi veya tamamına yakın ürünümüz akıllı
+          </label>
+        </div>
+      </div>
 
           
           <div className="form-group">
@@ -2156,33 +2319,67 @@ const handleSmartServicesChange = (e) => {
       <label>55. Şirketinizdeki üretim otomasyonunun seviyesi nedir? Lütfen bir adet seçenek işaretleyiniz. <span className="required-star">*</span></label>
       <div className="radio-group">
         <label>
-          <input type="radio" name="productionAutomationLevel" value="Üretim süreçleri manuel olarak yapılmaktadır." checked={productionAutomationLevel === "Üretim süreçleri manuel olarak yapılmaktadır."} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Üretim süreçleri manuel olarak yapılmaktadır.
+          <input type="radio" name="productionAutomationLevel" value="Üretim süreçleri manuel olarak yapılmaktadır." checked={productionAutomationLevel === "Üretim süreçleri manuel olarak yapılmaktadır."} onChange={(e) => {
+            setProductionAutomationLevel(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productionAutomationLevel = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Üretim süreçleri manuel olarak yapılmaktadır.
         </label>
         <label>
-          <input type="radio" name="productionAutomationLevel" value="İnsan müdahalesi gerektiren makine ve ekipman uygulamaları" checked={productionAutomationLevel === "İnsan müdahalesi gerektiren makine ve ekipman uygulamaları"} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> İnsan müdahalesi gerektiren makine ve ekipman uygulamaları
+          <input type="radio" name="productionAutomationLevel" value="İnsan müdahalesi gerektiren makine ve ekipman uygulamaları" checked={productionAutomationLevel === "İnsan müdahalesi gerektiren makine ve ekipman uygulamaları"} onChange={(e) => {
+            setProductionAutomationLevel(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productionAutomationLevel = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> İnsan müdahalesi gerektiren makine ve ekipman uygulamaları
         </label>
         <label>
-          <input type="radio" name="productionAutomationLevel" value="Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir)." checked={productionAutomationLevel === "Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir)."} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir).
+          <input type="radio" name="productionAutomationLevel" value="Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir)." checked={productionAutomationLevel === "Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir)."} onChange={(e) => {
+            setProductionAutomationLevel(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productionAutomationLevel = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Bilgisayar tabanlı makine ve ekipmanların minimum insan müdahalesi ile uygulanması (örneğin, süreci başlatmak ve bitirmek için veya planlanmamış olaylar için insan müdahalesi gereklidir).
         </label>
         <label>
-          <input type="radio" name="productionAutomationLevel" value="Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor" checked={productionAutomationLevel === "Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor"} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor
+          <input type="radio" name="productionAutomationLevel" value="Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor" checked={productionAutomationLevel === "Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor"} onChange={(e) => {
+            setProductionAutomationLevel(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productionAutomationLevel = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Ekipman, makine ve bilgisayar tabanlı sistemlerin modifikasyonu, yeniden yapılandırılması ve yeniden görevlendirilmesi, sınırlı insan müdahalesi ile hızlı ve kolay bir şekilde yapılabiliyor
         </label>
         <label>
-          <input type="radio" name="productionAutomationLevel" value="Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip" checked={productionAutomationLevel === "Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip"} onChange={(e) => setProductionAutomationLevel(e.target.value)} /> Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip
+          <input type="radio" name="productionAutomationLevel" value="Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip" checked={productionAutomationLevel === "Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip"} onChange={(e) => {
+            setProductionAutomationLevel(e.target.value);
+            const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+            savedFormData.productionAutomationLevel = e.target.value;
+            localStorage.setItem('formData', JSON.stringify(savedFormData));
+          }} /> Makinelerimiz tamamen entegre ve analitik kabiliyete sahip, tepki verebilen, değişiklikleri aktarabilen ve atölye ve kurumsal yönetim sistemleriyle yakınsayan bir yapıya sahip
         </label>
       </div>
     </div>
 
-        <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
-        <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+          <div className="button-container"> 
+              <button type="button" className="gradient-button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="gradient-button" onClick={handleNext}> İleri </button>
+          </div>
         <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-        <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
         </>
       )}
       {currentPage === 8 && (
   <>
       <div className="form-group">
+      <div className="form-header"> 
       <p class="page-parts">BT Sistemleri Peyzajı</p>
+      <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+              </div>
       <p class="question-note">56'dan 58'e kadar olan soruları cevaplayın.</p>
       <label>56. Şirketinizde aşağıdaki BT-Sistemlerinden hangilerini halihazırda kullanıyorsunuz? Ve bunların kullanım yoğunluğu nedir? (Lütfen her satır için geçerli olan cevabı seçiniz.) <span className="required-star">*</span></label>
       <div className="bt-systems-usage">
@@ -2217,13 +2414,19 @@ const handleSmartServicesChange = (e) => {
                 <td>{system.label}</td>
                 {[5, 4, 3, 2, 1].map((value) => (
                   <td key={value}>
-                    <input
-                      type="radio"
-                      name={system.key}
-                      value={value}
-                      checked={btSystemsUsage56[system.key] === value.toString()}
-                      onChange={(e) => setBtSystemsUsage56({ ...btSystemsUsage56, [system.key]: e.target.value })}
-                    />
+                  <input
+                    type="radio"
+                    name={system.key}
+                    value={value}
+                    checked={btSystemsUsage56[system.key] === value.toString()}
+                    onChange={(e) => {
+                      const newState = { ...btSystemsUsage56, [system.key]: e.target.value };
+                      setBtSystemsUsage56(newState);
+                      const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                      savedFormData.btSystemsUsage56 = newState;
+                      localStorage.setItem('formData', JSON.stringify(savedFormData));
+                    }}
+                  />
                   </td>
                 ))}
               </tr>
@@ -2270,28 +2473,43 @@ const handleSmartServicesChange = (e) => {
                 'Tepki verebilen, değişiklikleri aktarabilen ve kurumsal yönetim sistemleriyle birleşebilen tam entegre SCADA tabanlı sistem uygulamaları'
               ].map((method, index) => (
                 <div className="checkbox-group" key={index}>
-                  <input
-                    type="radio"
-                    name="machineControlMethod"
-                    value={method}
-                    checked={machineControlMethod === method}
-                    onChange={(e) => setMachineControlMethod(e.target.value)}
-                  />
+                <input
+                  type="radio"
+                  name="machineControlMethod"
+                  value={method}
+                  checked={machineControlMethod === method}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setMachineControlMethod(newValue);
+                    const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                    savedFormData.machineControlMethod = newValue;
+                    localStorage.setItem('formData', JSON.stringify(savedFormData));
+                  }}
+                />
                   <label>{method}</label>
                 </div>
               ))}
             </div>
           </div>
-          <button type="button" style={{ backgroundColor: '#007BFF' }} onClick={handleNext}>İleri</button>
-          <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+          <div className="button-container"> 
+              <button type="button" className="gradient-button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="button" className="gradient-button" onClick={handleNext}> İleri </button>
+          </div>
           <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>İleri</button>
-          <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
             </>
           )}
 {currentPage === 9 && (
     <>
     <div className="form-group question-59">
-    <p class="page-parts">Dijitalleşme Düzeyi Öz Değerlendirmesi</p>
+    <div className="form-header"> 
+          <p class="page-parts">Dijitalleşme Düzeyi Öz Değerlendirmesi</p>
+              <div className="clear-form-container"> 
+                  <button type="button" className="clear-button" onClick={() => handleClearForm(currentPage)}>
+                      <span className="clear-icon">🗑️</span> 
+                      Formu Temizle
+                  </button>
+              </div>
+              </div>
     <p class="question-note">59'dan 65'e kadar olan soruları cevaplayın.</p>
       <label>59. Aşağıdaki ifadelerden şirketinize en uygun olan seçeneği işaretleyiniz. <span className="required-star">*</span></label>
       <div className="bt-systems-usage">
@@ -2302,13 +2520,19 @@ const handleSmartServicesChange = (e) => {
           '4- Şirketimiz ağırlıklı olarak dijital olmayan üretim ve satışa odaklanmıştır; şimdiye kadar dijital tasarım / modelleme / prototipleme / satış konusunda herhangi bir çalışma yapmadık, yakın gelecekte yapacağımızı sanmıyoruz.'
         ].map((status, index) => (
           <div className="checkbox-group" key={index}>
-            <input
-              type="radio"
-              name="digitalizationStatus"
-              value={status}
-              checked={digitalizationStatus === status}
-              onChange={(e) => setDigitalizationStatus(e.target.value)}
-            />
+          <input
+            type="radio"
+            name="digitalizationStatus"
+            value={status}
+            checked={digitalizationStatus === status}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setDigitalizationStatus(newValue);
+              const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+              savedFormData.digitalizationStatus = newValue;
+              localStorage.setItem('formData', JSON.stringify(savedFormData));
+            }}
+          />
             <label>{status}</label>
           </div>
         ))}
@@ -2356,13 +2580,19 @@ const handleSmartServicesChange = (e) => {
                 <td>{challenge}</td>
                 {[5, 4, 3, 2, 1].map((value) => (
                   <td key={value}>
-                    <input
-                      type="radio"
-                      name={`digitalizationChallenge-${index}`}
-                      value={value}
-                      checked={digitalizationChallenges[`digitalizationChallenge-${index}`] === value.toString()}
-                      onChange={(e) => setDigitalizationChallenges({ ...digitalizationChallenges, [`digitalizationChallenge-${index}`]: e.target.value })}
-                    />
+                  <input
+                    type="radio"
+                    name={`digitalizationChallenge-${index}`}
+                    value={value}
+                    checked={digitalizationChallenges[`digitalizationChallenge-${index}`] === value.toString()}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      setDigitalizationChallenges({ ...digitalizationChallenges, [`digitalizationChallenge-${index}`]: newValue });
+                      const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                      savedFormData.digitalizationChallenges = { ...digitalizationChallenges, [`digitalizationChallenge-${index}`]: newValue };
+                      localStorage.setItem('formData', JSON.stringify(savedFormData));
+                    }}
+                  />
                   </td>
                 ))}
               </tr>
@@ -2377,7 +2607,13 @@ const handleSmartServicesChange = (e) => {
         type="text"
         name="otherResponse61"
         value={otherResponse61}
-        onChange={(e) => setOtherResponse61(e.target.value)}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          setOtherResponse61(newValue);
+          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+          savedFormData.otherResponse61 = newValue;
+          localStorage.setItem('formData', JSON.stringify(savedFormData));
+        }}
         placeholder="Yanıtınızı girin"
       />
     </div>
@@ -2414,13 +2650,19 @@ const handleSmartServicesChange = (e) => {
                 <td>{reason}</td>
                 {[5, 4, 3, 2, 1].map((value) => (
                   <td key={value}>
-                    <input
-                      type="radio"
-                      name={`digitalTechnologyReason-${index}`}
-                      value={value}
-                      checked={digitalTechnologyReasons[`digitalTechnologyReason-${index}`] === value.toString()}
-                      onChange={(e) => setDigitalTechnologyReasons({ ...digitalTechnologyReasons, [`digitalTechnologyReason-${index}`]: e.target.value })}
-                    />
+                  <input
+                    type="radio"
+                    name={`digitalTechnologyReason-${index}`}
+                    value={value}
+                    checked={digitalTechnologyReasons[`digitalTechnologyReason-${index}`] === value.toString()}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      setDigitalTechnologyReasons({ ...digitalTechnologyReasons, [`digitalTechnologyReason-${index}`]: newValue });
+                      const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+                      savedFormData.digitalTechnologyReasons = { ...digitalTechnologyReasons, [`digitalTechnologyReason-${index}`]: newValue };
+                      localStorage.setItem('formData', JSON.stringify(savedFormData));
+                    }}
+                  />
                   </td>
                 ))}
               </tr>
@@ -2435,7 +2677,13 @@ const handleSmartServicesChange = (e) => {
         type="text"
         name="otherResponse63"
         value={otherResponse63}
-        onChange={(e) => setOtherResponse63(e.target.value)}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          setOtherResponse63(newValue);
+          const savedFormData = JSON.parse(localStorage.getItem('formData')) || {};
+          savedFormData.otherResponse63 = newValue;
+          localStorage.setItem('formData', JSON.stringify(savedFormData));
+        }}
         placeholder="Yanıtınızı girin"
       />
     </div>
@@ -2492,9 +2740,10 @@ const handleSmartServicesChange = (e) => {
         ))}
       </div>
     </div>
-            <button type="submit" className="button">Gönder</button>
-            <button type="button" className="button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
-            <button type="button" onClick={() => handleClearForm(currentPage)}>Formu Temizle</button>
+            <div className="button-container"> 
+              <button type="button" className="gradient-button" onClick={() => setCurrentPage((prevPage) => prevPage - 1)}>Geri</button>
+              <button type="submit" className="gradient-button">Gönder</button>
+          </div>
           </>
         )}
 

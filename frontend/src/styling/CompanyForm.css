@@ -6,6 +6,67 @@ body {
   background-attachment: fixed; /* Arka planın sabit kalmasını sağlar */
 }
 
+.question-note {
+  font-size: 14px; /* Yazının boyutunu ayarlar */
+  color: #555; /* Yazının rengini ayarlar (isteğe bağlı) */
+  margin-bottom: 25px !important; /* Yazının alt boşluğunu ayarlar (isteğe bağlı) */
+  text-align: left;
+  font-style: italic;
+  margin-top: 0px;
+}
+
+.form-header {
+  display: flex; /* Başlık ve butonu yan yana hizalamak için */
+  justify-content: space-between; /* Başlık ve buton arasında boşluk bırakmak için */
+  align-items: center; /* Dikeyde ortalamak için */
+  margin-bottom: 0px !important; /* Alt boşluk */
+}
+
+.clear-form-container {
+  margin-left: 10px; /* Başlıktan butona boşluk bırakmak için */
+  margin-top: -10px !important;
+}
+
+.clear-button {
+  display: flex; /* Flex kullanarak içeriği hizalamak için */
+  align-items: center; /* Dikeyde ortalamak için */
+  background-color: #2596b3; /* Daha hafif bir yeşil ton */
+  color: white; /* Yazı rengi */
+  border: none; /* Kenarlığı kaldır */
+  border-radius: 4px; /* Kenar yuvarlama */
+  padding: 5px 10px; /* İç boşluk */
+  cursor: pointer; /* İmleç */
+  font-size: 12px; /* Yazı boyutu */
+  transition: background-color 0.3s ease; /* Geçiş efekti */
+}
+
+.clear-button:hover {
+  background-color: #136c8f; /* Hover durumunda daha koyu bir yeşil tonu */
+}
+.clear-icon {
+  margin-right: 5px; /* Simgeden metne boşluk */
+}
+
+.gradient-button {
+  background: linear-gradient(90deg, #007BFF, #00AFFF); /* İleri butonu için geçişli renk */
+  width: 15%;
+  border: none; /* Kenarlık yok */
+  color: #fff; /* Yazı rengi */
+  padding: 10px 20px; /* İç boşluk */
+  border-radius: 5px; /* Kenar yuvarlama */
+  cursor: pointer; /* İmleç */
+  transition: background 0.1s ease; /* Geçiş süresi */
+}
+
+.light-gradient-button:hover {
+  background: linear-gradient(90deg, #0056b3, #0088cc); /* Hover durumunda daha koyu geçişli renk */
+}
+
+.button-container {
+  display: flex; /* Butonları yan yana yerleştirmek için flex kullanıldı */
+  gap: 10px; /* Butonlar arasında boşluk */
+}
+
 .form-container {
   width: 50%; /* Formun genişliğini ayarlar */
   max-width: 1200px; /* Formun maksimum genişliğini ayarlar */
@@ -15,6 +76,7 @@ body {
   border-radius: 8px; /* Formun köşelerini yuvarlar */
   box-shadow: 0 0 10px rgba(148, 128, 128, 0.5) !important;/* Formun gölgesini ayarlar */
   font-size: 14px; /* Formun genel yazı boyutunu ayarlar */
+  position: relative;
 }
 
 .intro-text {
@@ -87,22 +149,6 @@ h1 {
 
 .name-inputs input {
   flex: 1; /* İsim girdi alanlarının esnekliğini ayarlar */
-}
-
-button {
-  display: block; /* Butonları blok seviyesinde gösterir */
-  width: 100%; /* Butonların genişliğini ayarlar */
-  padding: 10px; /* Butonların iç boşluğunu ayarlar */
-  background-color: #4CAF50; /* Butonların arka plan rengini ayarlar */
-  color: white; /* Butonların yazı rengini ayarlar */
-  border: none; /* Butonların kenarlığını kaldırır */
-  border-radius: 4px; /* Butonların köşelerini yuvarlar */
-  cursor: pointer; /* Butonların imlecini işaretçi yapar */
-  font-size: 16px; /* Butonların yazı boyutunu ayarlar */
-}
-
-button:hover {
-  background-color: #45a049; /* Butonların üzerine gelindiğinde arka plan rengini değiştirir */
 }
 
 .required-star {
@@ -208,19 +254,12 @@ button:hover {
   margin-right: 8px; /* Radyo butonu ile etiketi arasındaki boşluğu ayarlar */
 }
 
-.question-note {
-  font-size: 14px; /* Yazının boyutunu ayarlar */
-  color: #555; /* Yazının rengini ayarlar (isteğe bağlı) */
-  margin-bottom: 8px !important; /* Yazının alt boşluğunu ayarlar (isteğe bağlı) */
-  text-align: left;
-  font-style: italic;
-}
-
 .page-parts {
   font-size: 18px; /* Yazının boyutunu ayarlar */
   color: black; /* Yazının rengini ayarlar (isteğe bağlı) */
   margin-bottom: 8px !important; /* Yazının alt boşluğunu ayarlar (isteğe bağlı) */
   text-align: left;
   font-weight: bold;
+  margin-top: 0px !important;
 }
 
