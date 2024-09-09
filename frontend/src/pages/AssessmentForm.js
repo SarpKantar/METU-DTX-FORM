@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc,query, where} from 'firebase/firestore';
 import '../styling/AssessmentForm.css';
 
 const AssessmentForm = () => {
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState('');
+  const [companyID, setCompanyID] = useState(''); // State for companyID
+  const [assessorID, setAssessorID] = useState('');
   const [formData, setFormData] = useState({
     city: '',
     sector: '',
@@ -19,6 +21,23 @@ const AssessmentForm = () => {
     availabilityOfRAndD: ''
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAssessorID = async () => {
+      const email = sessionStorage.getItem('userEmail'); // Assuming the email is stored in sessionStorage
+      if (email) {
+        const querySnapshot = await getDocs(query(collection(db, 'assessorUsers'), where('email', '==', email)));
+        if (!querySnapshot.empty) {
+          const assessorDoc = querySnapshot.docs[0]; // Get the first matching document
+          setAssessorID(assessorDoc.data().assessorID); // Set the assessorID
+        } else {
+          console.error('No matching assessor found in assessorUsers collection!');
+        }
+      }
+    };
+
+    fetchAssessorID();
+  }, []);
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -38,15 +57,31 @@ const AssessmentForm = () => {
     }));
   };
 
+  const handleCompanySelect = async (companyName) => {
+    setSelectedCompany(companyName);
+    
+    // Fetch companyID from companyUsers collection based on selected company name
+    const querySnapshot = await getDocs(query(collection(db, 'companyUsers'), where('companyName', '==', companyName)));
+    if (!querySnapshot.empty) {
+      const companyDoc = querySnapshot.docs[0]; // Get the first matching document
+      setCompanyID(companyDoc.data().companyID); // Set the companyID
+    } else {
+      console.error('No matching company found in companyUsers collection!');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const assessmentData = {
       selectedCompany,
-      ...formData
+      ...formData,
+      companyID, // Add companyID
+      assessorID // Add assessorID
     };
 
     try {
-      await addDoc(collection(db, 'assessmentForms'), assessmentData);
+      // Add the assessment data to the assessorForms collection
+      await addDoc(collection(db, 'assessorForms'), assessmentData);
       alert('Assessment form submitted successfully!');
       navigate('/assessor-dashboard');
     } catch (error) {
@@ -69,7 +104,7 @@ const AssessmentForm = () => {
           <label>Select Company</label>
           <select
             value={selectedCompany}
-            onChange={(e) => setSelectedCompany(e.target.value)}
+            onChange={(e) => handleCompanySelect(e.target.value)}
             required
           >
             <option value="">Şirket seçin</option>

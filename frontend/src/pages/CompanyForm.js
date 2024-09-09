@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { collection, addDoc, setDoc, getDoc ,getDocs, doc, query, where } from 'firebase/firestore';
+import { collection, addDoc, setDoc, getDoc ,getDocs, query, where } from 'firebase/firestore';
 import '../styling/CompanyForm.css';
 import { useAuth } from "../context/AuthContext";
 
