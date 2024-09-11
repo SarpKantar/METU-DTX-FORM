@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState,  useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
+import { useAuth } from '../context/AuthContext';
 import '../styling/LoginPage.css';
 
 const AdminLogin = () => {
@@ -9,6 +10,14 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const { currentUser, setCurrentUser } = useAuth();
+
+  useEffect(() => {
+    // Redirect to admin page if already logged in as admin
+    if (currentUser && currentUser.email === 'admin@gmail.com') {
+      navigate('/admin-dashboard'); // Redirect to admin page
+    }
+  }, [currentUser, navigate]);
 
   const handleLogin = async () => {
     setErrorMessage(''); // Önceki hata mesajını temizle
@@ -16,9 +25,12 @@ const AdminLogin = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      setCurrentUser(user);
+
       // Admin e-posta adresini kontrol et
-      if (user.email === 'admin@gmail.com' && user.password === '123123') { // Burayı kendi admin e-posta adresinizle değiştirin
-        navigate('/admin'); // Admin sayfasına yönlendir
+      if (user.email === 'admin@gmail.com') { // Burayı kendi admin e-posta adresinizle değiştirin
+        console.log('User is admin, navigating to admin page.');
+        navigate('/admin-dashboard'); // Admin sayfasına yönlendir
       } else {
         setErrorMessage('Bu kullanıcı admin değil.');
       }

@@ -12,7 +12,7 @@ const CompanyLogin = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser } = useAuth(); // Ensure you have a way to set currentUser
+  const { currentUser, setCurrentUser } = useAuth();
 
   useEffect(() => {
     console.log('Current User:', currentUser);
@@ -24,9 +24,9 @@ const CompanyLogin = () => {
         
         if (!querySnapshot.empty) {
           console.log('User is a company user, navigating to dashboard.');
-          navigate('/company-dashboard'); // Redirect to company dashboard if already logged in
+          navigate('/company-dashboard');
         } else {
-          console.log('No matching company user found.'); // Log if no user is found
+          console.log('No matching company user found.');
         }
       }
     };
@@ -34,33 +34,41 @@ const CompanyLogin = () => {
   }, [currentUser, navigate]);
 
   const handleLogin = async () => {
-    setErrorMessage(''); // Clear previous error message
+    setErrorMessage('');
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Set currentUser in context
-      setCurrentUser(user); // Set the current user in context
+      setCurrentUser(user);
       console.log('User Logged In:', user);
-      sessionStorage.setItem('user', JSON.stringify(user)); // Ensure this line is present
+      sessionStorage.setItem('user', JSON.stringify(user));
+
+      // Check if the user is in the pendingUsers collection
+      const pendingUserQuery = query(collection(db, 'pendingUsers'), where('email', '==', user.email));
+      const pendingUserSnapshot = await getDocs(pendingUserQuery);
+
+      if (!pendingUserSnapshot.empty) {
+        setErrorMessage('Your account is pending approval. Please wait for an administrator to review your registration.');
+        return;
+      }
 
       // Check if the user is a company user using their email
-      const q = query(collection(db, 'companyUsers'), where('email', '==', user.email));
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        // Redirect to the company dashboard
+      const companyUserQuery = query(collection(db, 'companyUsers'), where('email', '==', user.email));
+      const companyUserSnapshot = await getDocs(companyUserQuery);
+
+      if (!companyUserSnapshot.empty) {
         navigate('/company-dashboard');
       } else {
-        setErrorMessage('User is not a company user.'); // Handle case where user is not a company user
+        setErrorMessage('User is not a company user.');
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      setErrorMessage('Login failed. Please check your credentials.'); // Set error message
+      setErrorMessage('Login failed. Please check your credentials.');
     }
   };
 
   const handleBack = () => {
-    navigate('/login'); // Always navigate to the login page
+    navigate('/login');
   };
 
   return (
@@ -84,7 +92,7 @@ const CompanyLogin = () => {
       />
       <button className="button" onClick={handleLogin}>Login</button>
       <button className="button" onClick={handleBack}>Back</button>
-      {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };

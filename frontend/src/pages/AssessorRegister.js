@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { addDoc, doc, setDoc,collection } from 'firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 import '../styling/RegisterPage.css';
 
 const AssessorRegister = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState(''); // New state for name
-  const [surname, setSurname] = useState(''); // New state for surname
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [linkedin, setLinkedin] = useState('');
   const navigate = useNavigate();
-  const [linkedin, setLinkedin] = useState(''); // New state for LinkedIn link
-  const [assignedCompanyIDs, setAssignedCompanyIDs] = useState([]); // New state for assigned company IDs
+
   const handleRegister = async () => {
     if (password !== confirmPassword) {
       alert('Passwords do not match');
@@ -35,21 +35,14 @@ const AssessorRegister = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      const companyDocRef = await addDoc(collection(db, 'assessorUsers'), {
+      // Store user information in pendingUsers collection
+      await setDoc(doc(db, 'pendingUsers', user.uid), {
         email: user.email,
-        name: name, // Include name
-        surname: surname, // Include surname
+        name: name,
+        surname: surname,
         linkedin: linkedin,
-        assignedCompanyIDs: [], // Initialize assignedCompanyIDs as an empty array
-      });
-      // Store additional user information in Firestore
-      await setDoc(doc(db, 'assessorUsers', companyDocRef.id), {
-        email: user.email,
-        name: name, // Include name
-        surname: surname, // Include surname
-        linkedin: linkedin,
-        assignedCompanyIDs: [], // Initialize assignedCompanyIDs as an empty array
-        assessorID: companyDocRef.id
+        type: 'assessor', // Indicate the type of user
+        status: 'pending'
       });
 
       // Send email verification
@@ -95,7 +88,7 @@ const AssessorRegister = () => {
         required
       />
       <input
-        type="url" // Change type to url for LinkedIn link
+        type="url"
         placeholder="LinkedIn Profile URL"
         value={linkedin}
         onChange={(e) => setLinkedin(e.target.value)}
@@ -124,4 +117,4 @@ const AssessorRegister = () => {
   );
 };
 
-export default AssessorRegister;  
+export default AssessorRegister;

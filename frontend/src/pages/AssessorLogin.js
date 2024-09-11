@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useAuth } from '../context/AuthContext'; 
-import { collection, query, where, getDocs } from 'firebase/firestore'; // Import Firestore functions
-import { db } from '../firebase'; // Import your Firestore database
+import { collection, query, where, getDocs } from 'firebase/firestore'; 
+import { db } from '../firebase'; 
 import '../styling/LoginPage.css';
 
 const AssessorLogin = () => {
@@ -17,12 +17,11 @@ const AssessorLogin = () => {
   useEffect(() => {      
     console.log('Current User:', currentUser);
     if (currentUser) {
-      // Check if the current user is an assessor user
       const checkUserType = async () => {
         const q = query(collection(db, 'assessorUsers'), where('email', '==', currentUser.email));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
-          console.log('User is a assessor user, navigating to dashboard.');
+          console.log('User is an assessor user, navigating to dashboard.');
           navigate('/assessor-dashboard'); // Redirect to assessor dashboard if already logged in
         }
       };
@@ -49,13 +48,21 @@ const AssessorLogin = () => {
 
       // Store user session in sessionStorage
       setCurrentUser(user); 
-      sessionStorage.setItem('user', JSON.stringify(user)); // Ensure this line is present
+      sessionStorage.setItem('user', JSON.stringify(user)); 
+
+      // Check if the user is in the pendingUsers collection
+      const pendingUserQuery = query(collection(db, 'pendingUsers'), where('email', '==', user.email));
+      const pendingUserSnapshot = await getDocs(pendingUserQuery);
+
+      if (!pendingUserSnapshot.empty) {
+        setErrorMessage('Your account is pending approval. Please wait for an administrator to review your registration.');
+        return;
+      }
 
       // Check if the user is an assessor user using their email
       const q = query(collection(db, 'assessorUsers'), where('email', '==', user.email));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
-        // Redirect to the assessor dashboard
         navigate('/assessor-dashboard');
       } else {
         setErrorMessage('User is not an assessor user.'); // Handle case where user is not an assessor user
