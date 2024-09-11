@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
+import { useAuth } from '../context/AuthContext'; 
+import { collection, query, where, getDocs } from 'firebase/firestore'; 
+import { db } from '../firebase'; 
 import '../styling/LoginPage.css';
 
 const CompanyLogin = () => {
@@ -9,19 +12,26 @@ const CompanyLogin = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const { currentUser, setCurrentUser } = useAuth(); // Ensure you have a way to set currentUser
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        handleLogin();
+    console.log('Current User:', currentUser);
+
+    const checkUserType = async () => {
+      if (currentUser) {
+        const q = query(collection(db, 'companyUsers'), where('email', '==', currentUser.email));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          console.log('User is a company user, navigating to dashboard.');
+          navigate('/company-dashboard'); // Redirect to company dashboard if already logged in
+        } else {
+          console.log('No matching company user found.'); // Log if no user is found
+        }
       }
     };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [email, password]);
+    checkUserType();
+  }, [currentUser, navigate]);
 
   const handleLogin = async () => {
     setErrorMessage(''); // Clear previous error message
@@ -29,11 +39,20 @@ const CompanyLogin = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Store user session in sessionStorage
-      sessionStorage.setItem('user', JSON.stringify(user));
+      // Set currentUser in context
+      setCurrentUser(user); // Set the current user in context
+      console.log('User Logged In:', user);
+      sessionStorage.setItem('user', JSON.stringify(user)); // Ensure this line is present
 
-      // Directly navigate to the company dashboard
-      navigate('/company-dashboard');
+      // Check if the user is a company user using their email
+      const q = query(collection(db, 'companyUsers'), where('email', '==', user.email));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        // Redirect to the company dashboard
+        navigate('/company-dashboard');
+      } else {
+        setErrorMessage('User is not a company user.'); // Handle case where user is not a company user
+      }
     } catch (error) {
       console.error('Error logging in:', error);
       setErrorMessage('Login failed. Please check your credentials.'); // Set error message

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase'; // Firebase auth modülünü import edin
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut} from 'firebase/auth';
 
 const AuthContext = createContext();
 
@@ -16,13 +16,21 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
             setLoading(false);
+            console.log('Auth State Changed:', user);
         });
 
         return unsubscribe;
     }, []);
 
+    const logout = async () => {
+        await signOut(auth);
+        setCurrentUser(null);
+    };
+
     const value = {
-        currentUser
+        currentUser,
+        setCurrentUser,
+        logout
     };
 
     return (

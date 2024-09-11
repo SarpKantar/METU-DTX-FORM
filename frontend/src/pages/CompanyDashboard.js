@@ -3,15 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { storage } from '../firebase'; // Import storage from firebase.js
 import { ref, uploadBytes } from 'firebase/storage';
 import '../styling/CompanyDashboard.css';
+import { useAuth } from '../context/AuthContext';
 
 const CompanyDashboard = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
   const [fileName, setFileName] = useState(''); // New state for file name
+  const { logout } = useAuth();
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
+    
     if (!user) {
       navigate('/login');
     }
@@ -21,7 +24,8 @@ const CompanyDashboard = () => {
     navigate('/company-form'); // Ensure this route is correct
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logout(); // Call the logout function
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('userType');
     navigate('/login', { replace: true });

@@ -6,6 +6,7 @@ import { jsPDF } from 'jspdf';
 import { saveAs } from 'file-saver';
 import { ref, uploadBytes } from 'firebase/storage'; // Import uploadBytes
 import '../styling/AssessorDashboard.css';
+import { useAuth } from '../context/AuthContext';
 
 const AssessorDashboard = () => {
   const [companyForms, setCompanyForms] = useState([]);
@@ -13,6 +14,7 @@ const AssessorDashboard = () => {
   const [uploadStatus, setUploadStatus] = useState(''); // State for upload status
   const [fileName, setFileName] = useState(''); // State for file name
   const navigate = useNavigate();
+  const { currentUser, logout } = useAuth()
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
@@ -39,7 +41,10 @@ const AssessorDashboard = () => {
     }
   }, [navigate]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    console.log('Current User before logout:', currentUser);
+    await logout(); // Call the logout function
+    console.log('Current User after logout:', currentUser); // This may still show the old value due to async nature
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('userType');
     navigate('/login', { replace: true });
@@ -61,7 +66,7 @@ const AssessorDashboard = () => {
   };
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/login');
   };
 
   const handleFileChange = (event) => {
