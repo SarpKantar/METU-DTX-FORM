@@ -7,6 +7,9 @@ import { saveAs } from 'file-saver';
 import { ref, uploadBytes } from 'firebase/storage'; // Import uploadBytes
 import '../styling/AssessorDashboard.css';
 import { useAuth } from '../context/AuthContext';
+import pdfIcon from '../file_icons/pdf-icon.png'; // Import icons
+import docIcon from '../file_icons/doc-icon.png';
+import xlsIcon from '../file_icons/xls-icon.png';
 
 const AssessorDashboard = () => {
   const [companyForms, setCompanyForms] = useState([]);
@@ -15,6 +18,7 @@ const AssessorDashboard = () => {
   const [fileName, setFileName] = useState(''); // State for file name
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth()
+  const [fileIcon, setFileIcon] = useState(null); // New state for file icon
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
@@ -74,8 +78,24 @@ const AssessorDashboard = () => {
     if (selectedFile) {
       setFile(selectedFile);
       setFileName(selectedFile.name.slice(0, 15)); // Show only the first 15 characters
+      setFileIcon(getFileIcon(selectedFile.type)); // Set the icon based on file type
     } else {
       alert('No file selected.');
+    }
+  };
+
+  const getFileIcon = (fileType) => {
+    switch (fileType) {
+      case 'application/pdf':
+        return pdfIcon;
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      case 'application/msword': 
+        return docIcon;
+      case 'application/vnd.ms-excel':
+      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        return xlsIcon;
+      default:
+        return null;
     }
   };
 
@@ -124,12 +144,17 @@ const AssessorDashboard = () => {
           <input type="file" onChange={handleFileChange} className="file-input" />
         </label>
         <button className="button" onClick={handleUpload}>Upload File</button>
-        {fileName && <p className="selected-file">Selected File: {fileName}</p>} {/* Display selected file name */}
+        {fileName && (
+          <div className="selected-file" style={{ display: 'flex', alignItems: 'center' }}>
+            <p style={{ marginRight: '10px' }}>Selected File: {fileName}</p>
+            {fileIcon && <img src={fileIcon} alt="File Icon" className="file-icon" />} {/* Display the icon */}
+          </div>
+        )}
         {uploadStatus && <p>{uploadStatus}</p>} {/* Display upload status */}
       </div>
     </div>
   );
-  
+
 };
 
 export default AssessorDashboard;
