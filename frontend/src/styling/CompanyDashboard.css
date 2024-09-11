@@ -57,19 +57,3 @@
   font-size: 1em; /* Font size for the file name */
   margin-top: 10px; /* Space above the file name */
 }
-
-
-.selected-file {
-  display: flex;
-  align-items: center;
-}
-
-.selected-file p {
-  margin-right: 10px; /* Space between the file name and icon */
-}
-
-.file-icon {
-  width: 30px; /* Set the desired width */
-  height: 30px; /* Set the desired height */
-  margin-left: 10px; /* Optional: Add some space between the text and the icon */
-}
