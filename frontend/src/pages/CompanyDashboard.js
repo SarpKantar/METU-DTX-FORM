@@ -35,7 +35,7 @@ const CompanyDashboard = () => {
       return;
     }
   
-    const storageRef = ref(storage, `uploads/${file.name}`);
+    const storageRef = ref(storage, `companyFiles/${file.name}`);
     
     uploadBytes(storageRef, file)
       .then(() => {

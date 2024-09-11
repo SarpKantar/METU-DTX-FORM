@@ -54,3 +54,18 @@ li {
 .button:hover {
   background-color: #000066;
 }
+.custom-file-upload {
+  background-color: #008b58; /* Dark blue background */
+  color: white; /* White text color */
+  border: none; /* No border */
+  padding: 10px 20px; /* Padding around the button */
+  margin: 10px; /* Margin around buttons */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 1em; /* Font size for button text */
+  border-radius: 5px; /* Rounded corners */
+  display: inline-block; /* Allow label to behave like a button */
+}
+
+.file-input {
+  display: none; /* Hide the default file input */
+}

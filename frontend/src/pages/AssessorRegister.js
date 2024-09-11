@@ -12,6 +12,7 @@ const AssessorRegister = () => {
   const [name, setName] = useState(''); // New state for name
   const [surname, setSurname] = useState(''); // New state for surname
   const navigate = useNavigate();
+  const [linkedin, setLinkedin] = useState(''); // New state for LinkedIn link
   const [assignedCompanyIDs, setAssignedCompanyIDs] = useState([]); // New state for assigned company IDs
   const handleRegister = async () => {
     if (password !== confirmPassword) {
@@ -38,6 +39,7 @@ const AssessorRegister = () => {
         email: user.email,
         name: name, // Include name
         surname: surname, // Include surname
+        linkedin: linkedin,
         assignedCompanyIDs: [], // Initialize assignedCompanyIDs as an empty array
       });
       // Store additional user information in Firestore
@@ -45,6 +47,7 @@ const AssessorRegister = () => {
         email: user.email,
         name: name, // Include name
         surname: surname, // Include surname
+        linkedin: linkedin,
         assignedCompanyIDs: [], // Initialize assignedCompanyIDs as an empty array
         assessorID: companyDocRef.id
       });
@@ -88,6 +91,14 @@ const AssessorRegister = () => {
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        className="input"
+        required
+      />
+      <input
+        type="url" // Change type to url for LinkedIn link
+        placeholder="LinkedIn Profile URL"
+        value={linkedin}
+        onChange={(e) => setLinkedin(e.target.value)}
         className="input"
         required
       />
