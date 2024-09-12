@@ -98,7 +98,7 @@ const AssessorLogin = () => {
       />
       <button className="button" onClick={handleLogin}>Login</button>
       <button className="button" onClick={handleBack}>Back</button>
-      {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };

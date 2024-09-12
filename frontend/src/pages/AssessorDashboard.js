@@ -17,7 +17,7 @@ const AssessorDashboard = () => {
   const [uploadStatus, setUploadStatus] = useState(''); // State for upload status
   const [fileName, setFileName] = useState(''); // State for file name
   const navigate = useNavigate();
-  const { currentUser, logout } = useAuth()
+  const { currentUser, setCurrentUser ,logout } = useAuth()
   const [fileIcon, setFileIcon] = useState(null); // New state for file icon
 
   useEffect(() => {
@@ -47,7 +47,8 @@ const AssessorDashboard = () => {
 
   const handleLogout = async () => {
     console.log('Current User before logout:', currentUser);
-    await logout(); // Call the logout function
+    await logout(); // Call the logout function 
+    setCurrentUser(null);
     console.log('Current User after logout:', currentUser); // This may still show the old value due to async nature
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('userType');
