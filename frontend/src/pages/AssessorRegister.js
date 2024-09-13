@@ -42,7 +42,9 @@ const AssessorRegister = () => {
         surname: surname,
         linkedin: linkedin,
         type: 'assessor', // Indicate the type of user
-        status: 'pending'
+        status: 'pending',
+        assignedCompanyIDs: [], // New array for storing company IDs
+        assessorID: user.uid
       });
 
       // Send email verification

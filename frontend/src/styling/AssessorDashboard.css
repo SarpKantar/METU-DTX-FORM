@@ -69,3 +69,18 @@ li {
 .file-input {
   display: none; /* Hide the default file input */
 }
+
+.attained-button {
+  background-color: red; /* Red background */
+  color: white; /* White text */
+  border: none; /* No border */
+  padding: 10px 20px; /* Padding */
+  margin: 10px; /* Margin */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 1em; /* Font size */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.attained-button:hover {
+  background-color: darkred; /* Darker red on hover */
+}

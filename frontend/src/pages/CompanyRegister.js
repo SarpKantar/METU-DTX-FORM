@@ -38,7 +38,8 @@ const CompanyRegister = () => {
         email: user.email,
         companyName: companyName,
         type: 'company',
-        status: 'pending'
+        status: 'pending',
+        companyID: user.uid
       });
 
       // Send email verification

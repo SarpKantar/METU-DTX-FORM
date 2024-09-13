@@ -19,6 +19,8 @@ const AssessorDashboard = () => {
   const navigate = useNavigate();
   const { currentUser, setCurrentUser ,logout } = useAuth()
   const [fileIcon, setFileIcon] = useState(null); // New state for file icon
+  const [attainedCompanies, setAttainedCompanies] = useState([]);
+  const [companyUsers, setCompanyUsers] = useState([]); // New state for company users
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
@@ -38,6 +40,14 @@ const AssessorDashboard = () => {
             .filter(form => assignedCompanyIDs.includes(form.id)); // Filter by assigned company IDs
 
           setCompanyForms(forms);
+
+          const usersSnapshot = await getDocs(collection(db, 'companyUsers'));
+          const users = usersSnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .filter(user => assignedCompanyIDs.includes(user.id)); // Filter by assigned company IDs
+
+          setAttainedCompanies(assignedCompanyIDs);
+          setCompanyUsers(users) // Ensure this line is present
         }
       };
 
@@ -124,6 +134,17 @@ const AssessorDashboard = () => {
     <div className="container">
       <h1 className="title">Assessor Dashboard</h1>
       <div className="options">
+        <h2>Attained Companies</h2>
+        <div>
+          {attainedCompanies.map(companyID => {
+            const company = companyUsers.find(form => form.id === companyID);
+            return (
+              <button key={companyID} className="attained-button">
+                {company ? company.companyName : 'Unknown Company'} {/* Display company name or fallback */}
+              </button>
+            );
+          })}
+        </div>
         <h2>Company Forms</h2>
         <ul>
           {companyForms.map(form => (
