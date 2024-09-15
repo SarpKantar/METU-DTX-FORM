@@ -188,7 +188,7 @@ const AdminDashboard = () => {
         <h2>Pending Requests</h2>
         <h3>Company Requests</h3>
         {pendingCompanyRequests.length === 0 ? (
-          <p className="no-requests-message">No company requests available.</p>
+          <p >No company requests available.</p>
         ) : (
           pendingCompanyRequests.map(request => (
             <div key={request.id} className="request-item" onClick={() => handleUserClick(request)}>

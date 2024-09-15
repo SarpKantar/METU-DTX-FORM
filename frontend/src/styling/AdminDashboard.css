@@ -1,4 +1,3 @@
-
 /* AdminDashboard.css */
 .modal-overlay {
     position: fixed;
@@ -40,7 +39,7 @@
     border-radius: 5px;
     padding: 10px;
     margin-top: 10px;
-    background-color: #f9f9f9;
+    background-color: rgba(249, 249, 249, 0.9); /* Add slight opacity */
     display: inline-block; /* Yan yana durması için */
     width: 48%; /* Genişlik ayarı */
     vertical-align: top; /* Üstten hizalama */
@@ -61,7 +60,7 @@
     border-radius: 5px;
     padding: 10px;
     margin-top: 10px;
-    background-color: #f9f9f9;
+    background-color: rgba(249, 249, 249, 0.9); /* Add slight opacity */
     width: 48%; /* Genişlik ayarı */
   }
 
@@ -90,13 +89,14 @@
     border: 1px solid #ddd;
     margin-bottom: 10px;
     cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.9); /* Add slight opacity */
 }
 
 .user-details {
     margin-top: 10px;
     padding: 10px;
     border: 1px solid #ddd;
-    background-color: #f9f9f9;
+    background-color: rgba(249, 249, 249, 0.9); /* Add slight opacity */
     width: 100%; /* Tam genişlik */
 }
 
@@ -122,12 +122,17 @@
 }
 
 .reject {
-    background-color: #f44336; /* Kırmızı arka plan */
-    color: white; /* Beyaz yazı rengi */
-    padding: 10px 20px; /* İç boşluk */
-    border: none; /* Kenar yok */
-    border-radius: 5px; /* Yuvarlatılmış köşeler */
-    cursor: pointer; /* İmleç değişimi */
+    background-color: #d32f2f; /* Darker red background */
+    color: white; /* White text color */
+    padding: 10px 20px; /* Inner padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Change cursor on hover */
+}
+
+/* Optional: Add hover effect for better UX */
+.reject:hover {
+    background-color: #c62828; /* Slightly darker red on hover */
 }
 
 /* AdminDashboard.css */
@@ -135,4 +140,16 @@
     text-align: left; /* Metni sola hizala */
     width: 100%; /* Tam genişlik */
     margin: 10px 0; /* Üst ve alt boşluk */
+}
+
+.admin-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f9;
+    color: #333;
+    max-width: 1200px; /* Set a maximum width for the dashboard */
+    margin: 0 auto; /* Center the container */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for depth */
+    margin-top: 20px;
 }
