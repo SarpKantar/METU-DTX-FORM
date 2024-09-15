@@ -33,7 +33,13 @@
     font-size: 2em; /* Title font size */
     margin-bottom: 20px; /* Space below the title */
   }
-  
+  .file-icon {
+    width: 1em; /* Set width to match text size */
+    height: 1em; /* Set height to match text size */
+    margin-left: 10px; /* Space between text and icon */
+    vertical-align: middle; /* Align icon with text */
+  }
+    
   .button {
     background-color: #00008b; /* Dark blue background for buttons */
     color: white; /* White text color */
