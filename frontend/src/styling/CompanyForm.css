@@ -1,5 +1,5 @@
 body {
-  background-image: url('C:\Users\Msi\Desktop\METU-DTX-FORM\frontend\src'); /* Arka plan resmi */
+  background-image: url('../background_image.jpeg'); /* Arka plan resmi */
   background-size: cover; /* Resmi tam ekran yapar */
   background-position: center; /* Resmi ortalar */
   background-repeat: no-repeat; /* Resmin tekrarlanmasını engeller */

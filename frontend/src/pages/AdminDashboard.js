@@ -3,6 +3,7 @@ import { db, auth } from '../firebase';
 import { collection, getDocs, deleteDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import FeedbackModal from '../components/FeedBackModal';
 import '../styling/AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -11,6 +12,11 @@ const AdminDashboard = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const navigate = useNavigate();
   const [collaborationRequests, setCollaborationRequests] = useState([]);
+  const [selectedCollaborationRequest, setSelectedCollaborationRequest] = useState(null);
+  const [approvedCollaborationRequests, setApprovedCollaborationRequests] = useState([]);
+  const [selectedApprovedRequest, setSelectedApprovedRequest] = useState(null);
+  const [feedbackRequestId, setFeedbackRequestId] = useState(null);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -21,25 +27,98 @@ const AdminDashboard = () => {
       pendingSnapshot.docs.forEach(doc => {
         const data = doc.data();
         if (data.type === 'company') {
-          companyRequests.push({ id: doc.id, ...doc.data() });
+          companyRequests.push({ id: doc.id, ...data });
         } else if (data.type === 'assessor') {
-          assessorRequests.push({ id: doc.id, ...doc.data() });
+          assessorRequests.push({ id: doc.id, ...data });
         }
       });
 
       setPendingCompanyRequests(companyRequests);
       setPendingAssessorRequests(assessorRequests);
-    };
 
-    const fetchCollaborationRequests = async () => {
+      // Collaboration requests
       const collaborationSnapshot = await getDocs(collection(db, 'collaborationRequests'));
-      const collaborationRequests = collaborationSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setCollaborationRequests(collaborationRequests);
+      const collaborationRequests = await Promise.all(collaborationSnapshot.docs.map(async docSnapshot => {
+        const requestData = { id: docSnapshot.id, ...docSnapshot.data() };
+        const companyDoc = await getDoc(doc(db, 'companyUsers', requestData.companyId));
+        const assessorDoc = await getDoc(doc(db, 'assessorUsers', requestData.assessorId));
+
+        return {
+          ...requestData,
+          companyDetails: companyDoc.exists() ? companyDoc.data() : null,
+          assessorDetails: assessorDoc.exists() ? assessorDoc.data() : null,
+        };
+      }));
+
+      // Onaylı istekleri ayır
+      const approvedRequests = collaborationRequests.filter(req => req.status === 'approved');
+      const pendingRequests = collaborationRequests.filter(req => req.status === 'pending');
+
+      setApprovedCollaborationRequests(approvedRequests);
+      setCollaborationRequests(pendingRequests);
     };
 
     fetchRequests();
-    fetchCollaborationRequests();
   }, []);
+
+  const handleFeedbackSubmit = async (feedback) => {
+    try {
+      const requestRef = doc(db, 'collaborationRequests', feedbackRequestId);
+      await setDoc(requestRef, { feedback }, { merge: true });
+      setIsFeedbackModalOpen(false);
+      setFeedbackRequestId(null);
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+    }
+  };
+
+  const handleCollaborationApprove = async (requestId) => {
+    try {
+      const requestRef = doc(db, 'collaborationRequests', requestId);
+      await setDoc(requestRef, { status: 'approved' }, { merge: true });
+
+      // Onaylanan isteği yerel state'e ekle
+      const approvedRequest = collaborationRequests.find(req => req.id === requestId);
+      if (approvedRequest) {
+        setApprovedCollaborationRequests(prev => [...prev, { ...approvedRequest, status: 'approved' }]);
+      }
+
+      // Pending isteği kaldır
+      setCollaborationRequests(prev => prev.filter(req => req.id !== requestId));
+    } catch (error) {
+      console.error('Error approving collaboration request:', error);
+    }
+  };
+
+  const handleCollaborationReject = async (requestId) => {
+    setFeedbackRequestId(requestId);
+    setIsFeedbackModalOpen(true);
+    try {
+      const requestRef = doc(db, 'collaborationRequests', requestId);
+      await setDoc(requestRef, { status: 'rejected' }, { merge: true });
+
+      // Reddedilen isteği yerel state'den kaldır
+      setCollaborationRequests(prev => prev.filter(req => req.id !== requestId));
+    } catch (error) {
+      console.error('Error rejecting collaboration request:', error);
+    }
+  };
+
+  const handleCollaborationRequestClick = (request) => {
+    if (selectedCollaborationRequest && selectedCollaborationRequest.id === request.id) {
+      setSelectedCollaborationRequest(null); // Aynı isteğe tekrar tıklanırsa kapat
+    } else {
+      setSelectedCollaborationRequest(request); // İsteği aç
+    }
+  };
+
+  const handleApprovedRequestClick = (request) => {
+    if (selectedApprovedRequest && selectedApprovedRequest.id === request.id) {
+      setSelectedApprovedRequest(null); // Aynı isteğe tekrar tıklanırsa kapat
+    } else {
+      setSelectedApprovedRequest(request); // İsteği aç
+    }
+  };
 
   const handleApprove = async (id, type) => {
     const docRef = doc(db, 'pendingUsers', id);
@@ -83,7 +162,7 @@ const AdminDashboard = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate('/login');
+      navigate('/admin');
     } catch (error) {
       console.error('Error logging out:', error);
     }
@@ -97,28 +176,6 @@ const AdminDashboard = () => {
     }
   };
 
-  
-  const handleCollaborationApprove = async (requestId) => {
-    try {
-      const requestRef = doc(db, 'collaborationRequests', requestId);
-      await setDoc(requestRef, { status: 'approved' }, { merge: true });
-      setCollaborationRequests(collaborationRequests.map(request =>
-        request.id === requestId ? { ...request, status: 'approved' } : request
-      ));
-    } catch (error) {
-      console.error('Error approving collaboration request:', error);
-    }
-  };
-
-  const handleCollaborationReject = async (requestId) => {
-    try {
-      await deleteDoc(doc(db, 'collaborationRequests', requestId));
-      setCollaborationRequests(collaborationRequests.filter(request => request.id !== requestId));
-    } catch (error) {
-      console.error('Error rejecting collaboration request:', error);
-    }
-  };
-
   return (
     <div className="admin-container">
       <h1>Admin Dashboard</h1>
@@ -126,7 +183,7 @@ const AdminDashboard = () => {
         <h2>Pending Requests</h2>
         <h3>Company Requests</h3>
         {pendingCompanyRequests.length === 0 ? (
-          <p className="no-requests-message">No company requests available.</p>
+          <p>No company requests available.</p>
         ) : (
           pendingCompanyRequests.map(request => (
             <div key={request.id} className="request-item" onClick={() => handleUserClick(request)}>
@@ -174,7 +231,7 @@ const AdminDashboard = () => {
         <p>No collaboration requests available.</p>
       ) : (
         collaborationRequests.map(request => (
-          <div key={request.id} className="request-item">
+          <div key={request.id} className="request-item" onClick={() => handleCollaborationRequestClick(request)}>
             <p>Company ID: {request.companyId}</p>
             <p>Assessor ID: {request.assessorId}</p>
             <p>Status: {request.status}</p>
@@ -184,10 +241,71 @@ const AdminDashboard = () => {
                 <button className="reject" onClick={() => handleCollaborationReject(request.id)}>Reject</button>
               </div>
             )}
+            {selectedCollaborationRequest && selectedCollaborationRequest.id === request.id && (
+              <div className="collaboration-details">
+                <div className="collaboration-box">
+                  {request.companyDetails && (
+                    <div>
+                      <h4>Company Details</h4>
+                      <p><strong>Company Name:</strong> {request.companyDetails.companyName}</p>
+                      <p><strong>Email:</strong> {request.companyDetails.email}</p>
+                    </div>
+                  )}
+                </div>
+                <div className="collaboration-box">
+                  {request.assessorDetails && (
+                    <div>
+                      <h4>Assessor Details</h4>
+                      <p><strong>Assessor Name:</strong> {request.assessorDetails.name}</p>
+                      <p><strong>Email:</strong> {request.assessorDetails.email}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        ))
+      )}
+      <h2>Approved Collaboration Requests</h2>
+      {approvedCollaborationRequests.length === 0 ? (
+        <p>No approved collaboration requests available.</p>
+      ) : (
+        approvedCollaborationRequests.map(request => (
+          <div key={request.id} className="request-item" onClick={() => handleApprovedRequestClick(request)}>
+            <p>Company ID: {request.companyId}</p>
+            <p>Assessor ID: {request.assessorId}</p>
+            <p>Status: {request.status}</p>
+            {selectedApprovedRequest && selectedApprovedRequest.id === request.id && (
+              <div className="info-container"> {/* Flexbox konteyneri */}
+                <div className="info-box">
+                  {request.companyDetails && (
+                    <div>
+                      <h4>Company Details</h4>
+                      <p><strong>Company Name:</strong> {request.companyDetails.companyName}</p>
+                      <p><strong>Email:</strong> {request.companyDetails.email}</p>
+                    </div>
+                  )}
+                </div>
+                <div className="info-box">
+                  {request.assessorDetails && (
+                    <div>
+                      <h4>Assessor Details</h4>
+                      <p><strong>Assessor Name:</strong> {request.assessorDetails.name}</p>
+                      <p><strong>Email:</strong> {request.assessorDetails.email}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         ))
       )}
       <button onClick={handleLogout} className="logout-button">Logout</button>
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        onSubmit={handleFeedbackSubmit}
+      />
     </div>
   );
 };

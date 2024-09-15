@@ -41,6 +41,7 @@ const CompanyLogin = () => {
 
       setCurrentUser(user);
       console.log('User Logged In:', user);
+
       sessionStorage.setItem('user', JSON.stringify(user));
 
       // Check if the user is in the pendingUsers collection
@@ -57,6 +58,8 @@ const CompanyLogin = () => {
       const companyUserSnapshot = await getDocs(companyUserQuery);
 
       if (!companyUserSnapshot.empty) {
+        const companyData = companyUserSnapshot.docs[0].data(); 
+        sessionStorage.setItem('companyId', companyData.companyID); 
         navigate('/company-dashboard');
       } else {
         setErrorMessage('User is not a company user.');

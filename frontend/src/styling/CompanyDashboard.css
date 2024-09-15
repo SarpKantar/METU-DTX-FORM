@@ -1,3 +1,24 @@
+.status-box {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.status-box.pending {
+  background-color: yellow;
+  color: black;
+}
+
+.status-box.approved {
+  background-color: green;
+}
+
+.status-box.rejected {
+  background-color: red;
+}
+
 .container {
     display: flex;
     flex-direction: column;

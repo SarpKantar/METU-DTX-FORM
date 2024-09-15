@@ -15,7 +15,9 @@ const CompanyDashboard = () => {
   const [assessors, setAssessors] = useState([]); // State for assessors
   const [showAssessors, setShowAssessors] = useState(false); // State to toggle assessor visibility
   const [expandedAssessorId, setExpandedAssessorId] = useState(null); // State to track expanded assessor
-  const {currentUser, setCurrentUser, logout } = useAuth();
+  const { currentUser, setCurrentUser, logout } = useAuth();
+  const [assessorStatuses, setAssessorStatuses] = useState({});
+  const [feedbacks, setFeedbacks] = useState({});
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
@@ -23,6 +25,7 @@ const CompanyDashboard = () => {
       navigate('/login');
     } else {
       fetchAssessors(); // Fetch assessors when the component mounts
+      fetchFeedbacks();
     }
   }, [navigate]);
 
@@ -30,7 +33,31 @@ const CompanyDashboard = () => {
     const assessorCollection = collection(db, 'assessorUsers'); // Adjust the collection name as needed
     const assessorSnapshot = await getDocs(assessorCollection);
     const assessorList = assessorSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+    // Assessor'ların durumunu kontrol et
+    const collaborationRequestsSnapshot = await getDocs(collection(db, 'collaborationRequests'));
+    const statuses = {};
+    collaborationRequestsSnapshot.docs.forEach(doc => {
+      const data = doc.data();
+      if (data.companyId === sessionStorage.getItem('companyId')) {
+        statuses[data.assessorId] = data.status;
+      }
+    });
+  
     setAssessors(assessorList); // Set the assessors state
+    setAssessorStatuses(statuses); // Set the assessor statuses
+  };
+
+  const fetchFeedbacks = async () => {
+    const collaborationRequestsSnapshot = await getDocs(collection(db, 'collaborationRequests'));
+    const feedbacks = {};
+    collaborationRequestsSnapshot.docs.forEach(doc => {
+      const data = doc.data();
+      if (data.companyId === sessionStorage.getItem('companyId') && data.feedback) {
+        feedbacks[data.assessorId] = data.feedback;
+      }
+    });
+    setFeedbacks(feedbacks);
   };
 
   const handleFillAssessmentForm = () => {
@@ -50,9 +77,9 @@ const CompanyDashboard = () => {
       alert('Please select a file to upload.');
       return;
     }
-  
+
     const storageRef = ref(storage, `companyFiles/${file.name}`);
-    
+
     uploadBytes(storageRef, file)
       .then(() => {
         setUploadStatus('File uploaded successfully!'); // Set success message
@@ -74,20 +101,38 @@ const CompanyDashboard = () => {
   };
 
   const handleRequestCollaboration = async (assessorId) => {
-    // Send collaboration request to the admin
     try {
-      const companyId = sessionStorage.getItem('userId'); // Assuming you have the company ID
-
+      const companyId = sessionStorage.getItem('companyId'); // Assuming you have the company ID
+  
       if (!companyId) {
         throw new Error('Company ID not found in session storage.');
+      }
+  
+      // Daha önce aynı assessor'a istek gönderilip gönderilmediğini kontrol et
+      const collaborationRequestsSnapshot = await getDocs(collection(db, 'collaborationRequests'));
+      const existingRequest = collaborationRequestsSnapshot.docs.find(doc => {
+        const data = doc.data();
+        return data.companyId === companyId && data.assessorId === assessorId;
+      });
+  
+      if (existingRequest) {
+        alert('You have already sent a request to this assessor.');
+        return;
       }
   
       await addDoc(collection(db, 'collaborationRequests'), {
         companyId: companyId, // Use the retrieved company ID
         assessorId: assessorId,
         status: 'pending', // Initial status
-        createdAt: new Date(),
+        //createdAt: new Date(),
       });
+  
+      // Assessor'un durumunu güncelle
+      setAssessorStatuses(prevStatuses => ({
+        ...prevStatuses,
+        [assessorId]: 'pending'
+      }));
+  
       alert('Collaboration request sent successfully!');
     } catch (error) {
       console.error('Error sending collaboration request:', error.message);
@@ -102,7 +147,6 @@ const CompanyDashboard = () => {
   const toggleAssessorDetails = (assessorId) => {
     setExpandedAssessorId(expandedAssessorId === assessorId ? null : assessorId); // Toggle the selected assessor's details
   };
-
   return (
     <div className="container">
       <h1 className="title">Company Dashboard</h1>
@@ -113,7 +157,7 @@ const CompanyDashboard = () => {
           <input type="file" onChange={handleFileChange} className="file-input" />
         </label>
         <button className="button" onClick={handleUpload}>Upload File</button>
-      </div> 
+      </div>
       {fileName && <p className="selected-file">Selected File: {fileName}</p>}
       {uploadStatus && <p>{uploadStatus}</p>}
       <button className="button" onClick={handleLogout}>Log Out</button>
@@ -135,7 +179,18 @@ const CompanyDashboard = () => {
                   <div className="assessor-details">
                     <p><strong>Phone:</strong> {assessor.phone}</p>
                     <p><strong>Expertise:</strong> {assessor.expertise}</p>
-                    <button className="button" onClick={() => handleRequestCollaboration(assessor.id)}>Work with this Assessor</button>
+                    {assessorStatuses[assessor.id] ? (
+                      <div className={`status-box ${assessorStatuses[assessor.id]}`}>
+                        {assessorStatuses[assessor.id]}
+                      </div>
+                    ) : (
+                      <button className="button" onClick={() => handleRequestCollaboration(assessor.id)}>Work with this Assessor</button>
+                    )}
+                    {feedbacks[assessor.id] && (
+                      <div className="feedback-box">
+                        <p><strong>Feedback:</strong> {feedbacks[assessor.id]}</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
