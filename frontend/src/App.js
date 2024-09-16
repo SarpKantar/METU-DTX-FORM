@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import PrivateRoute from './routes/PrivateRoute';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import CompanyAnswer from './pages/CompanyAnswer';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -15,6 +15,7 @@ import CompanyForm from './pages/CompanyForm'; // Import the CompanyForm
 import AssessmentForm from './pages/AssessmentForm'; // Import the AssessmentForm
 import { AuthProvider } from './context/AuthContext'; // Import the AuthProvider
 import AdminLogin from './pages/AdminLogin';
+
 import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="/company-dashboard" element={<CompanyDashboard />} />
           <Route path="/assessor-dashboard" element={<AssessorDashboard />} />
           <Route path="/activation" element={<ActivationPage />} />
+          <Route path="/company-answer/:companyID" element={<CompanyAnswer />} />
           <Route path="/company-form" element={<CompanyForm />} /> {/* Ensure this route exists */}
           <Route path="/assessment-form" element={<AssessmentForm />} /> {/* Ensure this route exists */}
         </Routes>

@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db, storage} from '../firebase';
+import { db, storage } from '../firebase';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { jsPDF } from 'jspdf';
 import { saveAs } from 'file-saver';
-import { ref, uploadBytes } from 'firebase/storage'; // Import uploadBytes
+import { ref, uploadBytes } from 'firebase/storage';
 import '../styling/AssessorDashboard.css';
 import { useAuth } from '../context/AuthContext';
-import pdfIcon from '../file_icons/pdf-icon.png'; // Import icons
+import pdfIcon from '../file_icons/pdf-icon.png';
 import docIcon from '../file_icons/doc-icon.png';
 import xlsIcon from '../file_icons/xls-icon.png';
 
 const AssessorDashboard = () => {
   const [companyForms, setCompanyForms] = useState([]);
-  const [file, setFile] = useState(null); // State for file
-  const [uploadStatus, setUploadStatus] = useState(''); // State for upload status
-  const [fileName, setFileName] = useState(''); // State for file name
+  const [file, setFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [fileName, setFileName] = useState('');
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser ,logout } = useAuth()
-  const [fileIcon, setFileIcon] = useState(null); // New state for file icon
+  const { currentUser, setCurrentUser, logout } = useAuth();
+  const [fileIcon, setFileIcon] = useState(null);
   const [attainedCompanies, setAttainedCompanies] = useState([]);
-  const [companyUsers, setCompanyUsers] = useState([]); // New state for company users
+  const [companyUsers, setCompanyUsers] = useState([]);
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
@@ -37,17 +37,17 @@ const AssessorDashboard = () => {
           const querySnapshot = await getDocs(collection(db, 'companyForms'));
           const forms = querySnapshot.docs
             .map(doc => ({ id: doc.id, ...doc.data() }))
-            .filter(form => assignedCompanyIDs.includes(form.id)); // Filter by assigned company IDs
+            .filter(form => assignedCompanyIDs.includes(form.id));
 
           setCompanyForms(forms);
 
           const usersSnapshot = await getDocs(collection(db, 'companyUsers'));
           const users = usersSnapshot.docs
             .map(doc => ({ id: doc.id, ...doc.data() }))
-            .filter(user => assignedCompanyIDs.includes(user.id)); // Filter by assigned company IDs
+            .filter(user => assignedCompanyIDs.includes(user.id));
 
           setAttainedCompanies(assignedCompanyIDs);
-          setCompanyUsers(users) // Ensure this line is present
+          setCompanyUsers(users);
         }
       };
 
@@ -57,9 +57,9 @@ const AssessorDashboard = () => {
 
   const handleLogout = async () => {
     console.log('Current User before logout:', currentUser);
-    await logout(); // Call the logout function 
+    await logout();
     setCurrentUser(null);
-    console.log('Current User after logout:', currentUser); // This may still show the old value due to async nature
+    console.log('Current User after logout:', currentUser);
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('userType');
     navigate('/login', { replace: true });
@@ -88,8 +88,8 @@ const AssessorDashboard = () => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setFileName(selectedFile.name.slice(0, 15)); // Show only the first 15 characters
-      setFileIcon(getFileIcon(selectedFile.type)); // Set the icon based on file type
+      setFileName(selectedFile.name.slice(0, 15));
+      setFileIcon(getFileIcon(selectedFile.type));
     } else {
       alert('No file selected.');
     }
@@ -116,7 +116,7 @@ const AssessorDashboard = () => {
       return;
     }
 
-    const storageRef = ref(storage, `assessorFiles/${file.name}`); // Store in assessorFiles folder
+    const storageRef = ref(storage, `assessorFiles/${file.name}`);
     
     uploadBytes(storageRef, file)
       .then(() => {
@@ -130,6 +130,10 @@ const AssessorDashboard = () => {
       });
   };
 
+  const handleCompanyClick = (companyID) => {
+    navigate(`/company-answer/${companyID}`);
+  };
+
   return (
     <div className="container">
       <h1 className="title">Assessor Dashboard</h1>
@@ -139,8 +143,8 @@ const AssessorDashboard = () => {
           {attainedCompanies.map(companyID => {
             const company = companyUsers.find(form => form.id === companyID);
             return (
-              <button key={companyID} className="attained-button">
-                {company ? company.companyName : 'Unknown Company'} {/* Display company name or fallback */}
+              <button key={companyID} className="attained-button" onClick={() => handleCompanyClick(companyID)}>
+                {company ? company.companyName : 'Unknown Company'}
               </button>
             );
           })}
@@ -169,14 +173,13 @@ const AssessorDashboard = () => {
         {fileName && (
           <div className="selected-file" style={{ display: 'flex', alignItems: 'center' }}>
             <p style={{ marginRight: '10px' }}>Selected File: {fileName}</p>
-            {fileIcon && <img src={fileIcon} alt="File Icon" className="file-icon" />} {/* Display the icon */}
+            {fileIcon && <img src={fileIcon} alt="File Icon" className="file-icon" />}
           </div>
         )}
-        {uploadStatus && <p>{uploadStatus}</p>} {/* Display upload status */}
+        {uploadStatus && <p>{uploadStatus}</p>}
       </div>
     </div>
   );
-
 };
 
 export default AssessorDashboard;

@@ -1,0 +1,35 @@
+.company-answer-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .company-answer {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .company-answer table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .company-answer th, .company-answer td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .company-answer th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .company-answer tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .company-answer tr:hover {
+    background-color: #ddd;
+  }
