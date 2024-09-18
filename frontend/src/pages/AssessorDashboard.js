@@ -4,7 +4,7 @@ import { db, storage } from '../firebase';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { jsPDF } from 'jspdf';
 import { saveAs } from 'file-saver';
-import { ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 import '../styling/AssessorDashboard.css';
 import { useAuth } from '../context/AuthContext';
 import pdfIcon from '../file_icons/pdf-icon.png';
@@ -16,11 +16,13 @@ const AssessorDashboard = () => {
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
   const [fileName, setFileName] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const navigate = useNavigate();
   const { currentUser, setCurrentUser, logout } = useAuth();
   const [fileIcon, setFileIcon] = useState(null);
   const [attainedCompanies, setAttainedCompanies] = useState([]);
   const [companyUsers, setCompanyUsers] = useState([]);
+  const [assessorName, setAssessorName] = useState('');
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
@@ -33,6 +35,7 @@ const AssessorDashboard = () => {
         
         if (assessorDoc.exists()) {
           const assignedCompanyIDs = assessorDoc.data().assignedCompanyIDs;
+          setAssessorName(assessorDoc.data().name); // Assuming the assessor's name is stored in the 'name' field
 
           const querySnapshot = await getDocs(collection(db, 'companyForms'));
           const forms = querySnapshot.docs
@@ -48,12 +51,25 @@ const AssessorDashboard = () => {
 
           setAttainedCompanies(assignedCompanyIDs);
           setCompanyUsers(users);
+
+          // Fetch uploaded files
+          fetchUploadedFiles(assessorDoc.data().name);
         }
       };
 
       fetchCompanyForms();
     }
   }, [navigate]);
+
+  const fetchUploadedFiles = async (assessorName) => {
+    const storageRef = ref(storage, `assessorFiles/${assessorName}`);
+    const fileList = await listAll(storageRef);
+    const files = await Promise.all(fileList.items.map(async (itemRef) => {
+      const url = await getDownloadURL(itemRef);
+      return { name: itemRef.name, url, type: itemRef.contentType };
+    }));
+    setUploadedFiles(files);
+  };
 
   const handleLogout = async () => {
     console.log('Current User before logout:', currentUser);
@@ -116,13 +132,15 @@ const AssessorDashboard = () => {
       return;
     }
 
-    const storageRef = ref(storage, `assessorFiles/${file.name}`);
+    const storageRef = ref(storage, `assessorFiles/${assessorName}/${file.name}`);
     
     uploadBytes(storageRef, file)
       .then(() => {
         setUploadStatus('File uploaded successfully!');
         setFile(null);
         setFileName('');
+        // Fetch the updated list of uploaded files
+        fetchUploadedFiles(assessorName);
       })
       .catch((error) => {
         console.error('Upload failed:', error);
@@ -177,6 +195,17 @@ const AssessorDashboard = () => {
           </div>
         )}
         {uploadStatus && <p>{uploadStatus}</p>}
+      </div>
+      <div className="uploaded-files-section">
+        <h2>Uploaded Files</h2>
+        <ul>
+          {uploadedFiles.map(file => (
+            <li key={file.name}>
+              <img src={getFileIcon(file.type)} alt="File Icon" className="file-icon" />
+              <a href={file.url} download>{file.name}</a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

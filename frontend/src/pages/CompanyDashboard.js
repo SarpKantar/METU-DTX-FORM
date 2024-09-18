@@ -1,33 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../firebase'; // Import storage from firebase.js
-import { ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 import '../styling/CompanyDashboard.css';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase'; // Import Firestore
-import { collection, getDocs, addDoc } from 'firebase/firestore'; // Import Firestore functions
+import { collection, getDocs, addDoc, doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
+import pdfIcon from '../file_icons/pdf-icon.png';
+import docIcon from '../file_icons/doc-icon.png';
+import xlsIcon from '../file_icons/xls-icon.png';
 
 const CompanyDashboard = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
   const [fileName, setFileName] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [assessors, setAssessors] = useState([]); // State for assessors
   const [showAssessors, setShowAssessors] = useState(false); // State to toggle assessor visibility
   const [expandedAssessorId, setExpandedAssessorId] = useState(null); // State to track expanded assessor
   const { currentUser, setCurrentUser, logout } = useAuth();
   const [assessorStatuses, setAssessorStatuses] = useState({});
   const [feedbacks, setFeedbacks] = useState({});
+  const [companyName, setCompanyName] = useState('');
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
+    console.log('Retrieved user from session storage:', user); // Log the user
     if (!user) {
       navigate('/login');
     } else {
+      fetchCompanyName(); // Fetch company name when the component mounts
       fetchAssessors(); // Fetch assessors when the component mounts
       fetchFeedbacks();
     }
   }, [navigate]);
+
+  const fetchCompanyName = async () => {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const companyDoc = await getDoc(doc(db, 'companyUsers', user.uid));
+    console.log('Retrieved company document from Firestore:', companyDoc.data()); // Log the company document
+    if (companyDoc.exists()) {
+      setCompanyName(companyDoc.data().companyName); // Assuming the company's name is stored in the 'companyName' field
+      fetchUploadedFiles(companyDoc.data().companyName); // Fetch uploaded files when company name is retrieved
+    }
+  };
+
+  const fetchUploadedFiles = async (companyName) => {
+    const storageRef = ref(storage, `companyFiles/${companyName}`);
+    const fileList = await listAll(storageRef);
+    const files = await Promise.all(fileList.items.map(async (itemRef) => {
+      const url = await getDownloadURL(itemRef);
+      return { name: itemRef.name, url, type: itemRef.contentType };
+    }));
+    setUploadedFiles(files);
+  };
 
   const fetchAssessors = async () => {
     const assessorCollection = collection(db, 'assessorUsers'); // Adjust the collection name as needed
@@ -78,11 +105,20 @@ const CompanyDashboard = () => {
       return;
     }
 
-    const storageRef = ref(storage, `companyFiles/${file.name}`);
+    if (!companyName) {
+      alert('Company name not found.');
+      return;
+    }
+
+    const storageRef = ref(storage, `companyFiles/${companyName}/${file.name}`);
 
     uploadBytes(storageRef, file)
       .then(() => {
         setUploadStatus('File uploaded successfully!'); // Set success message
+        setFile(null);
+        setFileName('');
+        // Fetch the updated list of uploaded files
+        fetchUploadedFiles(companyName);
       })
       .catch((error) => {
         console.error('Upload failed:', error);
@@ -147,6 +183,22 @@ const CompanyDashboard = () => {
   const toggleAssessorDetails = (assessorId) => {
     setExpandedAssessorId(expandedAssessorId === assessorId ? null : assessorId); // Toggle the selected assessor's details
   };
+
+  const getFileIcon = (fileType) => {
+    switch (fileType) {
+      case 'application/pdf':
+        return pdfIcon;
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      case 'application/msword': 
+        return docIcon;
+      case 'application/vnd.ms-excel':
+      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        return xlsIcon;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="container">
       <h1 className="title">Company Dashboard</h1>
@@ -198,6 +250,18 @@ const CompanyDashboard = () => {
           )}
         </div>
       )}
+
+      <div className="uploaded-files-section">
+        <h2>Uploaded Files</h2>
+        <ul>
+          {uploadedFiles.map(file => (
+            <li key={file.name}>
+              <img src={getFileIcon(file.type)} alt="File Icon" className="file-icon" />
+              <a href={file.url} download>{file.name}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

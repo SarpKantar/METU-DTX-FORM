@@ -80,15 +80,29 @@ const AdminDashboard = () => {
   const handleCollaborationApprove = async (requestId) => {
     try {
       const requestRef = doc(db, 'collaborationRequests', requestId);
+      const requestDoc = await getDoc(requestRef);
+      const requestData = requestDoc.data();
+  
+      // Update the collaboration request status to 'approved'
       await setDoc(requestRef, { status: 'approved' }, { merge: true });
-
-      // Onaylanan isteği yerel state'e ekle
+  
+      // Fetch the assessor's document
+      const assessorRef = doc(db, 'assessorUsers', requestData.assessorId);
+      const assessorDoc = await getDoc(assessorRef);
+  
+      if (assessorDoc.exists()) {
+        const assessorData = assessorDoc.data();
+        const updatedAssignedCompanyIDs = [...(assessorData.assignedCompanyIDs || []), requestData.companyId];
+  
+        // Update the assessor's assignedCompanyIDs array
+        await setDoc(assessorRef, { assignedCompanyIDs: updatedAssignedCompanyIDs }, { merge: true });
+      }
+  
+      // Update local state
       const approvedRequest = collaborationRequests.find(req => req.id === requestId);
       if (approvedRequest) {
         setApprovedCollaborationRequests(prev => [...prev, { ...approvedRequest, status: 'approved' }]);
       }
-
-      // Pending isteği kaldır
       setCollaborationRequests(prev => prev.filter(req => req.id !== requestId));
     } catch (error) {
       console.error('Error approving collaboration request:', error);
