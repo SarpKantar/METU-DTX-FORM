@@ -14,7 +14,7 @@ const LoginPage = () => {
         return;
       }
     }
-    navigate('/login/company');
+    navigate('/login-company');
   };
   
   const handleAssessorLogin = () => {
@@ -26,7 +26,7 @@ const LoginPage = () => {
         return;
       }
     }
-    navigate('/login/assessor');
+    navigate('/login-assessor');
   };
 
   const handleBack = () => {

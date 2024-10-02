@@ -1,37 +1,64 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh; /* Full viewport height */
-    background-color: #f0f8ff; /* Light blue background */
-    padding: 20px;
+.activation-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%);
+}
+
+.activation-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.activation-message {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #555;
+  max-width: 600px;
+}
+
+.activation-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  background-color: #333;
+  color: white;
+}
+
+.activation-button:hover {
+  background-color: #555;
+}
+
+@media (max-width: 640px) {
+  .activation-container {
+    padding: 1rem;
   }
-  
-  .title {
-    color: #00008b; /* Dark blue color for the title */
-    font-size: 2em; /* Title font size */
-    margin-bottom: 20px; /* Space below the title */
+
+  .activation-title {
+    font-size: 1.75rem;
   }
-  
-  p {
-    color: #333; /* Dark gray color for text */
-    font-size: 1.2em; /* Text font size */
-    margin: 10px 0; /* Space above and below paragraphs */
-    text-align: center; /* Center align text */
+
+  .activation-message {
+    font-size: 0.9rem;
   }
-  
-  .button {
-    background-color: #00008b; /* Dark blue background for buttons */
-    color: white; /* White text color */
-    border: none; /* No border */
-    padding: 10px 20px; /* Padding around the button */
-    margin-top: 20px; /* Space above the button */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 1em; /* Font size for button text */
-    border-radius: 5px; /* Rounded corners */
+
+  .activation-button {
+    padding: 0.625rem 0.875rem;
   }
-  
-  .button:hover {
-    background-color: #000066; /* Darker blue on hover */
-  }
+}

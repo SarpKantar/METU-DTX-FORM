@@ -62,61 +62,63 @@ const AssessorRegister = () => {
     navigate(-1);
   };
 
-  return (
-    <div className="container">
-      <h1 className="title">Assessor Register</h1>
-      <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="input"
-        required
-      />
-      <input
-        type="text"
-        placeholder="Surname"
-        value={surname}
-        onChange={(e) => setSurname(e.target.value)}
-        className="input"
-        required
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="input"
-        required
-      />
-      <input
-        type="url"
-        placeholder="LinkedIn Profile URL"
-        value={linkedin}
-        onChange={(e) => setLinkedin(e.target.value)}
-        className="input"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="input"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        className="input"
-        required
-      />
-      <button className="button" onClick={handleRegister}>Register</button>
-      <button className="button" onClick={handleBack}>Back</button>
-    </div>
-  );
+
+return (
+  <div className="assessor-register-container">
+    <h1 className="assessor-register-title">Sign Up as Assessor</h1>
+    <input
+      type="text"
+      placeholder="Name"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      className="assessor-register-input"
+      required
+    />
+    <input
+      type="text"
+      placeholder="Surname"
+      value={surname}
+      onChange={(e) => setSurname(e.target.value)}
+      className="assessor-register-input"
+      required
+    />
+    <input
+      type="email"
+      placeholder="Email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="assessor-register-input"
+      required
+    />
+    <input
+      type="url"
+      placeholder="LinkedIn Profile URL"
+      value={linkedin}
+      onChange={(e) => setLinkedin(e.target.value)}
+      className="assessor-register-input"
+      required
+    />
+    <input
+      type="password"
+      placeholder="Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      className="assessor-register-input"
+      required
+    />
+    <input
+      type="password"
+      placeholder="Confirm Password"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+      className="assessor-register-input"
+      required
+    />
+    <button className="assessor-register-button" onClick={handleRegister}>Sign up</button>
+    <button className="assessor-register-back-button" onClick={handleBack}>Back</button>
+  </div>
+);
+
 };
 
 export default AssessorRegister;

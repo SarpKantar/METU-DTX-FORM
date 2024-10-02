@@ -17,7 +17,7 @@ const AdminDashboard = () => {
   const [selectedApprovedRequest, setSelectedApprovedRequest] = useState(null);
   const [feedbackRequestId, setFeedbackRequestId] = useState(null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-
+  const [currentUser, setCurrentUser] = useState(null);
   useEffect(() => {
     const fetchRequests = async () => {
       const pendingSnapshot = await getDocs(collection(db, 'pendingUsers'));
@@ -181,6 +181,8 @@ const AdminDashboard = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      setCurrentUser(null);
+
       navigate('/admin');
     } catch (error) {
       console.error('Error logging out:', error);

@@ -1,35 +1,93 @@
 .company-answer-container {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%);
+}
+
+.company-answer-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.company-answer {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
+
+.company-answer table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.company-answer th, .company-answer td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.company-answer th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+
+.company-answer tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.company-answer tr:hover {
+  background-color: #f0f0f0;
+}
+
+.company-answer-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 0.75rem 1rem;
+  margin-top: 2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  background-color: #333;
+  color: white;
+}
+
+.company-answer-button:hover {
+  background-color: #555;
+}
+
+@media (max-width: 640px) {
+  .company-answer-container {
+    padding: 1rem;
   }
-  
+
+  .company-answer-title {
+    font-size: 1.75rem;
+  }
+
   .company-answer {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
   }
-  
-  .company-answer table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
+
   .company-answer th, .company-answer td {
-    border: 1px solid #ddd;
     padding: 8px;
   }
-  
-  .company-answer th {
-    background-color: #f2f2f2;
-    text-align: left;
+
+  .company-answer-button {
+    padding: 0.625rem 0.875rem;
   }
-  
-  .company-answer tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .company-answer tr:hover {
-    background-color: #ddd;
-  }
+}

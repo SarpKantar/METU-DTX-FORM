@@ -1,86 +1,277 @@
-.status-box {
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: white;
+.company-dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%);
+}
+
+.company-dashboard-title {
+  font-size: 2rem;
   font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+  width: 100%;
+}
+
+.company-dashboard-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.company-dashboard-left-section {
+  width: 30%;
+}
+
+.company-dashboard-right-section {
+  width: 30%;
+}
+
+.company-dashboard-center-section {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.company-dashboard-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.company-dashboard-upload-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.company-dashboard-file-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  height: 100%;
+  margin: 0;
+  width: 100%;
+
+  max-width: 320px;
+}
+
+.company-dashboard-upload-arrow {
+  width: 7.4%;
+  height: 40%;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  background-color: #aca6a6;
+  padding: 8px;
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.company-dashboard-file-upload:hover {
+  background-color: #555;
+}
+
+.company-dashboard-upload-arrow:hover {
+  transform: scale(1.1);
+  background-color: #555;
+}
+
+.company-dashboard-file-input {
+  display: none;
+}
+
+.company-dashboard-button.dark {
+  background-color: #333;
+  color: white;
+}
+
+.company-dashboard-button.dark:hover {
+  background-color: #555;
+}
+
+.company-dashboard-button.light {
+  background-color: white;
+  color: #333;
+  border: 1px solid #333;
+}
+
+.company-dashboard-button.light:hover {
+  background-color: #f0f0f0;
+}
+
+.company-dashboard-selected-file {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.company-dashboard-assessor-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+  cursor: pointer;
+  text-align: center;
+}
+
+.company-dashboard-assessor-list {
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.company-dashboard-assessor-item {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.company-dashboard-assessor-item:last-child {
+  border-bottom: none;
+}
+
+.company-dashboard-assessor-details {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
+
+.company-dashboard-status-box {
   display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
-.status-box.pending {
-  background-color: yellow;
-  color: black;
+.company-dashboard-status-box.pending {
+  background-color: #ffd700;
+  color: #333;
 }
 
-.status-box.approved {
-  background-color: green;
+.company-dashboard-status-box.accepted {
+  background-color: #4caf50;
+  color: white;
 }
 
-.status-box.rejected {
-  background-color: red;
+.company-dashboard-status-box.rejected {
+  background-color: #f44336;
+  color: white;
 }
 
-.container {
-    display: flex;
+.company-dashboard-feedback-box {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.company-dashboard-uploaded-files {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.company-dashboard-uploaded-files h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.company-dashboard-uploaded-files ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.company-dashboard-uploaded-files li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.company-dashboard-file-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem;
+}
+
+.company-dashboard-logout-container {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.company-dashboard-logout-button {
+  width: 100%;
+}
+
+.company-dashboard-file-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .company-dashboard-content {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f0f8ff; /* Light blue background */
-  }
-  
-  .title {
-    color: #add8e6; /* Light blue color for the title */
-    font-size: 2em; /* Title font size */
-    margin-bottom: 20px; /* Space below the title */
-  }
-  .file-icon {
-    width: 1em; /* Set width to match text size */
-    height: 1em; /* Set height to match text size */
-    margin-left: 10px; /* Space between text and icon */
-    vertical-align: middle; /* Align icon with text */
-  }
-    
-  .button {
-    background-color: #00008b; /* Dark blue background for buttons */
-    color: white; /* White text color */
-    border: none; /* No border */
-    padding: 10px 20px; /* Padding around the button */
-    margin: 10px; /* Margin around buttons */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 1em; /* Font size for button text */
-    border-radius: 5px; /* Rounded corners */
-  }
-  
-  .button:hover {
-    background-color: #000066; /* Darker blue on hover */
   }
 
-  .file-input {
-    display: none; /* Hide the default file input */
+  .company-dashboard-left-section,
+  .company-dashboard-right-section,
+  .company-dashboard-center-section,
+  .company-dashboard-logout-container {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
 }
 
-.button-cont1{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
+@media (max-width: 640px) {
+  .company-dashboard-container {
+    padding: 1rem;
+  }
 
-.custom-file-upload {
-    background-color: #008b58; /* Dark blue background */
-    color: white; /* White text color */
-    border: none; /* No border */
-    padding: 10px 20px; /* Padding around the button */
-    margin: 10px; /* Margin around buttons */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 1em; /* Font size for button text */
-    border-radius: 5px; /* Rounded corners */
-}
+  .company-dashboard-title {
+    font-size: 1.75rem;
+  }
 
-.custom-file-upload:hover {
-    background-color: #00664e; /* Darker blue on hover */
-}
-.selected-file {
-  color: #00008b; /* Dark blue color for the file name */
-  font-size: 1em; /* Font size for the file name */
-  margin-top: 10px; /* Space above the file name */
+  .company-dashboard-button,
+  .company-dashboard-file-upload {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .company-dashboard-assessor-header {
+    font-size: 1.25rem;
+  }
 }

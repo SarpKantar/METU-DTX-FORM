@@ -2,8 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CompanyAnswer from './pages/CompanyAnswer';
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
 import CompanyRegister from './pages/CompanyRegister';
 import AssessorRegister from './pages/AssessorRegister';
 import CompanyLogin from './pages/CompanyLogin';
@@ -26,12 +24,10 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
           <Route path="/register/company" element={<CompanyRegister />} />
           <Route path="/register/assessor" element={<AssessorRegister />} />
-          <Route path="/login/company" element={<CompanyLogin />} />
-          <Route path="/login/assessor" element={<AssessorLogin />} />
+          <Route path="/login-company" element={<CompanyLogin />} />
+          <Route path="/login-assessor" element={<AssessorLogin />} />
           <Route path="/company-dashboard" element={<CompanyDashboard />} />
           <Route path="/assessor-dashboard" element={<AssessorDashboard />} />
           <Route path="/activation" element={<ActivationPage />} />

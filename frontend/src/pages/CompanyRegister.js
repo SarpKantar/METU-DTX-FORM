@@ -57,45 +57,48 @@ const CompanyRegister = () => {
     navigate(-1);
   };
 
-  return (
-    <div className="container">
-      <h1 className="title">Company Register</h1>
-      <input
-        type="text"
-        placeholder="Company Name"
-        value={companyName}
-        onChange={(e) => setCompanyName(e.target.value)}
-        className="input"
-        required
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="input"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="input"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        className="input"
-        required
-      />
-      <button className="button" onClick={handleRegister}>Register</button>
-      <button className="button" onClick={handleBack}>Back</button>
-    </div>
-  );
+
+return (
+  <div className="company-register-container">
+    <h1 className="company-register-title">Company Register</h1>
+    <input
+      type="text"
+      placeholder="Company Name"
+      value={companyName}
+      onChange={(e) => setCompanyName(e.target.value)}
+      className="company-register-input"
+      required
+    />
+    <input
+      type="email"
+      placeholder="Email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="company-register-input"
+      required
+    />
+    <input
+      type="password"
+      placeholder="Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      className="company-register-input"
+      required
+    />
+    <input
+      type="password"
+      placeholder="Confirm Password"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+      className="company-register-input"
+      required
+    />
+    <button className="company-register-button" onClick={handleRegister}>Sign up</button>
+    <button className="company-register-back-button" onClick={handleBack}>Back</button>
+  </div>
+);
+
+
 };
 
 export default CompanyRegister;

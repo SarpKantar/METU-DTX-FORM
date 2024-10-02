@@ -236,7 +236,7 @@ const CompanyAnswer = () => {
           </tbody>
         </table>
       </div>
-      <button className="button" onClick={() => navigate(-1)}>Back</button>
+      <button className="company-answer-button" onClick={() => navigate(-1)}>Back</button>
     </div>
   );
 };

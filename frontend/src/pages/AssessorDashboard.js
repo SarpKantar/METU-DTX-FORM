@@ -4,12 +4,13 @@ import { db, storage } from '../firebase';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { jsPDF } from 'jspdf';
 import { saveAs } from 'file-saver';
-import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata } from 'firebase/storage';
 import '../styling/AssessorDashboard.css';
 import { useAuth } from '../context/AuthContext';
 import pdfIcon from '../file_icons/pdf-icon.png';
 import docIcon from '../file_icons/doc-icon.png';
 import xlsIcon from '../file_icons/xls-icon.png';
+import uploadArrow from '../upload-big-arrow.png';
 
 const AssessorDashboard = () => {
   const [companyForms, setCompanyForms] = useState([]);
@@ -23,15 +24,26 @@ const AssessorDashboard = () => {
   const [attainedCompanies, setAttainedCompanies] = useState([]);
   const [companyUsers, setCompanyUsers] = useState([]);
   const [assessorName, setAssessorName] = useState('');
+  const [loading, setLoading] = useState(true);
+
+
+  const fetchUploadedFiles = async (assessorName) => {
+    const storageRef = ref(storage, `assessorFiles/${assessorName}`);
+    const fileList = await listAll(storageRef);
+    const files = await Promise.all(fileList.items.map(async (itemRef) => {
+      const url = await getDownloadURL(itemRef);
+      const metadata = await getMetadata(itemRef);
+      return { name: itemRef.name, url, type: metadata.contentType };
+    }));
+    setUploadedFiles(files);
+  };
 
   useEffect(() => {
-    const user = sessionStorage.getItem('user');
-    if (!user) {
-      navigate('/login');
-    } else {
+    if (currentUser === null) {
+      navigate('/login-assessor');
+    } else if (currentUser) {
       const fetchCompanyForms = async () => {
-        const userObj = JSON.parse(user);
-        const assessorDoc = await getDoc(doc(db, 'assessorUsers', userObj.uid));
+        const assessorDoc = await getDoc(doc(db, 'assessorUsers', currentUser.uid));
         
         if (assessorDoc.exists()) {
           const assignedCompanyIDs = assessorDoc.data().assignedCompanyIDs;
@@ -54,22 +66,22 @@ const AssessorDashboard = () => {
 
           // Fetch uploaded files
           fetchUploadedFiles(assessorDoc.data().name);
+          setLoading(false);
         }
       };
 
       fetchCompanyForms();
     }
-  }, [navigate]);
+    else {
+      navigate('/login-assessor');
+    }
+  }, [currentUser, navigate]);
 
-  const fetchUploadedFiles = async (assessorName) => {
-    const storageRef = ref(storage, `assessorFiles/${assessorName}`);
-    const fileList = await listAll(storageRef);
-    const files = await Promise.all(fileList.items.map(async (itemRef) => {
-      const url = await getDownloadURL(itemRef);
-      return { name: itemRef.name, url, type: itemRef.contentType };
-    }));
-    setUploadedFiles(files);
-  };
+  if (loading) {
+    return <div>Loading...</div>; // Or a spinner component
+  }
+
+
 
   const handleLogout = async () => {
     console.log('Current User before logout:', currentUser);
@@ -78,7 +90,7 @@ const AssessorDashboard = () => {
     console.log('Current User after logout:', currentUser);
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('userType');
-    navigate('/login', { replace: true });
+    navigate(-1, { replace: true });
   };
 
   const downloadPDF = (form) => {
@@ -97,7 +109,7 @@ const AssessorDashboard = () => {
   };
 
   const handleBack = () => {
-    navigate('/login');
+    navigate(-1);
   };
 
   const handleFileChange = (event) => {
@@ -141,6 +153,9 @@ const AssessorDashboard = () => {
         setFileName('');
         // Fetch the updated list of uploaded files
         fetchUploadedFiles(assessorName);
+        setTimeout(() => {
+          setUploadStatus('');
+        }, 3000);
       })
       .catch((error) => {
         console.error('Upload failed:', error);
@@ -153,61 +168,60 @@ const AssessorDashboard = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="title">Assessor Dashboard</h1>
-      <div className="options">
+<div className="assessor-dashboard-container">
+  <h1 className="assessor-dashboard-title">Assessor Dashboard</h1>
+  <div className="assessor-dashboard-content">
+    <div className="assessor-dashboard-left-section">
+      <div className="assessor-dashboard-attained-companies">
         <h2>Attained Companies</h2>
-        <div>
-          {attainedCompanies.map(companyID => {
-            const company = companyUsers.find(form => form.id === companyID);
-            return (
-              <button key={companyID} className="attained-button" onClick={() => handleCompanyClick(companyID)}>
-                {company ? company.companyName : 'Unknown Company'}
-              </button>
-            );
-          })}
-        </div>
-        <h2>Company Forms</h2>
-        <ul>
-          {companyForms.map(form => (
-            <li key={form.id}>
-              <span>{form.companyName}</span>
-              <button className="download-button" onClick={() => downloadPDF(form)}>Download PDF</button>
-              <button className="download-button" onClick={() => downloadWord(form)}>Download Word</button>
-            </li>
-          ))}
-        </ul>
-        <button className="button" onClick={handleAssessment}>Fill Assessment Form</button>
-        <button className="button" onClick={handleBack}>Back</button>
-        <button className="button" onClick={handleLogout}>Log Out</button>
-      </div>
-      <div className="upload-section">
-        <h2>Upload File</h2>
-        <label className="custom-file-upload">
-          Choose File
-          <input type="file" onChange={handleFileChange} className="file-input" />
-        </label>
-        <button className="button" onClick={handleUpload}>Upload File</button>
-        {fileName && (
-          <div className="selected-file" style={{ display: 'flex', alignItems: 'center' }}>
-            <p style={{ marginRight: '10px' }}>Selected File: {fileName}</p>
-            {fileIcon && <img src={fileIcon} alt="File Icon" className="file-icon" />}
-          </div>
-        )}
-        {uploadStatus && <p>{uploadStatus}</p>}
-      </div>
-      <div className="uploaded-files-section">
-        <h2>Uploaded Files</h2>
-        <ul>
-          {uploadedFiles.map(file => (
-            <li key={file.name}>
-              <img src={getFileIcon(file.type)} alt="File Icon" className="file-icon" />
-              <a href={file.url} download>{file.name}</a>
-            </li>
-          ))}
-        </ul>
+        {attainedCompanies.map(companyID => (
+          <button key={companyID} className="assessor-dashboard-attained-button" onClick={() => handleCompanyClick(companyID)}>
+            {companyUsers.find(company => company.id === companyID)?.companyName || 'Unknown Company'}
+          </button>
+        ))}
       </div>
     </div>
+    <div className="assessor-dashboard-center-section">
+      <button className="assessor-dashboard-button dark" onClick={handleAssessment}>Fill Assessment Form</button>
+      <button className="assessor-dashboard-button light" onClick={handleBack}>Back</button>
+      <button className="assessor-dashboard-button light" onClick={handleLogout}>Log Out</button>
+    </div>
+
+    <div className="assessor-dashboard-right-section">
+  <div className="assessor-dashboard-upload-container">
+    <label className="assessor-dashboard-file-upload">
+      Choose File
+      <input type="file" onChange={handleFileChange} className="assessor-dashboard-file-input" />
+    </label>
+    <img 
+      src={uploadArrow} 
+      alt="Upload" 
+      className="assessor-dashboard-upload-arrow" 
+      onClick={handleUpload}
+    />
+  </div>
+  {fileName && (
+    <div className="assessor-dashboard-selected-file">
+      <img src={fileIcon} alt="File Icon" className="assessor-dashboard-file-icon" />
+      <span>Selected File: {fileName}</span>
+    </div>
+  )}
+    {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
+  
+  <div className="assessor-dashboard-uploaded-files">
+  <h2>Uploaded Files</h2>
+  <ul>
+    {uploadedFiles.map(file => (
+      <li key={file.name}>
+        <img src={getFileIcon(file.type)} alt="File Icon" className="assessor-dashboard-file-icon" />
+        <a href={file.url} download>{file.name}</a>
+      </li>
+    ))}
+  </ul>
+</div>
+</div>
+  </div>
+</div>
   );
 };
 

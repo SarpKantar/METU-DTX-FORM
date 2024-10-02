@@ -30,10 +30,6 @@ label {
   margin-bottom: 5px;
   font-weight: bold;
 }
-
-input[type="text"],
-input[type="date"],
-input[type="email"],
 select {
   width: 100%;
   padding: 8px;

@@ -1,51 +1,85 @@
-.container {
+.assessor-register-container,
+.company-register-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #f0f8ff;
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%);
 }
 
-.title {
-  color: #add8e6;
-  font-size: 2em;
-  margin-bottom: 20px;
+.assessor-register-title,
+.company-register-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+
 }
 
-.top-left-button-register {
-  position: absolute !important;
-  top: 10px !important;
-  left: 10px !important;
-  font-size: 1em !important;
-  padding: 10px 20px;
-  background-color: #00008b !important;
-  color: white !important;
-  border: none !important;
-  cursor: pointer !important;
-  border-radius: 10px !important;
-  text-align: center !important; /* Center-align the button text */
-}
-
-.button {
-  background-color: #00008b;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin: 10px;
-  cursor: pointer;
-  font-size: 1em;
-  border-radius: 5px;
-}
-
-.button:hover {
-  background-color: #000066;
-}
-.input {
-  width: 80%;
-  padding: 10px;
-  margin: 10px 0;
+.assessor-register-input,
+.company-register-input {
+  display: block;
+  width: 30%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1em;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.assessor-register-button,
+.assessor-register-back-button,
+.company-register-button,
+.company-register-back-button {
+  display: block;
+  width: 25%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.assessor-register-button,
+.company-register-button {
+  background-color: #333;
+  color: white;
+}
+
+.assessor-register-button:hover,
+.company-register-button:hover {
+  background-color: #555;
+}
+
+.assessor-register-back-button,
+.company-register-back-button {
+  background-color: white;
+  color: #333;
+  border: 1px solid #333;
+}
+
+.assessor-register-back-button:hover,
+.company-register-back-button:hover {
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 640px) {
+  .assessor-register-title,
+  .company-register-title {
+    font-size: 1.75rem; /* Larger title for mobile */
+  }
+
+  .assessor-register-button,
+  .assessor-register-back-button,
+  .company-register-button,
+  .company-register-back-button {
+    padding: 0.625rem 0.875rem;
+  }
 }

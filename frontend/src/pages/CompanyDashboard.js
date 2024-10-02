@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../firebase'; // Import storage from firebase.js
-import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata } from 'firebase/storage';
 import '../styling/CompanyDashboard.css';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase'; // Import Firestore
@@ -9,6 +9,7 @@ import { collection, getDocs, addDoc, doc, getDoc } from 'firebase/firestore'; /
 import pdfIcon from '../file_icons/pdf-icon.png';
 import docIcon from '../file_icons/doc-icon.png';
 import xlsIcon from '../file_icons/xls-icon.png';
+import uploadArrow from '../upload-big-arrow.png'; 
 
 const CompanyDashboard = () => {
   const navigate = useNavigate();
@@ -23,12 +24,14 @@ const CompanyDashboard = () => {
   const [assessorStatuses, setAssessorStatuses] = useState({});
   const [feedbacks, setFeedbacks] = useState({});
   const [companyName, setCompanyName] = useState('');
+  const [fileIcon, setFileIcon] = useState(null);
+  const [showUploadSuccess, setShowUploadSuccess] = useState(false);
 
   useEffect(() => {
     const user = sessionStorage.getItem('user');
     console.log('Retrieved user from session storage:', user); // Log the user
     if (!user) {
-      navigate('/login');
+      navigate(-1);
     } else {
       fetchCompanyName(); // Fetch company name when the component mounts
       fetchAssessors(); // Fetch assessors when the component mounts
@@ -51,7 +54,8 @@ const CompanyDashboard = () => {
     const fileList = await listAll(storageRef);
     const files = await Promise.all(fileList.items.map(async (itemRef) => {
       const url = await getDownloadURL(itemRef);
-      return { name: itemRef.name, url, type: itemRef.contentType };
+      const metadata = await getMetadata(itemRef);
+      return { name: itemRef.name, url, type: metadata.contentType };
     }));
     setUploadedFiles(files);
   };
@@ -96,7 +100,7 @@ const CompanyDashboard = () => {
     setCurrentUser(null);
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('userType');
-    navigate('/login', { replace: true });
+    navigate(-1, { replace: true });
   };
 
   const handleUpload = () => {
@@ -115,10 +119,17 @@ const CompanyDashboard = () => {
     uploadBytes(storageRef, file)
       .then(() => {
         setUploadStatus('File uploaded successfully!'); // Set success message
+        setShowUploadSuccess(true);
         setFile(null);
         setFileName('');
         // Fetch the updated list of uploaded files
         fetchUploadedFiles(companyName);
+        setTimeout(() => {
+          setShowUploadSuccess(false);
+          setUploadStatus('');
+          setFileIcon(null);
+        }, 3000);
+
       })
       .catch((error) => {
         console.error('Upload failed:', error);
@@ -130,9 +141,14 @@ const CompanyDashboard = () => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setFileName(selectedFile.name.slice(0, 15)); // Show only the first 15 characters
+      setFileName(selectedFile.name.slice(0, 15) + (selectedFile.name.length > 15 ? '...' : ''));
+      setFileIcon(getFileIcon(selectedFile.type));
+      setShowUploadSuccess(false); // Reset the upload success state
+      setUploadStatus(''); // Clear any previous upload status
     } else {
-      alert('No file selected.');
+      setFile(null);
+      setFileName('');
+      setFileIcon(null);
     }
   };
 
@@ -200,25 +216,19 @@ const CompanyDashboard = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="title">Company Dashboard</h1>
-      <button className="button" onClick={handleFillAssessmentForm}>Fill Assessment Form</button>
-      <div className="button-cont1">
-        <label className="custom-file-upload">
-          Choose File
-          <input type="file" onChange={handleFileChange} className="file-input" />
-        </label>
-        <button className="button" onClick={handleUpload}>Upload File</button>
-      </div>
-      {fileName && <p className="selected-file">Selected File: {fileName}</p>}
-      {uploadStatus && <p>{uploadStatus}</p>}
-      <button className="button" onClick={handleLogout}>Log Out</button>
-
-      <h2 className="assessor-header" onClick={toggleAssessors} style={{ cursor: 'pointer' }}>
-        Available Assessors {showAssessors ? '▲' : '▼'}
-      </h2>
-      {showAssessors && (
-        <div className="assessor-list">
+    <div className="company-dashboard-container">
+      <h1 className="company-dashboard-title">Company Dashboard</h1>
+      <div className="company-dashboard-content">
+        <div className="company-dashboard-left-section">
+          <button className="company-dashboard-button dark" onClick={handleFillAssessmentForm}>Fill Assessment Form</button>
+        </div>
+        
+        <div className="company-dashboard-center-section">
+          <h2 className="company-dashboard-assessor-header" onClick={toggleAssessors}>
+            Available Assessors {showAssessors ? '▲' : '▼'}
+          </h2>
+          {showAssessors && (
+            <div className="company-dashboard-assessor-list">
           {assessors.length === 0 ? (
             <p>No assessors available.</p>
           ) : (
@@ -250,17 +260,47 @@ const CompanyDashboard = () => {
           )}
         </div>
       )}
-
-      <div className="uploaded-files-section">
-        <h2>Uploaded Files</h2>
-        <ul>
-          {uploadedFiles.map(file => (
-            <li key={file.name}>
-              <img src={getFileIcon(file.type)} alt="File Icon" className="file-icon" />
-              <a href={file.url} download>{file.name}</a>
-            </li>
-          ))}
-        </ul>
+  </div>
+  <div className="company-dashboard-right-section">
+  <div className="company-dashboard-upload-container">
+    <label className="company-dashboard-file-upload">
+      Choose File
+      <input type="file" onChange={handleFileChange} className="company-dashboard-file-input" />
+    </label>
+    <img 
+      src={uploadArrow} 
+      alt="Upload" 
+      className="company-dashboard-upload-arrow" 
+      onClick={handleUpload}
+    />
+  </div>
+  {fileName && !showUploadSuccess && (
+    <div className="company-dashboard-selected-file">
+      {fileIcon && <img src={fileIcon} alt="File Icon" className="company-dashboard-file-icon" />}
+      <span>Selected File: {fileName}</span>
+    </div>
+  )}
+  {showUploadSuccess && (
+    <>
+      {uploadStatus && <p>{uploadStatus}</p>}
+    </>
+  )}
+  
+  <div className="company-dashboard-uploaded-files">
+    <h2>Uploaded Files</h2>
+    <ul>
+      {uploadedFiles.map(file => (
+        <li key={file.name}>
+          <img src={getFileIcon(file.type)} alt="File Icon" className="company-dashboard-file-icon" />
+          <a href={file.url} download>{file.name}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+      </div>
+      <div className="company-dashboard-logout-container">
+        <button className="company-dashboard-button light company-dashboard-logout-button" onClick={handleLogout}>Log Out</button>
       </div>
     </div>
   );

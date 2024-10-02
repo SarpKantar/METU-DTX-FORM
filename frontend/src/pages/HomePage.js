@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styling/HomePage.css';
-import METU_DTX_Logo from '../DTX-Logo-Sqr.png'; // Ensure this path is correct
+import DTXLogo from '../DTX-Logo-Sqr.png';
+
+const Image = ({ src, alt, className }) => <img src={src} alt={alt} className={className} />;
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [showRegisterOptions, setShowRegisterOptions] = useState(false);
+  const [showOptions, setShowOptions] = useState('main');
 
-  const handleLogin = () => {
-    navigate('/login');
+  const handleShowLoginOptions = () => {
+    setShowOptions('login');
   };
 
   const handleShowRegisterOptions = () => {
-    setShowRegisterOptions(true);
+    setShowOptions('register');
+  };
+
+  const handleCompanyLogin = () => {
+    
+    navigate('/login-company')
+  };
+  
+  const handleAssessorLogin = () => {
+    
+    navigate('/login-assessor');
   };
 
   const handleCompanyRegister = () => {
@@ -23,22 +35,38 @@ const HomePage = () => {
     navigate('/register/assessor');
   };
 
+  const handleBack = () => {
+    setShowOptions('main');
+  };
+
   return (
     <div className="home-container">
       <div className="logo-container">
-        <img src={METU_DTX_Logo} alt="METU DTX Logo" className="logo" />
+        <Image src={DTXLogo} alt="METU DTX Logo" className="logo large-logo" />
       </div>
       <div className="login-box">
-        <h1 className="title-home">Digital Innovation Assessment</h1>
-        {!showRegisterOptions ? (
+        <h1 className="title-home">
+          <span>METU DTX</span>
+          <div>Digital Maturity Assessment</div>
+        </h1>
+        {showOptions === 'main' && (
           <>
-            <button className="button" onClick={handleLogin}>Log in</button>
-            <button className="button" onClick={handleShowRegisterOptions}>Sign up</button>
+            <button className="button dark" onClick={handleShowLoginOptions}>Log in</button>
+            <button className="button light" onClick={handleShowRegisterOptions}>Sign up</button>
           </>
-        ) : (
+        )}
+        {showOptions === 'login' && (
           <>
-            <button className="button" onClick={handleCompanyRegister}>Company Register</button>
-            <button className="button" onClick={handleAssessorRegister}>Assessor Register</button>
+            <button className="button dark" onClick={handleCompanyLogin}>Log in as Company</button>
+            <button className="button dark" onClick={handleAssessorLogin}>Log in as Assessor</button>
+            <button className="button light" onClick={handleBack}>Back</button>
+          </>
+        )}
+        {showOptions === 'register' && (
+          <>
+            <button className="button dark" onClick={handleCompanyRegister}>Sign up as Company</button>
+            <button className="button dark" onClick={handleAssessorRegister}>Sign up as Assessor</button>
+            <button className="button light" onClick={handleBack}>Back</button>
           </>
         )}
       </div>
@@ -47,6 +75,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
-

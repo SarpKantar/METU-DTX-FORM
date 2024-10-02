@@ -71,18 +71,18 @@ const CompanyLogin = () => {
   };
 
   const handleBack = () => {
-    navigate('/login');
+    navigate(-1);
   };
 
   return (
-    <div className="container">
-      <h1 className="title">Company Login</h1>
+    <div className="company-login-container">
+      <h1 className="company-login-title">Log in as Company</h1>
       <input
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="input"
+        className="company-login-input"
         required
       />
       <input
@@ -90,12 +90,12 @@ const CompanyLogin = () => {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="input"
+        className="company-login-input"
         required
       />
-      <button className="button" onClick={handleLogin}>Login</button>
-      <button className="button" onClick={handleBack}>Back</button>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <button className="company-login-button" onClick={handleLogin}>Log in</button>
+      <button className="company-login-back-button" onClick={handleBack}>Back</button>
+      {errorMessage && <p className="company-login-error-message">{errorMessage}</p>}
     </div>
   );
 };

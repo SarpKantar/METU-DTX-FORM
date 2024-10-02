@@ -560,7 +560,7 @@ const handleJobTitleChange = (e) => {
     try {
         await addDoc(collection(db, 'companyForms'), companyData);
         alert('Company form submitted successfully!');
-        navigate('/login/company'); 
+        navigate('/company-dashboard'); 
     } catch (error) {
         console.error('Error submitting form: ', error);
         alert('Error submitting form');

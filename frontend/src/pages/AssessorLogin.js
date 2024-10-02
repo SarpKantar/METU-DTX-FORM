@@ -44,11 +44,7 @@ const AssessorLogin = () => {
     setErrorMessage(''); // Clear previous error message
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // Store user session in sessionStorage
-      setCurrentUser(user); 
-      sessionStorage.setItem('user', JSON.stringify(user)); 
+      const user = userCredential.user; 
 
       // Check if the user is in the pendingUsers collection
       const pendingUserQuery = query(collection(db, 'pendingUsers'), where('email', '==', user.email));
@@ -74,18 +70,18 @@ const AssessorLogin = () => {
   };
 
   const handleBack = () => {
-    navigate('/login'); // Always navigate to the login page
+    navigate('/'); 
   };
 
   return (
-    <div className="container">
-      <h1 className="title">Assessor Login</h1>
+    <div className="assessor-login-container">
+      <h1 className="assessor-login-title">Log in as Assessor</h1>
       <input
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="input"
+        className="assessor-login-input"
         required
       />
       <input
@@ -93,12 +89,12 @@ const AssessorLogin = () => {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="input"
+        className="assessor-login-input"
         required
       />
-      <button className="button" onClick={handleLogin}>Login</button>
-      <button className="button" onClick={handleBack}>Back</button>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <button className="assessor-login-button" onClick={handleLogin}>Log in</button>
+      <button className="assessor-login-back-button" onClick={handleBack}>Back</button>
+      {errorMessage && <p className="assessor-login-error-message">{errorMessage}</p>}
     </div>
   );
 };
