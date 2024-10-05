@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../firebase'; // Import storage from firebase.js
 import { ref, uploadBytes, listAll, getDownloadURL, getMetadata } from 'firebase/storage';
@@ -10,6 +10,8 @@ import pdfIcon from '../file_icons/pdf-icon.png';
 import docIcon from '../file_icons/doc-icon.png';
 import xlsIcon from '../file_icons/xls-icon.png';
 import uploadArrow from '../upload-big-arrow.png'; 
+import { ref, uploadBytes, listAll, getDownloadURL, deleteObject } from 'firebase/storage';
+import { useDropzone } from 'react-dropzone';
 
 const CompanyDashboard = () => {
   const navigate = useNavigate();
@@ -59,8 +61,36 @@ const CompanyDashboard = () => {
     }));
     setUploadedFiles(files);
   };
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  
+  const fetchUploadedFiles = useCallback(async () => {
+    try {
+        const userId = currentUser.uid;
+        console.log(`Fetching uploaded files for user ID: ${userId}`);
 
-  const fetchAssessors = async () => {
+        const filesRef = ref(storage, `companyFiles/${userId}`);
+        console.log(`Files reference: ${filesRef.toString()}`);
+
+        const filesList = await listAll(filesRef);
+        console.log(`Files list retrieved: ${filesList.items.length} items found.`);
+
+        const filesData = await Promise.all(
+            filesList.items.map(async (item) => {
+                const url = await getDownloadURL(item);
+                console.log(`Retrieved URL for file: ${item.name}`);
+                return { name: item.name, url };
+            })
+        );
+
+        console.log(`Successfully fetched ${filesData.length} files.`);
+        setUploadedFiles(filesData);
+    } catch (error) {
+        console.error('Error fetching files:', error);
+        // Hata alındığında state değişikliği yapmaktan kaçının
+    }
+}, [currentUser.uid]);
+
+  const fetchAssessors = useCallback(async () => {
     const assessorCollection = collection(db, 'assessorUsers'); // Adjust the collection name as needed
     const assessorSnapshot = await getDocs(assessorCollection);
     const assessorList = assessorSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -77,9 +107,9 @@ const CompanyDashboard = () => {
   
     setAssessors(assessorList); // Set the assessors state
     setAssessorStatuses(statuses); // Set the assessor statuses
-  };
+  }, []);
 
-  const fetchFeedbacks = async () => {
+  const fetchFeedbacks = useCallback(async () => {
     const collaborationRequestsSnapshot = await getDocs(collection(db, 'collaborationRequests'));
     const feedbacks = {};
     collaborationRequestsSnapshot.docs.forEach(doc => {
@@ -89,6 +119,35 @@ const CompanyDashboard = () => {
       }
     });
     setFeedbacks(feedbacks);
+  }, []);
+
+  useEffect(() => {
+    const user = sessionStorage.getItem('user');
+    if (!user) {
+      navigate('/login');
+    } else {
+      fetchUploadedFiles();
+      fetchAssessors(); // Fetch assessors when the component mounts
+      fetchFeedbacks();
+    }
+  }, [navigate, fetchUploadedFiles, fetchAssessors, fetchFeedbacks]);
+
+
+  const onDrop = useCallback((acceptedFiles) => {
+    setFile(acceptedFiles[0]);
+    setFileName(acceptedFiles[0].name);
+  }, []);
+  
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const handleDeleteFile = async (fileName) => {
+    try {
+      const fileRef = ref(storage, `companyFiles/${fileName}`);
+      await deleteObject(fileRef);
+      fetchUploadedFiles();
+    } catch (error) {
+      console.error('Error deleting file:', error);
+    }
   };
 
   const handleFillAssessmentForm = () => {
@@ -103,10 +162,10 @@ const CompanyDashboard = () => {
     navigate(-1, { replace: true });
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file) {
-      alert('Please select a file to upload.');
-      return;
+        alert('Please select a file to upload.');
+        return;
     }
 
     if (!companyName) {
@@ -303,7 +362,7 @@ const CompanyDashboard = () => {
         <button className="company-dashboard-button light company-dashboard-logout-button" onClick={handleLogout}>Log Out</button>
       </div>
     </div>
-  );
+);
 };
 
 export default CompanyDashboard;

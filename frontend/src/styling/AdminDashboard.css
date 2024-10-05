@@ -1,4 +1,14 @@
 /* AdminDashboard.css */
+/* AdminDashboard.css */
+/* Yeni konteyner stilleri ekle */
+.requests-container {
+  margin-bottom: 20px; /* Alt boşluk ekle */
+  padding: 15px; /* İç boşluk ekle */
+  border: 1px solid #ddd; /* Kenar rengi */
+  border-radius: 5px; /* Yuvarlatılmış köşeler */
+  background-color: #f9f9f9; /* Arka plan rengi */
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -37,32 +47,33 @@
 .info-box {
     border: 1px solid #ccc;
     border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
+    padding: 20px; /* İç boşluğu artır */
+    margin: 10px; /* Kenar boşluğu ekle */
     background-color: rgba(249, 249, 249, 0.9); /* Add slight opacity */
-    display: inline-block; /* Yan yana durması için */
-    width: 48%; /* Genişlik ayarı */
-    vertical-align: top; /* Üstten hizalama */
-  }
-  
-  .info-container {
+    width: 80%; /* Genişlik ayarını artır */
+    max-width: 800px; /* Maksimum genişlik belirle */
+    display: flex; /* Flexbox kullanarak içerikleri hizala */
+    flex-direction: column; /* Dikey hizalama */
+    align-items: flex-start; /* Sol hizalama */
+    flex-wrap: wrap; /* İçeriklerin sarılmasına izin ver */
+}
+
+.info-box p, .collaboration-box p {
+    word-wrap: break-word; /* Allow words to break */
+    white-space: normal; /* Normal whitespace handling */
+}
+
+.info-container {
     display: flex; /* Flexbox kullanarak yan yana yerleştirme */
-    justify-content: space-between; /* Aralarındaki boşluğu ayarlama */
-  }
-  
-  .collaboration-details {
+    justify-content: center; /* Ortala */
+    margin: 20px 0; /* Üst ve alt boşluk ekle */
+}
+
+.collaboration-details {
     display: flex; /* Flexbox kullanarak yan yana yerleştirme */
-    justify-content: space-between; /* Aralarındaki boşluğu ayarlama */
-  }
-  
-  .collaboration-box {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: rgba(249, 249, 249, 0.9); /* Add slight opacity */
-    width: 48%; /* Genişlik ayarı */
-  }
+    justify-content: center; /* Ortala */
+    margin: 20px 0; /* Üst ve alt boşluk ekle */
+}
 
 .logout-button {
     background-color: #4599b3; /* Kırmızı arka plan */
@@ -152,4 +163,19 @@
     border-radius: 8px; /* Optional: Add rounded corners */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for depth */
     margin-top: 20px;
+}
+
+/* Add a base font size for consistency */
+body {
+    font-size: 16px; /* Set a base font size */
+}
+
+h1, h2, h3, h4 {
+    font-family: Arial, sans-serif; /* Ensure all headings use the same font */
+}
+
+.request-item p, .user-details p, .collaboration-box p {
+    font-size: 14px; /* Set a consistent font size for paragraphs */
+    word-wrap: break-word; /* Kelimelerin sarılmasına izin ver */
+    white-space: normal; /* Normal boşluk ayarları */
 }

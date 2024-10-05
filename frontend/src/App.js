@@ -15,6 +15,7 @@ import { AuthProvider } from './context/AuthContext'; // Import the AuthProvider
 import AdminLogin from './pages/AdminLogin';
 
 import AdminDashboard from './pages/AdminDashboard';
+import ChatbotInterface from './components/ChatbotInterface';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/company-answer/:companyID" element={<CompanyAnswer />} />
           <Route path="/company-form" element={<CompanyForm />} /> {/* Ensure this route exists */}
           <Route path="/assessment-form" element={<AssessmentForm />} /> {/* Ensure this route exists */}
+          <Route path="/chatbot" element={<ChatbotInterface />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -200,7 +200,7 @@ const AdminDashboard = () => {
   return (
     <div className="admin-container">
       <h1>Admin Dashboard</h1>
-      <div className="requests-list">
+      <div className="requests-container">
         <h2>Pending Requests</h2>
         <h3>Company Requests</h3>
         {pendingCompanyRequests.length === 0 ? (
@@ -247,6 +247,8 @@ const AdminDashboard = () => {
           ))
         )}
       </div>
+
+      <div className="requests-container">
       <h2>Collaboration Requests</h2>
       {collaborationRequests.length === 0 ? (
         <p>No collaboration requests available.</p>
@@ -263,22 +265,27 @@ const AdminDashboard = () => {
               </div>
             )}
             {selectedCollaborationRequest && selectedCollaborationRequest.id === request.id && (
-              <div className="collaboration-details">
-                <div className="collaboration-box">
+              <div className="info-container">
+                <div className="info-box">
                   {request.companyDetails && (
                     <div>
                       <h4>Company Details</h4>
                       <p><strong>Company Name:</strong> {request.companyDetails.companyName}</p>
                       <p><strong>Email:</strong> {request.companyDetails.email}</p>
+                      <p><strong>Address:</strong> {request.companyDetails.address}</p>
+                      <p><strong>Phone:</strong> {request.companyDetails.phone}</p>
+                      <p><strong>Website:</strong> {request.companyDetails.website}</p>
                     </div>
                   )}
                 </div>
-                <div className="collaboration-box">
+                <div className="info-box">
                   {request.assessorDetails && (
                     <div>
                       <h4>Assessor Details</h4>
                       <p><strong>Assessor Name:</strong> {request.assessorDetails.name}</p>
                       <p><strong>Email:</strong> {request.assessorDetails.email}</p>
+                      <p><strong>LinkedIn:</strong> {request.assessorDetails.linkedin}</p>
+                      <p><strong>Experience:</strong> {request.assessorDetails.experience}</p>
                     </div>
                   )}
                 </div>
@@ -297,13 +304,16 @@ const AdminDashboard = () => {
             <p>Assessor ID: {request.assessorId}</p>
             <p>Status: {request.status}</p>
             {selectedApprovedRequest && selectedApprovedRequest.id === request.id && (
-              <div className="info-container"> {/* Flexbox konteyneri */}
+              <div className="info-container">
                 <div className="info-box">
                   {request.companyDetails && (
                     <div>
                       <h4>Company Details</h4>
                       <p><strong>Company Name:</strong> {request.companyDetails.companyName}</p>
                       <p><strong>Email:</strong> {request.companyDetails.email}</p>
+                      <p><strong>Address:</strong> {request.companyDetails.address}</p>
+                      <p><strong>Phone:</strong> {request.companyDetails.phone}</p>
+                      <p><strong>Website:</strong> {request.companyDetails.website}</p>
                     </div>
                   )}
                 </div>
@@ -313,6 +323,8 @@ const AdminDashboard = () => {
                       <h4>Assessor Details</h4>
                       <p><strong>Assessor Name:</strong> {request.assessorDetails.name}</p>
                       <p><strong>Email:</strong> {request.assessorDetails.email}</p>
+                      <p><strong>LinkedIn:</strong> {request.assessorDetails.linkedin}</p>
+                      <p><strong>Experience:</strong> {request.assessorDetails.experience}</p>
                     </div>
                   )}
                 </div>
@@ -321,6 +333,7 @@ const AdminDashboard = () => {
           </div>
         ))
       )}
+      </div>
       <button onClick={handleLogout} className="logout-button">Logout</button>
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
