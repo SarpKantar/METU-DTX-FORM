@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../firebase'; // Import storage from firebase.js
-import { ref, uploadBytes, listAll, getDownloadURL, getMetadata } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject} from 'firebase/storage';
 import '../styling/CompanyDashboard.css';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase'; // Import Firestore
@@ -10,7 +10,6 @@ import pdfIcon from '../file_icons/pdf-icon.png';
 import docIcon from '../file_icons/doc-icon.png';
 import xlsIcon from '../file_icons/xls-icon.png';
 import uploadArrow from '../upload-big-arrow.png'; 
-import { ref, uploadBytes, listAll, getDownloadURL, deleteObject } from 'firebase/storage';
 import { useDropzone } from 'react-dropzone';
 
 const CompanyDashboard = () => {
@@ -51,7 +50,7 @@ const CompanyDashboard = () => {
     }
   };
 
-  const fetchUploadedFiles = async (companyName) => {
+  /*const fetchUploadedFiles = async (companyName) => {
     const storageRef = ref(storage, `companyFiles/${companyName}`);
     const fileList = await listAll(storageRef);
     const files = await Promise.all(fileList.items.map(async (itemRef) => {
@@ -60,8 +59,7 @@ const CompanyDashboard = () => {
       return { name: itemRef.name, url, type: metadata.contentType };
     }));
     setUploadedFiles(files);
-  };
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  };*/
   
   const fetchUploadedFiles = useCallback(async () => {
     try {

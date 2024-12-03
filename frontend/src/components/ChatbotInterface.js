@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase'; // Ensure this path is correct
-import 'C:/Users/Msi/Desktop/METU-DTX-FORM/frontend/src/styling/ChatbotInterface.css'; // Import your CSS file for styling
-
+import '../styling/ChatbotInterface.css'; // Import your CSS file for styling
 
 const ChatbotInterface = () => {
   const [messages, setMessages] = useState([]);
@@ -26,24 +25,37 @@ const ChatbotInterface = () => {
   const sendMessage = async () => {
     if (inputText.trim() === '') return;
   
+    const OLLAMA_API_URL = 'http://localhost:11434';
+    console.log('Using Ollama URL:', OLLAMA_API_URL);
+  
     const userMessage = { role: 'user', content: inputText };
     setMessages([...messages, userMessage]);
     setInputText('');
   
     try {
-      const response = await fetch('http://localhost:11434/api/chat', {
+      console.log('Sending request to:', `${OLLAMA_API_URL}/api/chat`);
+      
+      // Create the exact message format that worked in our test
+      const messageBody = {
+        model: 'llama2:7b-chat-q4_0',  // Using the quantized version
+        messages: [{ role: 'user', content: inputText }]
+      };
+      
+      console.log('Request body:', JSON.stringify(messageBody, null, 2));
+      
+      const response = await fetch(`${OLLAMA_API_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          model: 'llama3.2',
-          messages: [...messages, userMessage],
-        }),
+        body: JSON.stringify(messageBody),
       });
 
-      if (!response.ok) { // Check if the response is not OK
-        throw new Error(`HTTP error! status: ${response.status}`);
+      console.log('Response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
   
       const reader = response.body.getReader();

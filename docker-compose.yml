@@ -1,0 +1,23 @@
+services:
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_OLLAMA_API_URL=http://ollama:11434
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  ollama_data:
